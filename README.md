@@ -1,8 +1,8 @@
-# AI Desk Meter
+# MuseMeter
 
 🌐 **Live Project Page:** https://garebear99.github.io/ai-desk-meter/
 
-**AI Desk Meter** is a local-first physical desktop usage dashboard for AI coding tools. The first target is a small ESP32-S3 AMOLED display that shows current usage, weekly usage, reset timers, burn-rate warnings, and connection status.
+**MuseMeter** is a local-first physical desktop usage dashboard for AI coding tools. The first target is a small ESP32-S3 AMOLED display that shows current usage, weekly usage, reset timers, burn-rate warnings, and connection status.
 
 This repo is designed as a full DIY starter package: firmware scaffold, Python host daemon, JSON protocol, docs, examples, enclosure notes, and a polished HTML spec guide.
 

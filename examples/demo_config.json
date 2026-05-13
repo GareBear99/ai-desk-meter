@@ -1,0 +1,18 @@
+{
+  "device": {
+    "name": "GARY_AI_METER",
+    "transport": "stdout",
+    "wifi_url": "http://192.168.1.44/api/state"
+  },
+  "provider": {
+    "active": "mock",
+    "poll_seconds": 30,
+    "warning_percent": 80,
+    "critical_percent": 95
+  },
+  "ui": {
+    "theme": "dark-crab",
+    "show_confidence": true,
+    "show_source": true
+  }
+}

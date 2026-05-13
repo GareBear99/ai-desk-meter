@@ -1,0 +1,68 @@
+from __future__ import annotations
+
+import argparse
+import json
+import sys
+import time
+
+from ai_meter.config import load_config
+from ai_meter.providers import make_provider
+from ai_meter.transports import make_transport
+
+
+def build_parser() -> argparse.ArgumentParser:
+    p = argparse.ArgumentParser(prog="ai-meter", description="AI Desk Meter host daemon")
+    sub = p.add_subparsers(dest="cmd", required=True)
+
+    start = sub.add_parser("start", help="start host loop")
+    start.add_argument("--config", default=None)
+    start.add_argument("--provider", default=None, choices=["mock", "manual"])
+    start.add_argument("--transport", default=None, choices=["stdout", "wifi"])
+    start.add_argument("--url", default=None)
+    start.add_argument("--poll", type=int, default=None)
+    start.add_argument("--once", action="store_true")
+
+    sub.add_parser("test-payload", help="print one mock payload")
+    sub.add_parser("providers", help="list available providers")
+    return p
+
+
+def cmd_start(args: argparse.Namespace) -> int:
+    cfg = load_config(args.config)
+    provider_name = args.provider or cfg.provider
+    transport_name = args.transport or cfg.transport
+    poll = args.poll or cfg.poll_seconds
+    url = args.url or cfg.url
+
+    provider = make_provider(provider_name)
+    transport = make_transport(transport_name, url)
+
+    while True:
+        try:
+            payload = provider.read()
+            transport.send(payload)
+        except KeyboardInterrupt:
+            return 0
+        except Exception as exc:
+            print(f"ai-meter error: {exc}", file=sys.stderr)
+        if args.once:
+            return 0
+        time.sleep(max(1, poll))
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = build_parser().parse_args(argv)
+    if args.cmd == "test-payload":
+        payload = make_provider("mock").read()
+        print(json.dumps(payload.to_wire(), indent=2))
+        return 0
+    if args.cmd == "providers":
+        print("mock\nmanual")
+        return 0
+    if args.cmd == "start":
+        return cmd_start(args)
+    return 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

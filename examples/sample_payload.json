@@ -1,0 +1,14 @@
+{
+  "schema": "ai-desk-meter.v1",
+  "service": "claude-code",
+  "current_percent": 50,
+  "weekly_percent": 11,
+  "current_reset_seconds": 4920,
+  "weekly_reset_seconds": 547200,
+  "burn_rate": "normal",
+  "status": "Musing...",
+  "mode": "active",
+  "updated_at": 1760000000,
+  "source": "mock",
+  "confidence": "mock"
+}

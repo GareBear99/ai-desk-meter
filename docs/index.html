@@ -133,7 +133,28 @@
     .bar { height:16px; border-radius:999px; background:#252b3b; border:1px solid rgba(255,255,255,.1); overflow:hidden; }
     .fill { height:100%; background:linear-gradient(90deg,var(--cyan),var(--accent),var(--danger)); border-radius:999px; }
     .reset { color:#c5ccda; font-size:12px; margin-top:5px; }
-    .sprite { text-align:center; font-size:48px; margin:14px 0 3px; }
+    .sprite {
+      margin:14px auto 3px;
+    }
+    .pixel-crab {
+      width:72px;
+      height:48px;
+      display:grid;
+      grid-template-columns:repeat(8, 1fr);
+      gap:3px;
+      image-rendering:pixelated;
+    }
+    .pixel-crab .px {
+      width:100%;
+      aspect-ratio:1;
+      border-radius:2px;
+      background:#ff6945;
+      box-shadow:0 0 8px rgba(255,105,69,.35);
+    }
+    .pixel-crab .px.red { background:#ff6945; }
+    .pixel-crab .px.blue { background:#69c8ff; box-shadow:0 0 8px rgba(105,200,255,.35); }
+    .pixel-crab .px.dark { background:#101827; box-shadow:none; }
+    .pixel-crab .px.off { background:transparent; box-shadow:none; }
     .status { text-align:center; color:#ffd6aa; font-weight:900; }
     nav {
       position:sticky;
@@ -263,7 +284,12 @@
               <div class="bar"><div class="fill" style="width:11%"></div></div>
               <div class="reset">Resets in 6d 8h</div>
             </div>
-            <div class="sprite">🦀</div>
+            <div class="sprite pixel-crab" aria-label="AI Desk Meter pixel mascot">
+  <span class="px off"></span><span class="px red"></span><span class="px red"></span><span class="px red"></span><span class="px red"></span><span class="px red"></span><span class="px red"></span><span class="px off"></span>
+  <span class="px red"></span><span class="px red"></span><span class="px dark"></span><span class="px red"></span><span class="px red"></span><span class="px dark"></span><span class="px red"></span><span class="px red"></span>
+  <span class="px off"></span><span class="px red"></span><span class="px red"></span><span class="px red"></span><span class="px red"></span><span class="px red"></span><span class="px red"></span><span class="px off"></span>
+  <span class="px blue"></span><span class="px blue"></span><span class="px off"></span><span class="px off"></span><span class="px off"></span><span class="px off"></span><span class="px blue"></span><span class="px blue"></span>
+</div>
             <div class="status">✶ Musing...</div>
           </div>
         </div>

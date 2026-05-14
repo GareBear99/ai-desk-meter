@@ -4,8 +4,10 @@ import argparse
 import json
 import sys
 import time
+from pathlib import Path
 
 from ai_meter.config import load_config
+from ai_meter.diagnostics import write_diagnostics_zip
 from ai_meter.providers import make_provider, provider_names
 from ai_meter.transports import make_transport
 
@@ -24,6 +26,14 @@ def build_parser() -> argparse.ArgumentParser:
 
     status = sub.add_parser("status", help="print one provider payload as formatted JSON")
     status.add_argument("--provider", default="mock", choices=provider_names())
+
+    serve = sub.add_parser("serve", help="start local dashboard API")
+    serve.add_argument("--host", default="127.0.0.1")
+    serve.add_argument("--port", type=int, default=8787)
+
+    diagnostics = sub.add_parser("diagnostics", help="write a safe diagnostics ZIP bundle")
+    diagnostics.add_argument("--provider", default="mock", choices=provider_names())
+    diagnostics.add_argument("--out", default="ai-desk-meter-diagnostics.zip")
 
     sub.add_parser("test-payload", help="print one mock payload")
     sub.add_parser("providers", help="list available providers")
@@ -65,6 +75,15 @@ def main(argv: list[str] | None = None) -> int:
         return 0
     if args.cmd == "providers":
         print("\n".join(provider_names()))
+        return 0
+    if args.cmd == "diagnostics":
+        out = write_diagnostics_zip(Path(args.out), args.provider)
+        print(str(out))
+        return 0
+    if args.cmd == "serve":
+        from ai_meter.server import run_server
+
+        run_server(args.host, args.port)
         return 0
     if args.cmd == "start":
         return cmd_start(args)

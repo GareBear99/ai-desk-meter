@@ -132,6 +132,47 @@ arc-rar status --json
 
 The state-file provider remains useful for development and hardware demos; the CLI provider is the preferred path toward live backend authority.
 
+
+## Local API and live dashboard
+
+AI Desk Meter now includes a local HTTP API bridge so the dashboard can refresh live provider state instead of remaining static.
+
+```bash
+cd host
+ai-meter serve --host 127.0.0.1 --port 8787
+```
+
+Available local endpoints:
+
+```text
+GET /health
+GET /providers
+GET /status?provider=mock
+GET /status?provider=arcrar
+GET /status?provider=arcrar-cli
+GET /diagnostics?provider=mock
+```
+
+Open `docs/index.html` or the GitHub Pages dashboard and use the live panel with:
+
+```text
+http://127.0.0.1:8787
+```
+
+The dashboard fails safely: if the API is offline, Arc-RAR is missing, or a provider returns invalid state, it shows an offline/error payload rather than inventing backend truth.
+
+## Diagnostics export
+
+Create a shareable diagnostics bundle without secrets, tokens, private prompts, or private AI session content:
+
+```bash
+cd host
+ai-meter diagnostics --provider mock --out ai-desk-meter-diagnostics.zip
+ai-meter diagnostics --provider arcrar-cli --out arcrar-diagnostics.zip
+```
+
+The ZIP includes `payload.json`, `diagnostics.json`, `provider.txt`, `environment.txt`, `errors.json`, and `README_DIAGNOSTICS.txt`.
+
 ## Firmware quick start
 
 ```bash
@@ -195,7 +236,7 @@ ai-desk-meter/
 - **v0.1** Clean dashboard + mock/manual providers
 - **v0.2** Arc-RAR state-file provider
 - **v0.3** Arc-RAR CLI/API provider ✅
-- **v0.4** Live dashboard provider refresh and diagnostics export
+- **v0.4** Live dashboard provider refresh and diagnostics export ✅
 - **v0.5** Raspberry Pi / Linux SBC kiosk validation
 - **v0.6** ESP32 display endpoint hardening
 - **v0.7** Arduino-class companion telemetry bridge design
@@ -209,10 +250,12 @@ ai-desk-meter/
 Current package validation:
 
 ```text
-pytest: 12 passed
+pytest: 18 passed
 mock provider works
 state-file Arc-RAR provider works
 Arc-RAR CLI provider fails closed for missing executable, invalid JSON, non-zero exit, and timeout
+local API bridge works for `/health`, `/providers`, `/status`, and `/diagnostics`
+diagnostics ZIP export works without including secrets or private prompt/session content
 ```
 
 ## License

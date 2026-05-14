@@ -16,3 +16,15 @@ Before tagging a release:
 - [ ] Docs describe Arduino-class boards as endpoints/companions, not full backend hosts.
 - [ ] No trademark-risk branding remains in public copy.
 - [ ] GitHub Pages renders without broken CSS or old names.
+
+## v0.4 functional checks
+
+- [ ] `ai-meter serve --host 127.0.0.1 --port 8787` starts locally.
+- [ ] `/health` returns OK.
+- [ ] `/providers` lists mock, manual, arcrar, and arcrar-cli.
+- [ ] `/status?provider=mock` returns a valid payload.
+- [ ] `/status?provider=arcrar-cli` fails closed if Arc-RAR is missing.
+- [ ] Dashboard live panel refreshes from `http://127.0.0.1:8787`.
+- [ ] `ai-meter diagnostics --provider mock --out diagnostics.zip` writes a ZIP.
+- [ ] Diagnostics bundle contains no secrets, tokens, private prompts, or private AI session content.
+

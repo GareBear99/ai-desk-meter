@@ -1,0 +1,23 @@
+{
+  "schema": "ai-desk-meter.v1",
+  "service": "arc-rar",
+  "current_percent": 18.5,
+  "weekly_percent": 7.2,
+  "current_reset_seconds": 5400,
+  "weekly_reset_seconds": 580000,
+  "burn_rate": "low",
+  "status": "Arc-RAR linked",
+  "mode": "active",
+  "updated_at": 1760000000,
+  "source": "arcrar-cli",
+  "confidence": "estimated",
+  "backend": {
+    "name": "Arc-RAR",
+    "receipt_state": "available",
+    "archive_state": "verified",
+    "hardwire_state": "portable",
+    "checkpoint_id": "checkpoint-demo"
+  },
+  "warnings": [],
+  "errors": []
+}

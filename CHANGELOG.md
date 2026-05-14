@@ -16,3 +16,12 @@
 - Added `ai-meter status --provider ...` command for formatted one-shot provider inspection.
 - Added CLI provider tests and example Arc-RAR CLI status payload.
 - Updated provider contract, Arc-RAR integration spec, roadmap, test matrix, and release checklist.
+
+## 0.4.0
+
+- Added local HTTP API bridge: `/health`, `/providers`, `/status`, and `/diagnostics`.
+- Added dashboard live-refresh panel for local provider polling.
+- Added safe diagnostics ZIP export command.
+- Added local API and dashboard refresh documentation.
+- Added tests for server endpoints and diagnostics export.
+

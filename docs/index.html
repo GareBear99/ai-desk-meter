@@ -32,6 +32,9 @@
     .bar { height:16px; border-radius:999px; background:#252b3b; border:1px solid rgba(255,255,255,.1); overflow:hidden; }
     .fill { height:100%; background:linear-gradient(90deg,var(--cyan),var(--accent),var(--danger)); border-radius:999px; }
     .status { margin-top:24px; text-align:center; color:#ffd6aa; font-weight:900; }
+    .live-row { display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin:14px 0; }
+    .live-row input, .live-row select { background:#05070b; color:var(--text); border:1px solid var(--line); border-radius:12px; padding:10px; min-height:42px; }
+    .pill { display:inline-flex; border:1px solid var(--line); border-radius:999px; padding:5px 10px; font-weight:900; color:#fff; background:rgba(255,255,255,.06); }
     nav { position:sticky; top:0; z-index:5; background:rgba(7,9,15,.88); backdrop-filter:blur(16px); border-bottom:1px solid var(--line); overflow-x:auto; white-space:nowrap; }
     nav .wrap { display:flex; gap:8px; padding:10px 0; } nav a { color:var(--muted); font-weight:900; font-size:13px; padding:8px 10px; border-radius:10px; }
     main { padding:36px 0 80px; } section { margin:22px 0; padding:28px; border:1px solid var(--line); background:linear-gradient(180deg,rgba(17,24,39,.84),rgba(11,16,32,.88)); border-radius:24px; box-shadow:0 14px 46px rgba(0,0,0,.24); }
@@ -59,16 +62,16 @@
       </div>
       <div class="device" aria-label="AI Desk Meter mock display">
         <div class="screen">
-          <div class="screen-top"><span>AI Desk</span><span>72%</span></div>
-          <div class="meter"><div class="meter-label"><span>Session</span><span>72%</span></div><div class="bar"><div class="fill" style="width:72%"></div></div></div>
-          <div class="meter"><div class="meter-label"><span>Weekly</span><span>31%</span></div><div class="bar"><div class="fill" style="width:31%"></div></div></div>
-          <p class="status">Arc-RAR linked</p>
-          <p>Receipt: available<br/>Archive: verified<br/>Hardwire: portable</p>
+          <div class="screen-top"><span>AI Desk</span><span id="screen-current">72%</span></div>
+          <div class="meter"><div class="meter-label"><span>Session</span><span id="screen-session-label">72%</span></div><div class="bar"><div class="fill" id="screen-session-fill" style="width:72%"></div></div></div>
+          <div class="meter"><div class="meter-label"><span>Weekly</span><span id="screen-weekly-label">31%</span></div><div class="bar"><div class="fill" id="screen-weekly-fill" style="width:31%"></div></div></div>
+          <p class="status" id="screen-status">Arc-RAR linked</p>
+          <p id="screen-backend">Receipt: available<br/>Archive: verified<br/>Hardwire: portable</p>
         </div>
       </div>
     </div>
   </header>
-  <nav><div class="wrap"><a href="#scope">Scope</a><a href="#architecture">Architecture</a><a href="#hardware">Hardware</a><a href="#arcrar">Arc-RAR</a><a href="#roadmap">Roadmap</a></div></nav>
+  <nav><div class="wrap"><a href="#scope">Scope</a><a href="#architecture">Architecture</a><a href="#hardware">Hardware</a><a href="#arcrar">Arc-RAR</a><a href="#live">Live API</a><a href="#roadmap">Roadmap</a></div></nav>
   <main class="wrap">
     <section id="scope">
       <h2>What it is</h2>
@@ -92,6 +95,19 @@
       <h2>Arc-RAR integration path</h2>
       <p>The first bridge reads a local Arc-RAR state JSON file. The next bridge should consume stable Arc-RAR CLI/API JSON output such as <code>arc-rar status --json</code> and <code>arc-rar archive verify --json</code>.</p>
     </section>
+
+    <section id="live">
+      <h2>Live local dashboard</h2>
+      <p>Run <code>ai-meter serve --host 127.0.0.1 --port 8787</code>, then use this panel to poll a local provider. If the API is not running, the page stays in safe demo/offline mode.</p>
+      <div class="live-row">
+        <label for="providerSelect">Provider</label>
+        <select id="providerSelect"><option value="mock">mock</option><option value="arcrar">arcrar</option><option value="arcrar-cli">arcrar-cli</option><option value="manual">manual</option></select>
+        <input id="apiBase" value="http://127.0.0.1:8787" aria-label="API base URL" />
+        <button class="btn primary" id="refreshNow" type="button">Refresh now</button>
+        <span class="pill" id="apiState">demo</span>
+      </div>
+      <pre id="livePayload">Local API not connected yet.</pre>
+    </section>
     <section id="roadmap">
       <h2>Roadmap</h2>
       <ol>
@@ -107,6 +123,53 @@
       </ol>
     </section>
   </main>
-  <footer><div class="wrap">AI Desk Meter — local-first visibility for AI workflow systems.</div></footer>
-<section><h2>Current Backend Milestone</h2><p>The host now includes <code>arcrar</code> for state-file bridge testing and <code>arcrar-cli</code> for timeout-safe <code>arc-rar status --json</code> integration.</p></section></body>
+  <footer><div class="wrap">AI Desk Meter — local-first visibility for AI workflow systems. Current backend milestone: state-file and CLI Arc-RAR providers are included.</div></footer>
+  <script>
+    const els = {
+      current: document.getElementById('screen-current'),
+      sessionLabel: document.getElementById('screen-session-label'),
+      sessionFill: document.getElementById('screen-session-fill'),
+      weeklyLabel: document.getElementById('screen-weekly-label'),
+      weeklyFill: document.getElementById('screen-weekly-fill'),
+      status: document.getElementById('screen-status'),
+      backend: document.getElementById('screen-backend'),
+      payload: document.getElementById('livePayload'),
+      state: document.getElementById('apiState'),
+      provider: document.getElementById('providerSelect'),
+      apiBase: document.getElementById('apiBase'),
+      refresh: document.getElementById('refreshNow')
+    };
+    function pct(v){ const n = Math.max(0, Math.min(100, Number(v || 0))); return `${n.toFixed(n % 1 ? 1 : 0)}%`; }
+    function applyPayload(data){
+      const session = pct(data.current_percent);
+      const weekly = pct(data.weekly_percent);
+      els.current.textContent = session;
+      els.sessionLabel.textContent = session;
+      els.sessionFill.style.width = session;
+      els.weeklyLabel.textContent = weekly;
+      els.weeklyFill.style.width = weekly;
+      els.status.textContent = data.status || 'Ready';
+      const b = data.backend || {};
+      els.backend.innerHTML = `Receipt: ${b.receipt_state || 'unknown'}<br/>Archive: ${b.archive_state || 'unknown'}<br/>Hardwire: ${b.hardwire_state || 'unknown'}`;
+      els.payload.textContent = JSON.stringify(data, null, 2);
+      els.state.textContent = data.mode || 'active';
+    }
+    async function refreshLive(){
+      const base = els.apiBase.value.replace(/\/$/, '');
+      const provider = encodeURIComponent(els.provider.value);
+      try {
+        const res = await fetch(`${base}/status?provider=${provider}`, { cache: 'no-store' });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        applyPayload(await res.json());
+      } catch (err) {
+        els.state.textContent = 'offline';
+        els.payload.textContent = `Local API offline or unreachable: ${err.message}`;
+      }
+    }
+    if (els.refresh) {
+      els.refresh.addEventListener('click', refreshLive);
+      setInterval(refreshLive, 5000);
+    }
+  </script>
+</body>
 </html>

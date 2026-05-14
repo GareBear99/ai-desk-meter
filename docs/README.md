@@ -22,3 +22,10 @@ Recommended reading order:
 ## Current implementation note
 
 The host package now includes both `arcrar` for state-file bridge testing and `arcrar-cli` for timeout-safe `arc-rar status --json` integration. Use `ai-meter status --provider arcrar-cli` to inspect the live CLI provider boundary.
+
+
+## Functional local bridge
+
+- [Local API](local-api.md)
+- [Dashboard refresh](dashboard-refresh.md)
+

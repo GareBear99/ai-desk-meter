@@ -1,4 +1,4 @@
-# AI Desk Meter
+# 🦀 AI Desk Meter
 
 [![Sponsor](https://img.shields.io/badge/Sponsor-GitHub%20Sponsors-ff69b4)](https://github.com/sponsors/GareBear99) [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-support-yellow)](https://www.buymeacoffee.com/tizwildin)
 

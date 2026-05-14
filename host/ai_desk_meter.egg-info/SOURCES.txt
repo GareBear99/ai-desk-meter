@@ -8,6 +8,7 @@ ai_desk_meter.egg-info/requires.txt
 ai_desk_meter.egg-info/top_level.txt
 ai_meter/__init__.py
 ai_meter/cli.py
+ai_meter/companion.py
 ai_meter/config.py
 ai_meter/diagnostics.py
 ai_meter/protocol.py

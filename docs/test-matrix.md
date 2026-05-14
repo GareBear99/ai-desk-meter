@@ -62,3 +62,12 @@ A release should not be tagged until:
 - dashboard keeps the baseline orange/blue pixel buddy
 - default loading/responding language remains `✶ Musing...`
 - future state differentiation must preserve the baseline state as a fallback
+
+
+## v0.6 companion bridge checks
+
+- `ai-meter companion-status --provider mock` returns `ai_desk_meter_companion_v1`.
+- `/companion/status?provider=mock` returns compact display-safe JSON.
+- Missing/offline providers remain display-safe and do not crash the API.
+- ESP32 and Arduino example firmware artifacts are present.
+- Companion payload excludes private prompts, tokens, and private session content.

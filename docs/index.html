@@ -84,7 +84,7 @@
       </div>
     </div>
   </header>
-  <nav><div class="wrap"><a href="#scope">Scope</a><a href="#architecture">Architecture</a><a href="#hardware">Hardware</a><a href="#arcrar">Arc-RAR</a><a href="#live">Live API</a><a href="#pi">Pi/SBC</a><a href="#roadmap">Roadmap</a><a href="#license">License Path</a></div></nav>
+  <nav><div class="wrap"><a href="#scope">Scope</a><a href="#architecture">Architecture</a><a href="#hardware">Hardware</a><a href="#arcrar">Arc-RAR</a><a href="#live">Live API</a><a href="#pi">Pi/SBC</a><a href="#companion">Companion</a><a href="#roadmap">Roadmap</a><a href="#license">License Path</a></div></nav>
   <main class="wrap">
     <section id="scope">
       <h2>What it is</h2>
@@ -130,6 +130,15 @@
 bash scripts/run_smoke_test.sh
 ai-meter serve --host 127.0.0.1 --port 8787</pre>
     </section>
+
+    <section id="companion">
+      <h2>ESP32 / Arduino companion bridge</h2>
+      <p>v0.6 adds a compact companion endpoint for small displays and serial telemetry nodes. The host remains the source of truth; companion devices render state only.</p>
+      <pre>GET /companion/status?provider=mock
+ai-meter companion-status --provider mock</pre>
+      <p>The pixel buddy and <code>✶ Musing...</code> state are preserved as the baseline display identity. For now, Musing means the agent is responding to prompt input or an action is loading.</p>
+    </section>
+
     <section id="license">
       <h2>Open-source corridor and MuseMeter 3.0</h2>
       <p>The current repo remains the open foundation. The planned MuseMeter 3.0 package is the later commercial-licensed second-brain / Neural Synth / AI buddy product. The baseline character and <code>✶ Musing...</code> state are intentional and preserved.</p>
@@ -142,14 +151,14 @@ ai-meter serve --host 127.0.0.1 --port 8787</pre>
         <li>Arc-RAR CLI/API provider.</li>
         <li>Provider contract tests and diagnostics export.</li>
         <li>Raspberry Pi / Linux SBC kiosk validation. ✅</li>
-        <li>ESP32-S3 display endpoint hardening.</li>
-        <li>Arduino-class companion telemetry bridge.</li>
+        <li>ESP32-S3 display endpoint hardening. ✅</li>
+        <li>Arduino-class companion telemetry bridge. ✅</li>
         <li>Native dashboard shell.</li>
         <li>Omnibinary adapter, ARC-Core hardwire integration, and Neural Synth toggle page.</li><li>MuseMeter 3.0 commercial full package: second-brain / Neural Synth / AI buddy.</li>
       </ol>
     </section>
   </main>
-  <footer><div class="wrap">AI Desk Meter — local-first visibility for AI workflow systems. Current milestone: live local API, diagnostics, and Raspberry Pi/Linux SBC deployment path are included.</div></footer>
+  <footer><div class="wrap">AI Desk Meter — local-first visibility for AI workflow systems. Current milestone: live local API, diagnostics, Raspberry Pi/Linux SBC deployment, and ESP32/Arduino companion bridge are included.</div></footer>
   <script>
     const els = {
       current: document.getElementById('screen-current'),

@@ -6,6 +6,7 @@ import sys
 import time
 from pathlib import Path
 
+from ai_meter.companion import to_companion_payload
 from ai_meter.config import load_config
 from ai_meter.diagnostics import write_diagnostics_zip
 from ai_meter.providers import make_provider, provider_names
@@ -30,6 +31,9 @@ def build_parser() -> argparse.ArgumentParser:
     serve = sub.add_parser("serve", help="start local dashboard API")
     serve.add_argument("--host", default="127.0.0.1")
     serve.add_argument("--port", type=int, default=8787)
+
+    companion = sub.add_parser("companion-status", help="print compact companion-display payload as JSON")
+    companion.add_argument("--provider", default="mock", choices=provider_names())
 
     diagnostics = sub.add_parser("diagnostics", help="write a safe diagnostics ZIP bundle")
     diagnostics.add_argument("--provider", default="mock", choices=provider_names())
@@ -68,6 +72,10 @@ def main(argv: list[str] | None = None) -> int:
     if args.cmd == "status":
         payload = make_provider(args.provider).read()
         print(json.dumps(payload.to_wire(), indent=2))
+        return 0
+    if args.cmd == "companion-status":
+        payload = make_provider(args.provider).read()
+        print(json.dumps(to_companion_payload(payload), indent=2))
         return 0
     if args.cmd == "test-payload":
         payload = make_provider("mock").read()

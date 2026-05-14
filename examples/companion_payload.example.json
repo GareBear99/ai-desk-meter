@@ -1,0 +1,18 @@
+{
+  "schema": "ai_desk_meter_companion_v1",
+  "status": "linked",
+  "current_pct": 50,
+  "weekly_pct": 11,
+  "current_reset": "1h 22m",
+  "weekly_reset": "6d 8h",
+  "activity": "musing",
+  "message": "\u2736 Musing...",
+  "burn_rate": "normal",
+  "backend": "arcrar-cli",
+  "receipt_state": "available",
+  "archive_state": "verified",
+  "hardwire_state": "portable",
+  "warnings": 0,
+  "errors": 0,
+  "updated_at": 1760000000
+}

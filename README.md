@@ -21,6 +21,7 @@ AI Desk Meter currently provides:
 - Wi-Fi/stdout transport scaffolds
 - Raspberry Pi / Linux SBC install, smoke-test, systemd, and kiosk deployment docs
 - ESP32-S3 firmware scaffold for a physical desk meter
+- Compact `/companion/status` endpoint for ESP32 and Arduino-class companion displays
 - Public docs for hardware, firmware, host app, provider contracts, roadmap, testing, companion devices, licensing direction, and the pixel buddy character
 - Example payloads for normal, warning, offline, corrupt, and Arc-RAR-linked states
 
@@ -155,6 +156,7 @@ GET /providers
 GET /status?provider=mock
 GET /status?provider=arcrar
 GET /status?provider=arcrar-cli
+GET /companion/status?provider=mock
 GET /diagnostics?provider=mock
 ```
 
@@ -165,6 +167,42 @@ http://127.0.0.1:8787
 ```
 
 The dashboard fails safely: if the API is offline, Arc-RAR is missing, or a provider returns invalid state, it shows an offline/error payload rather than inventing backend truth.
+
+
+## Companion hardware endpoint
+
+For ESP32 and Arduino-class display nodes, use the compact companion payload instead of the full dashboard payload:
+
+```bash
+ai-meter companion-status --provider mock
+```
+
+Or from the local API:
+
+```text
+GET /companion/status?provider=mock
+GET /companion/status?provider=arcrar-cli
+```
+
+Example compact payload:
+
+```json
+{
+  "schema": "ai_desk_meter_companion_v1",
+  "status": "linked",
+  "current_pct": 50,
+  "weekly_pct": 11,
+  "current_reset": "1h 22m",
+  "weekly_reset": "6d 8h",
+  "activity": "musing",
+  "message": "✶ Musing...",
+  "backend": "mock",
+  "warnings": 0,
+  "errors": 0
+}
+```
+
+The companion endpoint is display-safe and intentionally small. Backend authority remains on desktop, Raspberry Pi/Linux SBC, Arc-RAR, or future ARC/Omnibinary provider layers.
 
 ## Diagnostics export
 
@@ -205,7 +243,7 @@ pio upload
 pio device monitor
 ```
 
-The firmware scaffold is intentionally board-adaptation friendly. Start from your board vendor's display example, then wire the JSON parser and renderer into the provided module layout.
+The firmware scaffold is intentionally board-adaptation friendly. Start from your board vendor's display example, then wire the JSON parser and renderer into the provided module layout. v0.6 also includes standalone example sketches under `firmware/esp32_companion_display/` and `firmware/arduino_serial_companion/`.
 
 ## Payload example
 

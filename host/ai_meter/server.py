@@ -7,6 +7,7 @@ from typing import Any
 from urllib.parse import parse_qs, urlparse
 
 from ai_meter import __version__
+from ai_meter.companion import to_companion_payload
 from ai_meter.diagnostics import build_diagnostics_payload
 from ai_meter.providers import make_provider, provider_names
 
@@ -20,7 +21,7 @@ def _json_bytes(data: dict[str, Any], status: int = 200) -> tuple[int, bytes]:
 
 
 class MeterRequestHandler(BaseHTTPRequestHandler):
-    server_version = "AIDeskMeterHTTP/0.5"
+    server_version = "AIDeskMeterHTTP/0.6"
 
     def do_OPTIONS(self) -> None:  # noqa: N802 - stdlib hook name
         self._send_json({}, 204)
@@ -47,6 +48,10 @@ class MeterRequestHandler(BaseHTTPRequestHandler):
 
         if parsed.path == "/status":
             self._send_json(self._read_provider(provider))
+            return
+
+        if parsed.path == "/companion/status":
+            self._send_json(self._read_companion(provider))
             return
 
         if parsed.path == "/diagnostics":
@@ -82,6 +87,31 @@ class MeterRequestHandler(BaseHTTPRequestHandler):
                 "errors": [f"provider failed: {exc}"[:160]],
             }
 
+    def _read_companion(self, provider: str) -> dict[str, Any]:
+        try:
+            payload = make_provider(provider).read()
+            return to_companion_payload(payload)
+        except Exception as exc:  # defensive API boundary
+            return {
+                "schema": "ai_desk_meter_companion_v1",
+                "status": "error",
+                "current_pct": 0,
+                "weekly_pct": 0,
+                "current_reset": "0m",
+                "weekly_reset": "0m",
+                "activity": "error",
+                "message": "Provider error",
+                "burn_rate": "idle",
+                "backend": provider,
+                "receipt_state": "unknown",
+                "archive_state": "unknown",
+                "hardwire_state": "unknown",
+                "warnings": 0,
+                "errors": 1,
+                "updated_at": int(time()),
+                "error": f"provider failed: {exc}"[:160],
+            }
+
     def _send_json(self, data: dict[str, Any], status: int = 200) -> None:
         status_code, body = _json_bytes(data, status)
         self.send_response(status_code)
@@ -99,7 +129,7 @@ class MeterRequestHandler(BaseHTTPRequestHandler):
 def run_server(host: str = DEFAULT_HOST, port: int = DEFAULT_PORT) -> None:
     httpd = ThreadingHTTPServer((host, port), MeterRequestHandler)
     print(f"AI Desk Meter API listening on http://{host}:{port}")
-    print("Endpoints: /health /providers /status?provider=mock /diagnostics?provider=mock")
+    print("Endpoints: /health /providers /status?provider=mock /companion/status?provider=mock /diagnostics?provider=mock")
     try:
         httpd.serve_forever()
     except KeyboardInterrupt:

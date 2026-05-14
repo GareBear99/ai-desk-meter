@@ -2,6 +2,7 @@ from .arcrar import ArcRarProvider
 from .arcrar_cli import ArcRarCliProvider
 from .manual import ManualProvider
 from .mock import MockProvider
+from .omnibinary import OmnibinaryProvider
 
 
 PROVIDERS = {
@@ -9,6 +10,7 @@ PROVIDERS = {
     "arcrar-cli": ArcRarCliProvider,
     "manual": ManualProvider,
     "mock": MockProvider,
+    "omnibinary": OmnibinaryProvider,
 }
 
 

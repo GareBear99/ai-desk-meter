@@ -6,7 +6,9 @@ import sys
 import time
 from pathlib import Path
 
+from ai_meter import __version__
 from ai_meter.companion import to_companion_payload
+from ai_meter.doctor import run_doctor
 from ai_meter.config import load_config
 from ai_meter.diagnostics import write_diagnostics_zip
 from ai_meter.providers import make_provider, provider_names
@@ -39,8 +41,12 @@ def build_parser() -> argparse.ArgumentParser:
     diagnostics.add_argument("--provider", default="mock", choices=provider_names())
     diagnostics.add_argument("--out", default="ai-desk-meter-diagnostics.zip")
 
+    doctor = sub.add_parser("doctor", help="run a local functional health report")
+    doctor.add_argument("--provider", default="mock", choices=provider_names())
+
     sub.add_parser("test-payload", help="print one mock payload")
     sub.add_parser("providers", help="list available providers")
+    sub.add_parser("version", help="print the installed ai-desk-meter version")
     return p
 
 
@@ -83,6 +89,12 @@ def main(argv: list[str] | None = None) -> int:
         return 0
     if args.cmd == "providers":
         print("\n".join(provider_names()))
+        return 0
+    if args.cmd == "version":
+        print(__version__)
+        return 0
+    if args.cmd == "doctor":
+        print(json.dumps(run_doctor(args.provider), indent=2))
         return 0
     if args.cmd == "diagnostics":
         out = write_diagnostics_zip(Path(args.out), args.provider)

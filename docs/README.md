@@ -38,3 +38,10 @@ The host package now includes both `arcrar` for state-file bridge testing and `a
 - `companion-bridge.md` — ESP32 / Arduino companion display bridge direction
 - `licensing-roadmap.md` — open-source corridor and MuseMeter 3.0 commercial package direction
 - `character-spec.md` — pixel buddy and `✶ Musing...` state preservation
+
+## Native shell
+
+- [Native GUI plan](native-gui-plan.md)
+- [Tauri shell plan](tauri-shell-plan.md)
+- [Desktop security notes](desktop-security.md)
+

@@ -55,12 +55,20 @@
 - Treat required status failures as offline/error states
 - Treat optional enrichment failures as warnings
 
-## v0.8 — Native dashboard shell prototype
+## v0.8 — Native dashboard shell prototype ✅
 
-- Package local dashboard as desktop shell
-- Add provider health view
-- Add archive/receipt view
-- Add diagnostics export button
+- Tauri shell plan and config example
+- Desktop security notes
+- Frontend bridge contract for the local API
+- macOS/Linux and Windows dashboard launch scripts
+- Artifact tests to preserve the native shell path
+
+## v0.9 — Omnibinary adapter spec
+
+- Define Omnibinary as an optional event-spine adapter
+- Keep Arc-RAR as archive/receipt packaging authority
+- Document adapter payload contract before implementation
+- Do not add Neural Synth visualization until real state exists
 
 ## v1.0 — Stable open-source AI Desk Meter
 

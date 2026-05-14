@@ -61,3 +61,11 @@ Before tagging a release:
 - [ ] Optional enrichment failures become warnings, not crashes.
 - [ ] Required status failures become offline/error states.
 - [ ] `docs/arcrar-cli-contract.md` matches provider behavior.
+
+## v0.8 native shell checks
+
+- [ ] `docs/native-gui-plan.md` is present.
+- [ ] `native/tauri/tauri.conf.example.json` remains an example, not a signed release claim.
+- [ ] Launch scripts default to `127.0.0.1`.
+- [ ] Desktop shell docs state that the GUI is not backend authority.
+- [ ] Tests pass with `pytest`.

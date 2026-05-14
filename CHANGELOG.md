@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.8.0 - Native dashboard shell prototype
+
+- Added Tauri-oriented native shell plan and configuration example.
+- Added desktop security notes and frontend bridge docs for the local API.
+- Added macOS/Linux and Windows launch scripts for the local dashboard service.
+- Added native artifact tests so the desktop path is preserved.
+- Kept GUI authority separate from provider/backend truth and preserved the open-source path toward MuseMeter 3.0.
+
 ## 0.7.0 - Arc-RAR CLI command compatibility pass
 
 - Expanded the Arc-RAR CLI provider from a single status command to a contract bundle.

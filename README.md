@@ -22,6 +22,7 @@ AI Desk Meter currently provides:
 - Raspberry Pi / Linux SBC install, smoke-test, systemd, and kiosk deployment docs
 - ESP32-S3 firmware scaffold for a physical desk meter
 - Compact `/companion/status` endpoint for ESP32 and Arduino-class companion displays
+- Tauri-native shell plan/prototype docs and local dashboard launch scripts
 - Public docs for hardware, firmware, host app, provider contracts, roadmap, testing, companion devices, licensing direction, and the pixel buddy character
 - Example payloads for normal, warning, offline, corrupt, and Arc-RAR-linked states
 
@@ -113,6 +114,18 @@ arc-rar session inspect --json
 
 AI Desk Meter should consume stable command/API output rather than private Arc-RAR internals.
 
+
+## Native dashboard shell path
+
+v0.8 adds a desktop-shell path for the existing local API and dashboard. This is a Tauri-oriented prototype scaffold, not a signed desktop release yet.
+
+```bash
+./scripts/launch_local_dashboard.sh
+# Windows PowerShell:
+# ./scripts/launch_local_dashboard.ps1
+```
+
+The shell plan keeps the GUI as a viewer/control surface. Provider truth remains in the local host service and backend integrations.
 
 ## Arc-RAR CLI provider
 

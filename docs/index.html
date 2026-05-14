@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>AI Desk Meter — Local AI Workflow and Arc-RAR Dashboard</title>
-  <meta name="description" content="AI Desk Meter is a local-first AI workflow dashboard for desktop, Raspberry Pi, ESP32 displays, and future Arc-RAR/Omnibinary-backed ARC system visibility." />
-  <meta name="keywords" content="AI Desk Meter, Arc-RAR dashboard, Raspberry Pi AI dashboard, ESP32 AI display, Arduino telemetry display, local-first AI monitor, Claude Code usage dashboard, ARC-Core, Omnibinary, Neural Synth" />
+  <title>AI Desk Meter — Open Local AI Dashboard / MuseMeter 3.0 Path</title>
+  <meta name="description" content="AI Desk Meter is a local-first AI workflow dashboard for desktop, Raspberry Pi, ESP32 displays, Arc-RAR backend health, and the planned MuseMeter 3.0 second-brain / Neural Synth AI buddy path." />
+  <meta name="keywords" content="AI Desk Meter, MuseMeter, Arc-RAR dashboard, Raspberry Pi AI dashboard, ESP32 AI display, Arduino telemetry display, local-first AI monitor, Claude Code usage dashboard, ARC-Core, Omnibinary, Neural Synth, AI buddy" />
   <meta name="author" content="Gary Doman / GareBear99" />
-  <meta property="og:title" content="AI Desk Meter — Local AI Workflow and Arc-RAR Dashboard" />
-  <meta property="og:description" content="A local-first dashboard and device bridge for AI workflow state, Arc-RAR backend health, Raspberry Pi kiosks, ESP32 displays, and future ARC ecosystem telemetry." />
+  <meta property="og:title" content="AI Desk Meter — Open Local AI Dashboard / MuseMeter 3.0 Path" />
+  <meta property="og:description" content="A local-first dashboard and device bridge for AI workflow state, Arc-RAR backend health, Raspberry Pi kiosks, ESP32 displays, and the planned MuseMeter 3.0 second-brain / Neural Synth AI buddy path." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://garebear99.github.io/ai-desk-meter/" />
   <style>
@@ -32,6 +32,12 @@
     .bar { height:16px; border-radius:999px; background:#252b3b; border:1px solid rgba(255,255,255,.1); overflow:hidden; }
     .fill { height:100%; background:linear-gradient(90deg,var(--cyan),var(--accent),var(--danger)); border-radius:999px; }
     .status { margin-top:24px; text-align:center; color:#ffd6aa; font-weight:900; }
+    .pixel-buddy { width:72px; margin:18px auto 2px; display:grid; grid-template-columns:repeat(10,6px); grid-auto-rows:6px; gap:2px; justify-content:center; }
+    .pixel-buddy .px { width:6px; height:6px; border-radius:2px; background:#ff7048; box-shadow:0 0 10px rgba(255,112,72,.55); }
+    .pixel-buddy .px.dark { background:transparent; box-shadow:none; }
+    .pixel-buddy .px.blue { background:#67b7ff; box-shadow:0 0 10px rgba(103,183,255,.5); }
+    .pixel-buddy .px.dim { background:#ff9a5f; }
+    .status.musing { margin-top:4px; }
     .live-row { display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin:14px 0; }
     .live-row input, .live-row select { background:#05070b; color:var(--text); border:1px solid var(--line); border-radius:12px; padding:10px; min-height:42px; }
     .pill { display:inline-flex; border:1px solid var(--line); border-radius:999px; padding:5px 10px; font-weight:900; color:#fff; background:rgba(255,255,255,.06); }
@@ -51,9 +57,9 @@
   <header>
     <div class="wrap hero">
       <div>
-        <span class="eyebrow">Local-first AI workflow dashboard</span>
+        <span class="eyebrow">Open local dashboard → MuseMeter 3.0 path</span>
         <h1>AI Desk Meter</h1>
-        <p class="subtitle">A portable dashboard and device bridge for AI workflow state, Arc-RAR backend health, Raspberry Pi kiosks, ESP32 displays, and future ARC ecosystem telemetry.</p>
+        <p class="subtitle">A portable dashboard and device bridge for AI workflow state, Arc-RAR backend health, Raspberry Pi kiosks, ESP32 displays, and the planned MuseMeter 3.0 second-brain / Neural Synth AI buddy package.</p>
         <div class="actions">
           <a class="btn primary" href="https://github.com/GareBear99/ai-desk-meter">View on GitHub</a>
           <a class="btn" href="#architecture">Architecture</a>
@@ -62,25 +68,33 @@
       </div>
       <div class="device" aria-label="AI Desk Meter mock display">
         <div class="screen">
-          <div class="screen-top"><span>AI Desk</span><span id="screen-current">72%</span></div>
-          <div class="meter"><div class="meter-label"><span>Session</span><span id="screen-session-label">72%</span></div><div class="bar"><div class="fill" id="screen-session-fill" style="width:72%"></div></div></div>
-          <div class="meter"><div class="meter-label"><span>Weekly</span><span id="screen-weekly-label">31%</span></div><div class="bar"><div class="fill" id="screen-weekly-fill" style="width:31%"></div></div></div>
-          <p class="status" id="screen-status">Arc-RAR linked</p>
+          <div class="screen-top"><span>▮ Usage</span><span id="screen-current">50%</span></div>
+          <div class="meter"><div class="meter-label"><span id="screen-session-label">50%</span><span>Current</span></div><div class="bar"><div class="fill" id="screen-session-fill" style="width:50%"></div></div></div>
+          <div class="meter"><div class="meter-label"><span id="screen-weekly-label">11%</span><span>Weekly</span></div><div class="bar"><div class="fill" id="screen-weekly-fill" style="width:11%"></div></div></div>
+          <div class="pixel-buddy" aria-label="Pixel buddy mascot">
+            <span class="px dark"></span><span class="px dark"></span><span class="px"></span><span class="px"></span><span class="px"></span><span class="px"></span><span class="px"></span><span class="px"></span><span class="px dark"></span><span class="px dark"></span>
+            <span class="px dark"></span><span class="px"></span><span class="px"></span><span class="px dim"></span><span class="px"></span><span class="px"></span><span class="px dim"></span><span class="px"></span><span class="px"></span><span class="px dark"></span>
+            <span class="px"></span><span class="px"></span><span class="px"></span><span class="px"></span><span class="px"></span><span class="px"></span><span class="px"></span><span class="px"></span><span class="px"></span><span class="px"></span>
+            <span class="px dark"></span><span class="px dark"></span><span class="px"></span><span class="px"></span><span class="px"></span><span class="px"></span><span class="px"></span><span class="px"></span><span class="px dark"></span><span class="px dark"></span>
+            <span class="px dark"></span><span class="px blue"></span><span class="px blue"></span><span class="px dark"></span><span class="px dark"></span><span class="px dark"></span><span class="px dark"></span><span class="px blue"></span><span class="px blue"></span><span class="px dark"></span>
+          </div>
+          <p class="status musing" id="screen-status">✶ Musing...</p>
           <p id="screen-backend">Receipt: available<br/>Archive: verified<br/>Hardwire: portable</p>
         </div>
       </div>
     </div>
   </header>
-  <nav><div class="wrap"><a href="#scope">Scope</a><a href="#architecture">Architecture</a><a href="#hardware">Hardware</a><a href="#arcrar">Arc-RAR</a><a href="#live">Live API</a><a href="#roadmap">Roadmap</a></div></nav>
+  <nav><div class="wrap"><a href="#scope">Scope</a><a href="#architecture">Architecture</a><a href="#hardware">Hardware</a><a href="#arcrar">Arc-RAR</a><a href="#live">Live API</a><a href="#pi">Pi/SBC</a><a href="#roadmap">Roadmap</a><a href="#license">License Path</a></div></nav>
   <main class="wrap">
     <section id="scope">
       <h2>What it is</h2>
-      <p>AI Desk Meter is a visibility layer for local AI work. It reports provider state, confidence, backend warnings, and display-safe usage indicators without scraping private dashboards or pretending estimates are exact.</p>
+      <p>AI Desk Meter is a visibility layer for local AI work and the open foundation for the planned MuseMeter 3.0 commercial package. It reports provider state, confidence, backend warnings, and display-safe usage indicators without scraping private dashboards or pretending estimates are exact.</p>
       <div class="grid three">
         <div class="card"><strong>Host daemon</strong><p>Python provider layer for mock, manual, and Arc-RAR state-file payloads.</p></div>
         <div class="card"><strong>Device bridge</strong><p>Wi-Fi/stdout transport today, with BLE and serial companion bridges planned.</p></div>
         <div class="card"><strong>ARC-ready path</strong><p>Arc-RAR first, then Omnibinary event spine and Neural Synth visualization once backend contracts are stable.</p></div>
       </div>
+      <p><strong>Open corridor:</strong> v0.x through the stable pre-3.0 foundation remain open source. <strong>MuseMeter 3.0:</strong> planned commercial full package with second-brain / Neural Synth / AI buddy features.</p>
     </section>
     <section id="architecture">
       <h2>Backend-first architecture</h2>
@@ -108,6 +122,18 @@
       </div>
       <pre id="livePayload">Local API not connected yet.</pre>
     </section>
+
+    <section id="pi">
+      <h2>Raspberry Pi / Linux SBC ready path</h2>
+      <p>v0.5 adds install, smoke-test, systemd, kiosk, and network-safety docs for Raspberry Pi-class systems. Arduino-class devices remain companion display/telemetry nodes, not backend authority.</p>
+      <pre>bash scripts/install_linux_sbc.sh
+bash scripts/run_smoke_test.sh
+ai-meter serve --host 127.0.0.1 --port 8787</pre>
+    </section>
+    <section id="license">
+      <h2>Open-source corridor and MuseMeter 3.0</h2>
+      <p>The current repo remains the open foundation. The planned MuseMeter 3.0 package is the later commercial-licensed second-brain / Neural Synth / AI buddy product. The baseline character and <code>✶ Musing...</code> state are intentional and preserved.</p>
+    </section>
     <section id="roadmap">
       <h2>Roadmap</h2>
       <ol>
@@ -115,15 +141,15 @@
         <li>Arc-RAR state-file provider.</li>
         <li>Arc-RAR CLI/API provider.</li>
         <li>Provider contract tests and diagnostics export.</li>
-        <li>Raspberry Pi / Linux SBC kiosk validation.</li>
+        <li>Raspberry Pi / Linux SBC kiosk validation. ✅</li>
         <li>ESP32-S3 display endpoint hardening.</li>
         <li>Arduino-class companion telemetry bridge.</li>
         <li>Native dashboard shell.</li>
-        <li>Omnibinary adapter, ARC-Core hardwire integration, and Neural Synth toggle page.</li>
+        <li>Omnibinary adapter, ARC-Core hardwire integration, and Neural Synth toggle page.</li><li>MuseMeter 3.0 commercial full package: second-brain / Neural Synth / AI buddy.</li>
       </ol>
     </section>
   </main>
-  <footer><div class="wrap">AI Desk Meter — local-first visibility for AI workflow systems. Current backend milestone: state-file and CLI Arc-RAR providers are included.</div></footer>
+  <footer><div class="wrap">AI Desk Meter — local-first visibility for AI workflow systems. Current milestone: live local API, diagnostics, and Raspberry Pi/Linux SBC deployment path are included.</div></footer>
   <script>
     const els = {
       current: document.getElementById('screen-current'),
@@ -148,7 +174,7 @@
       els.sessionFill.style.width = session;
       els.weeklyLabel.textContent = weekly;
       els.weeklyFill.style.width = weekly;
-      els.status.textContent = data.status || 'Ready';
+      els.status.textContent = data.status || '✶ Musing...';
       const b = data.backend || {};
       els.backend.innerHTML = `Receipt: ${b.receipt_state || 'unknown'}<br/>Archive: ${b.archive_state || 'unknown'}<br/>Hardwire: ${b.hardwire_state || 'unknown'}`;
       els.payload.textContent = JSON.stringify(data, null, 2);

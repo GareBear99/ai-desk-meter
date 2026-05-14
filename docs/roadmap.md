@@ -25,7 +25,7 @@
 
 Status: implemented in host provider layer.
 
-## v0.4 — Live dashboard refresh and diagnostics export
+## v0.4 — Live dashboard refresh and diagnostics export ✅
 
 - Add a small local endpoint or generated payload file for the dashboard
 - Refresh provider output without reloading the page
@@ -40,12 +40,14 @@ Status: implemented in host provider layer.
 - Offline/error-state tests
 - Dashboard stale-state tests
 
-## v0.5 — Raspberry Pi / Linux SBC validation
+## v0.5 — Raspberry Pi / Linux SBC validation ✅
 
-- Document Raspberry Pi install path
-- Validate kiosk/local-dashboard mode
-- Add lightweight service template
-- Test low-resource operation
+- Document Raspberry Pi install path ✅
+- Add install and smoke-test scripts ✅
+- Validate kiosk/local-dashboard mode path ✅
+- Add lightweight systemd service template ✅
+- Add loopback-first network security guidance ✅
+- Test low-resource operation on physical target hardware next
 
 ## v0.6 — ESP32-S3 display endpoint hardening
 
@@ -82,3 +84,10 @@ Status: implemented in host provider layer.
 - ARC-Core canonical hardwire integration
 - Archive/replay timeline view
 - Neural Synth toggle page driven by real state
+
+
+## v3.0 — MuseMeter commercial package
+
+MuseMeter 3.0 is the planned commercial-licensed full package after the open-source foundation is stable. Direction: second-brain / Neural Synth / AI buddy package using the open dashboard, provider, hardware, and backend lessons from v0.x-v2.x.
+
+The baseline pixel buddy and `✶ Musing...` state remain intentional. For now, Musing means prompt response or action-loading. Later versions can differentiate states such as verifying, archiving, warning, responding, and idle.

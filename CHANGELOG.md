@@ -1,3 +1,13 @@
+
+## v0.5.0 - Raspberry Pi/SBC deployment and MuseMeter path
+
+- Added Linux/SBC install and smoke-test scripts.
+- Added systemd service template and example environment file.
+- Added Raspberry Pi setup, Linux SBC validation, network security, kiosk, and companion bridge docs.
+- Restored and preserved the pixel buddy / `✶ Musing...` loading/responding state as intentional product identity.
+- Added licensing roadmap: v0.x-v2.x open-source corridor, planned MuseMeter 3.0 commercial full package.
+- Updated public dashboard copy for the MuseMeter 3.0 second-brain / Neural Synth / AI buddy direction without moving those features into the current backend milestone.
+
 # Changelog
 
 ## 0.1.0 - Initial DIY repo scaffold

@@ -29,3 +29,12 @@ The host package now includes both `arcrar` for state-file bridge testing and `a
 - [Local API](local-api.md)
 - [Dashboard refresh](dashboard-refresh.md)
 
+
+## Added deployment and product-direction docs
+
+- `raspberry-pi-setup.md` — Raspberry Pi / Linux SBC install and service path
+- `linux-sbc-validation.md` — hardware validation checklist
+- `network-security.md` — loopback-first and LAN binding guidance
+- `companion-bridge.md` — ESP32 / Arduino companion display bridge direction
+- `licensing-roadmap.md` — open-source corridor and MuseMeter 3.0 commercial package direction
+- `character-spec.md` — pixel buddy and `✶ Musing...` state preservation

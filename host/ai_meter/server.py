@@ -20,7 +20,7 @@ def _json_bytes(data: dict[str, Any], status: int = 200) -> tuple[int, bytes]:
 
 
 class MeterRequestHandler(BaseHTTPRequestHandler):
-    server_version = "AIDeskMeterHTTP/0.4"
+    server_version = "AIDeskMeterHTTP/0.5"
 
     def do_OPTIONS(self) -> None:  # noqa: N802 - stdlib hook name
         self._send_json({}, 204)

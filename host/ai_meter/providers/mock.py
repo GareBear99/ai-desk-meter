@@ -24,7 +24,7 @@ class MockProvider:
             status = "Rested"
         else:
             burn = BurnRate.normal
-            status = "Thinking..."
+            status = "✶ Musing..."
         return UsagePayload(
             service="mock-ai",
             current_percent=round(max(0, min(100, current)), 1),

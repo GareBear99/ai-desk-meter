@@ -46,3 +46,19 @@ A release should not be tagged until:
 - `ai-meter start --provider arcrar --transport stdout --once` handles both valid and missing state files
 - `ai-meter status --provider arcrar-cli` fails closed when Arc-RAR is not installed
 - README and docs match the actual implemented state
+
+
+## Raspberry Pi / Linux SBC deployment
+
+- `scripts/install_linux_sbc.sh` completes on Python 3.10+
+- `scripts/run_smoke_test.sh` passes after install
+- systemd unit starts with loopback binding
+- dashboard can poll `http://127.0.0.1:8787/status?provider=mock`
+- diagnostics ZIP export works on target hardware
+- missing Arc-RAR returns a safe provider error/offline payload
+
+## Character/state preservation
+
+- dashboard keeps the baseline orange/blue pixel buddy
+- default loading/responding language remains `✶ Musing...`
+- future state differentiation must preserve the baseline state as a fallback

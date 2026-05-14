@@ -1,0 +1,22 @@
+[Unit]
+Description=AI Desk Meter local API
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/ai-desk-meter
+EnvironmentFile=-/etc/ai-desk-meter.env
+ExecStart=/opt/ai-desk-meter/.venv/bin/ai-meter serve --host ${AI_METER_HOST} --port ${AI_METER_PORT}
+Restart=on-failure
+RestartSec=3
+User=ai-meter
+Group=ai-meter
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+ReadWritePaths=/var/lib/ai-desk-meter /var/log/ai-desk-meter
+
+[Install]
+WantedBy=multi-user.target

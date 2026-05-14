@@ -28,3 +28,16 @@ Before tagging a release:
 - [ ] `ai-meter diagnostics --provider mock --out diagnostics.zip` writes a ZIP.
 - [ ] Diagnostics bundle contains no secrets, tokens, private prompts, or private AI session content.
 
+
+
+## v0.5 hardware/deployment gate
+
+- [ ] `scripts/install_linux_sbc.sh` reviewed and executable
+- [ ] `scripts/run_smoke_test.sh` reviewed and executable
+- [ ] systemd unit included under `deploy/systemd/`
+- [ ] kiosk notes included under `deploy/kiosk/`
+- [ ] Raspberry Pi setup docs included
+- [ ] network security docs keep loopback as default
+- [ ] companion bridge docs clarify Arduino-class devices are endpoints, not backend authority
+- [ ] pixel buddy and `✶ Musing...` state preserved in public dashboard/spec
+- [ ] licensing roadmap documents open-source corridor and planned MuseMeter 3.0 commercial package

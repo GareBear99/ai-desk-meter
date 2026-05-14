@@ -1,6 +1,8 @@
 # AI Desk Meter Host
 
-Python host daemon for AI Desk Meter.
+Python host daemon and local API for AI Desk Meter.
+
+The host owns provider reads, payload validation, transports, local dashboard API, and diagnostics export. It keeps the dashboard honest: if a provider is missing, stale, corrupt, or unavailable, the host returns an explicit error/offline state instead of inventing usage numbers.
 
 ## Install
 
@@ -10,19 +12,61 @@ source .venv/bin/activate
 pip install -e .
 ```
 
-## Run
+For Raspberry Pi / Linux SBC deployment from the repo root:
+
+```bash
+bash scripts/install_linux_sbc.sh
+bash scripts/run_smoke_test.sh
+```
+
+## Commands
 
 ```bash
 ai-meter test-payload
 ai-meter providers
+ai-meter status --provider mock
 ai-meter start --provider mock --transport stdout --once
-ai-meter start --provider mock --transport wifi --url http://192.168.1.44/api/state
+ai-meter diagnostics --provider mock --out ai-desk-meter-diagnostics.zip
+ai-meter serve --host 127.0.0.1 --port 8787
 ```
 
 ## Arc-RAR state-file provider
 
 ```bash
-AI_METER_ARCRAR_STATE=../examples/arcrar_meter_state.example.json   ai-meter start --provider arcrar --transport stdout --once
+AI_METER_ARCRAR_STATE=../examples/arcrar_meter_state.example.json \
+  ai-meter start --provider arcrar --transport stdout --once
 ```
 
-The Arc-RAR provider fails closed when state is missing or invalid.
+The Arc-RAR state-file provider fails closed when state is missing or invalid.
+
+## Arc-RAR CLI provider
+
+```bash
+AI_METER_ARCRAR_BIN=/path/to/arc-rar AI_METER_ARCRAR_TIMEOUT=3 \
+  ai-meter status --provider arcrar-cli
+```
+
+The CLI provider expects a stable command boundary:
+
+```text
+arc-rar status --json
+```
+
+## Local API
+
+```bash
+ai-meter serve --host 127.0.0.1 --port 8787
+```
+
+Endpoints:
+
+```text
+GET /health
+GET /providers
+GET /status?provider=mock
+GET /status?provider=arcrar
+GET /status?provider=arcrar-cli
+GET /diagnostics?provider=mock
+```
+
+Keep loopback binding unless you intentionally need a trusted LAN display.

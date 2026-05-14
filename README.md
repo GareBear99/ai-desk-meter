@@ -6,6 +6,8 @@
 
 The project is designed to remain honest and portable: the dashboard visualizes state reported by providers; it does not invent usage numbers, bypass limits, rotate accounts, scrape private dashboards, or claim exact usage where only estimates are available.
 
+The open-source track keeps the hardware, provider, dashboard, and local API groundwork public. The planned **MuseMeter 3.0** track is the later commercial full package: a second-brain / Neural Synth / AI buddy product built on the stable open foundation. The current `Musing...` state is intentional and means the agent is responding to prompt input or an action is loading.
+
 ## Current scope
 
 AI Desk Meter currently provides:
@@ -13,10 +15,13 @@ AI Desk Meter currently provides:
 - A Python host daemon with mock/manual provider support
 - A conservative Arc-RAR state-file provider for backend integration testing
 - A timeout-safe Arc-RAR CLI provider for the next backend boundary
+- A local HTTP API bridge for live dashboard refresh
+- A diagnostics ZIP exporter that avoids secrets and private prompt/session content
 - A JSON payload protocol suitable for dashboards and small hardware displays
 - Wi-Fi/stdout transport scaffolds
+- Raspberry Pi / Linux SBC install, smoke-test, systemd, and kiosk deployment docs
 - ESP32-S3 firmware scaffold for a physical desk meter
-- Public docs for hardware, firmware, host app, provider contracts, roadmap, and testing
+- Public docs for hardware, firmware, host app, provider contracts, roadmap, testing, companion devices, licensing direction, and the pixel buddy character
 - Example payloads for normal, warning, offline, corrupt, and Arc-RAR-linked states
 
 The original desk-meter feature set is still preserved as the baseline display target:
@@ -27,7 +32,7 @@ The original desk-meter feature set is still preserved as the baseline display t
 - Burn-rate state: idle, low, normal, high, critical
 - Data confidence: exact, estimated, mock, or unknown
 - Offline, stale, warning, and error states
-- Optional pixel mascot or status animation
+- Pixel buddy / status animation with the baseline `✶ Musing...` state
 - Local visibility and diagnostics for AI coding tools without bypassing usage limits
 
 ## Hardware direction
@@ -173,6 +178,24 @@ ai-meter diagnostics --provider arcrar-cli --out arcrar-diagnostics.zip
 
 The ZIP includes `payload.json`, `diagnostics.json`, `provider.txt`, `environment.txt`, `errors.json`, and `README_DIAGNOSTICS.txt`.
 
+## Raspberry Pi / Linux SBC deployment
+
+Install and smoke-test the host stack on Raspberry Pi-class systems or Linux SBCs:
+
+```bash
+bash scripts/install_linux_sbc.sh
+bash scripts/run_smoke_test.sh
+```
+
+A hardened systemd unit and example environment file are included:
+
+```text
+deploy/systemd/ai-desk-meter.service
+examples/systemd.env.example
+```
+
+Read `docs/raspberry-pi-setup.md`, `docs/linux-sbc-validation.md`, and `docs/network-security.md` before binding the API to a LAN address.
+
 ## Firmware quick start
 
 ```bash
@@ -221,9 +244,16 @@ ai-desk-meter/
 │  ├─ architecture.md
 │  ├─ provider-contract.md
 │  ├─ arcrar-integration-spec.md
-│  ├─ roadmap.md
+│  ├─ raspberry-pi-setup.md
+│  ├─ linux-sbc-validation.md
+│  ├─ network-security.md
+│  ├─ companion-bridge.md
+│  ├─ licensing-roadmap.md
+│  ├─ character-spec.md
 │  ├─ test-matrix.md
 │  └─ neural-synth-roadmap.md
+├─ scripts/
+├─ deploy/
 ├─ firmware/
 ├─ host/
 ├─ examples/
@@ -237,12 +267,13 @@ ai-desk-meter/
 - **v0.2** Arc-RAR state-file provider
 - **v0.3** Arc-RAR CLI/API provider ✅
 - **v0.4** Live dashboard provider refresh and diagnostics export ✅
-- **v0.5** Raspberry Pi / Linux SBC kiosk validation
+- **v0.5** Raspberry Pi / Linux SBC kiosk validation ✅
 - **v0.6** ESP32 display endpoint hardening
 - **v0.7** Arduino-class companion telemetry bridge design
 - **v0.8** Native dashboard shell prototype
 - **v1.0** Stable Arc-RAR-backed AI Desk Meter
 - **v1.1+** Omnibinary adapter, ARC-Core hardwire integration, archive timeline view, Neural Synth toggle page
+- **v3.0** MuseMeter commercial full package: second-brain / Neural Synth / AI buddy product
 - **Future provider targets** Multi-AI desk meter support where official/local signals exist: Claude Code/manual logs, Codex-style CLI workflows, Gemini CLI-style workflows, Ollama/local LLMs, and other local-first provider adapters
 
 ## Validation
@@ -256,8 +287,9 @@ state-file Arc-RAR provider works
 Arc-RAR CLI provider fails closed for missing executable, invalid JSON, non-zero exit, and timeout
 local API bridge works for `/health`, `/providers`, `/status`, and `/diagnostics`
 diagnostics ZIP export works without including secrets or private prompt/session content
+Linux/SBC install script, smoke-test script, systemd unit, kiosk docs, and network-safety docs are included
 ```
 
 ## License
 
-MIT. See `LICENSE`.
+MIT for the current open-source corridor. See `LICENSE` and `docs/licensing-roadmap.md`. The planned MuseMeter 3.0 package is intended to move to a commercial license after the open foundation is stable.

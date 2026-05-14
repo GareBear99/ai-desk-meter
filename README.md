@@ -10,7 +10,7 @@ The open-source track keeps the hardware, provider, dashboard, and local API gro
 
 ## Current scope
 
-**Current release:** v1.0.0 — stable open-source functional foundation.
+**Current release:** v1.0.1 — stable open-source functional foundation with no local server required by default.
 
 
 AI Desk Meter currently provides:
@@ -18,14 +18,16 @@ AI Desk Meter currently provides:
 - A Python host daemon with mock/manual provider support
 - A conservative Arc-RAR state-file provider for backend integration testing
 - A timeout-safe Arc-RAR CLI provider with status, receipt, archive, and session contract fixtures
-- A local HTTP API bridge for live dashboard refresh
+- Offline-first JSON file/stdout flows for dashboards and companion devices
+- An optional local HTTP API bridge for development/debug live dashboard refresh
 - A diagnostics ZIP exporter that avoids secrets and private prompt/session content
 - A local `doctor` command for functional health checks
 - A JSON payload protocol suitable for dashboards and small hardware displays
 - Wi-Fi/stdout transport scaffolds
 - Raspberry Pi / Linux SBC install, smoke-test, systemd, and kiosk deployment docs
 - ESP32-S3 firmware scaffold for a physical desk meter
-- Compact `/companion/status` endpoint for ESP32 and Arduino-class companion displays
+- Compact companion JSON payloads for ESP32 and Arduino-class companion displays
+- Optional `/companion/status` endpoint for development/debug previews
 - Tauri-native shell plan/prototype docs and local dashboard launch scripts
 - Public docs for hardware, firmware, host app, provider contracts, roadmap, testing, companion devices, licensing direction, and the pixel buddy character
 - Example payloads for normal, warning, offline, corrupt, and Arc-RAR-linked states
@@ -66,7 +68,8 @@ Raspberry Pi-class systems can run the Python host and dashboard stack directly.
 
 ## Release and license path
 
-- `v1.0.0` is the stable open-source functional release.
+- `v1.0.1` is the stable open-source functional release with no local server required by default.
+- `v1.0.0` remains the first stable functional release baseline.
 - `v1.x-v2.x` remain the open-source foundation/expansion corridor unless a future notice says otherwise.
 - `MuseMeter 3.0` is the planned commercial full package: second-brain / Neural Synth / AI buddy.
 
@@ -166,16 +169,42 @@ arc-rar status --json
 The state-file provider remains useful for development and hardware demos; the CLI provider is the preferred path toward live backend authority.
 
 
-## Local API and live dashboard
+## Default runtime: no local server required
 
-AI Desk Meter now includes a local HTTP API bridge so the dashboard can refresh live provider state instead of remaining static.
+AI Desk Meter is offline-first by default. The normal runtime writes validated JSON payloads to files, stdout, serial/Wi-Fi bridges, or companion devices. The local HTTP API is optional development/debug tooling only.
+
+Write one full dashboard payload:
+
+```bash
+cd host
+ai-meter write-status --provider mock --out ../runtime/status.json
+```
+
+Write one compact companion payload:
+
+```bash
+ai-meter write-companion --provider mock --out ../runtime/companion.json
+```
+
+Continuously refresh file payloads:
+
+```bash
+ai-meter watch --provider mock --out ../runtime/status.json --interval 2
+ai-meter watch-companion --provider mock --out ../runtime/companion.json --interval 2
+```
+
+Open `docs/index.html` directly and use the file-import control to load `runtime/status.json`. Native/Tauri shells and Raspberry Pi kiosk setups should prefer file/stdout/serial flows over a required server.
+
+## Optional local API and live dashboard preview
+
+The local HTTP API is still included for development, browser preview, and LAN/debug testing. It is not required for normal use.
 
 ```bash
 cd host
 ai-meter serve --host 127.0.0.1 --port 8787
 ```
 
-Available local endpoints:
+Available optional endpoints:
 
 ```text
 GET /health
@@ -187,13 +216,7 @@ GET /companion/status?provider=mock
 GET /diagnostics?provider=mock
 ```
 
-Open `docs/index.html` or the GitHub Pages dashboard and use the live panel with:
-
-```text
-http://127.0.0.1:8787
-```
-
-The dashboard fails safely: if the API is offline, Arc-RAR is missing, or a provider returns invalid state, it shows an offline/error payload rather than inventing backend truth.
+The dashboard fails safely: if the optional API is offline, Arc-RAR is missing, or a provider returns invalid state, it shows an offline/error payload rather than inventing backend truth.
 
 
 ## Companion hardware endpoint
@@ -353,7 +376,8 @@ mock provider works
 state-file Arc-RAR provider works
 Arc-RAR CLI provider fails closed for missing executable, invalid JSON, non-zero exit, and timeout
 Arc-RAR CLI provider now merges status, latest receipt, archive verify, and session inspect fixture outputs
-local API bridge works for `/health`, `/providers`, `/status`, `/companion/status`, and `/diagnostics`
+file/stdout payload commands work without a local server
+optional local API bridge works for `/health`, `/providers`, `/status`, `/companion/status`, and `/diagnostics`
 diagnostics ZIP export works without including secrets or private prompt/session content
 Linux/SBC install script, smoke-test script, systemd unit, kiosk docs, and network-safety docs are included
 ```

@@ -59,7 +59,7 @@
 
 - Tauri shell plan and config example
 - Desktop security notes
-- Frontend bridge contract for the local API
+- Frontend bridge contract for the optional local API
 - macOS/Linux and Windows dashboard launch scripts
 - Artifact tests to preserve the native shell path
 
@@ -107,3 +107,8 @@ Status: complete for the open-source foundation.
 ## v1.0 — Stable open-source functional release
 
 Next release target. Focus on final public polish, install validation, release notes, and packaging hygiene.
+
+
+## v1.0.1 No-server default
+
+AI Desk Meter does not require a local server for normal use. Prefer `write-status`, `write-companion`, `watch`, and `watch-companion` for desktop, Raspberry Pi, native/Tauri, and companion-device flows. The HTTP API remains optional development/debug preview tooling.

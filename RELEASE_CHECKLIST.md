@@ -47,7 +47,7 @@ Before tagging a release:
 
 - [ ] `pytest` passes.
 - [ ] `ai-meter companion-status --provider mock` returns compact JSON.
-- [ ] `/companion/status?provider=mock` works from the local API.
+- [ ] `/companion/status?provider=mock` works from the optional local API.
 - [ ] ESP32 companion example has Wi-Fi/URL placeholders only.
 - [ ] Arduino serial example reads one JSON payload per line.
 - [ ] Public docs clearly say microcontrollers are companion nodes, not backend authority.

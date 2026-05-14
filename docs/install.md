@@ -43,3 +43,8 @@ AI_METER_ARCRAR_BIN=/path/to/arc-rar ai-meter status --provider arcrar-cli
 ```
 
 If Arc-RAR is not installed, the CLI provider returns an offline payload instead of crashing.
+
+
+## v1.0.1 No-server default
+
+AI Desk Meter does not require a local server for normal use. Prefer `write-status`, `write-companion`, `watch`, and `watch-companion` for desktop, Raspberry Pi, native/Tauri, and companion-device flows. The HTTP API remains optional development/debug preview tooling.

@@ -1,3 +1,12 @@
+
+## 1.0.1
+
+- Added no-server default runtime commands: `write-status`, `write-companion`, `watch`, and `watch-companion`.
+- Added atomic JSON file writer for full dashboard and compact companion payloads.
+- Added dashboard file-import workflow so `docs/index.html` can render payloads without a local HTTP server.
+- Reframed the HTTP API as optional development/debug preview tooling only.
+- Added `docs/no-local-server-default.md` and release notes for v1.0.1.
+
 # Changelog
 
 ## v1.0.0 — Stable open-source functional release

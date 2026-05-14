@@ -1,0 +1,16 @@
+{
+  "schema": "ai-desk-meter.v1",
+  "service": "mock-ai",
+  "current_percent": 8.7,
+  "weekly_percent": 34.2,
+  "current_reset_seconds": 4799,
+  "weekly_reset_seconds": 580799,
+  "burn_rate": "low",
+  "status": "Rested",
+  "mode": "active",
+  "updated_at": 1778740800,
+  "source": "mock",
+  "confidence": "mock",
+  "warnings": [],
+  "errors": []
+}

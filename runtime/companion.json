@@ -1,0 +1,18 @@
+{
+  "schema": "ai_desk_meter_companion_v1",
+  "status": "linked",
+  "current_pct": 8,
+  "weekly_pct": 34,
+  "current_reset": "1h 19m",
+  "weekly_reset": "6d 17h",
+  "activity": "musing",
+  "message": "Rested",
+  "burn_rate": "low",
+  "backend": "mock",
+  "receipt_state": "unknown",
+  "archive_state": "unknown",
+  "hardwire_state": "unknown",
+  "warnings": 0,
+  "errors": 0,
+  "updated_at": 1778740802
+}

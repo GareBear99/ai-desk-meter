@@ -9,14 +9,14 @@ The GUI is a viewer and control surface. Provider truth remains in the host proc
 ```text
 Arc-RAR / mock / manual provider
         ↓
-ai-meter local API
+ai-meter optional local API
         ↓
 HTML dashboard / Tauri shell / kiosk view
 ```
 
 ## Open-source track
 
-The v0.x-v2.x track stays open-source and focuses on local API stability, provider contract stability, Raspberry Pi / Linux SBC operation, ESP32/Arduino-class companion displays, dashboard shelling, and diagnostics.
+The v0.x-v2.x track stays open-source and focuses on optional local API stability, provider contract stability, Raspberry Pi / Linux SBC operation, ESP32/Arduino-class companion displays, dashboard shelling, and diagnostics.
 
 ## MuseMeter 3.0 track
 
@@ -29,7 +29,7 @@ Included in this repo stage:
 - Tauri shell plan and config example
 - launch scripts for macOS/Linux and Windows
 - desktop security notes
-- frontend bridge notes for polling the local API
+- frontend bridge notes for polling the optional local API
 - artifact tests to prevent losing the native shell path
 
 Not included yet: compiled desktop binaries, signed installers, Omnibinary adapter, Neural Synth toggle implementation, or commercial MuseMeter-only features.

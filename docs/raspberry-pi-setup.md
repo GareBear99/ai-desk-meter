@@ -25,7 +25,7 @@ ai-meter providers
 ai-meter status --provider mock
 ```
 
-## Run local API
+## Run optional local API
 
 ```bash
 ai-meter serve --host 127.0.0.1 --port 8787

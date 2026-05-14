@@ -1,4 +1,4 @@
-# Local API Bridge
+# Optional local API Bridge
 
 AI Desk Meter includes a small local HTTP API for desktop browsers, Raspberry Pi kiosks, and local dashboard shells.
 

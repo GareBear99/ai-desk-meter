@@ -26,7 +26,7 @@ The host package now includes both `arcrar` for state-file bridge testing and `a
 
 ## Functional local bridge
 
-- [Local API](local-api.md)
+- [Optional local API](local-api.md)
 - [Dashboard refresh](dashboard-refresh.md)
 
 
@@ -57,3 +57,8 @@ The host package now includes both `arcrar` for state-file bridge testing and `a
 - [Functional release definition](functional-release.md)
 - [Open-source boundary](open-source-boundary.md)
 - [Version and license matrix](version-license-matrix.md)
+
+
+## v1.0.1 No-server default
+
+AI Desk Meter does not require a local server for normal use. Prefer `write-status`, `write-companion`, `watch`, and `watch-companion` for desktop, Raspberry Pi, native/Tauri, and companion-device flows. The HTTP API remains optional development/debug preview tooling.

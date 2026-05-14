@@ -32,3 +32,8 @@ curl http://127.0.0.1:8787/companion/status?provider=mock
 - Diagnostics exclude secrets and private AI content.
 - API defaults to loopback.
 - Companion endpoint returns compact JSON suitable for ESP32/Arduino-class displays.
+
+
+## v1.0.1 No-server default
+
+AI Desk Meter does not require a local server for normal use. Prefer `write-status`, `write-companion`, `watch`, and `watch-companion` for desktop, Raspberry Pi, native/Tauri, and companion-device flows. The HTTP API remains optional development/debug preview tooling.

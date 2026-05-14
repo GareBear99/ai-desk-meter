@@ -1,5 +1,23 @@
 # Changelog
 
+## v1.0.0 — Stable open-source functional release
+
+- Promoted the package version to 1.0.0.
+- Added `ai-meter version` and `ai-meter doctor --provider ...` commands.
+- Added v1.0 release notes, install guide, open-source boundary, functional release definition, and version/license matrix.
+- Added release smoke-test script and GitHub Actions CI workflow.
+- Kept MuseMeter 3.0 documented as the future commercial second-brain / Neural Synth / AI buddy package while preserving the current open-source foundation.
+- Preserved the intentional pixel buddy and `✶ Musing...` state.
+
+## v0.9.0 — Omnibinary adapter boundary
+
+- Added planned/fails-closed Omnibinary provider.
+- Added Omnibinary adapter spec and fixtures.
+- Added ARC-Core hardwire map.
+- Added adapter boundary rules.
+- Registered `omnibinary` provider without claiming full backend integration.
+
+
 ## 0.8.0 - Native dashboard shell prototype
 
 - Added Tauri-oriented native shell plan and configuration example.

@@ -1,0 +1,24 @@
+{
+  "schema": "omnibinary.adapter_state.v1",
+  "linked": true,
+  "status": "Omnibinary replay indexing",
+  "checkpoint_id": "ob_chk_002",
+  "usage": {
+    "current": 18,
+    "weekly": 5
+  },
+  "burn_rate": "low",
+  "event": {
+    "state": "available",
+    "last_event_id": "ob_evt_144"
+  },
+  "replay": {
+    "state": "indexing",
+    "last_replay_id": "ob_replay_009"
+  },
+  "health": {
+    "hardwire_state": "portable"
+  },
+  "warnings": ["Replay index is still warming up."],
+  "errors": []
+}

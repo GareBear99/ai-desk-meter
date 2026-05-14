@@ -1,0 +1,24 @@
+{
+  "schema": "omnibinary.adapter_state.v1",
+  "linked": true,
+  "status": "Omnibinary linked",
+  "checkpoint_id": "ob_chk_001",
+  "usage": {
+    "current": 12,
+    "weekly": 3
+  },
+  "event": {
+    "state": "available",
+    "last_event_id": "ob_evt_001",
+    "checkpoint_id": "ob_chk_001"
+  },
+  "replay": {
+    "state": "ready",
+    "last_replay_id": "ob_replay_001"
+  },
+  "health": {
+    "hardwire_state": "portable"
+  },
+  "warnings": [],
+  "errors": []
+}

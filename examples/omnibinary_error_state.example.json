@@ -1,0 +1,20 @@
+{
+  "schema": "omnibinary.adapter_state.v1",
+  "linked": false,
+  "status": "Omnibinary unavailable",
+  "usage": {
+    "current": 0,
+    "weekly": 0
+  },
+  "event": {
+    "state": "unavailable"
+  },
+  "replay": {
+    "state": "unavailable"
+  },
+  "health": {
+    "hardwire_state": "unknown"
+  },
+  "warnings": [],
+  "errors": ["Omnibinary event source unavailable."]
+}

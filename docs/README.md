@@ -45,3 +45,15 @@ The host package now includes both `arcrar` for state-file bridge testing and `a
 - [Tauri shell plan](tauri-shell-plan.md)
 - [Desktop security notes](desktop-security.md)
 
+
+- [Omnibinary Adapter Spec](omnibinary-adapter-spec.md)
+- [ARC-Core Hardwire Map](arc-core-hardwire-map.md)
+- [Adapter Boundaries](adapter-boundaries.md)
+
+## v1.0 release docs
+
+- [Install and run](install.md)
+- [Release notes v1.0.0](release-v1.0.0.md)
+- [Functional release definition](functional-release.md)
+- [Open-source boundary](open-source-boundary.md)
+- [Version and license matrix](version-license-matrix.md)

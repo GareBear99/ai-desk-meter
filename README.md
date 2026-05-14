@@ -10,6 +10,9 @@ The open-source track keeps the hardware, provider, dashboard, and local API gro
 
 ## Current scope
 
+**Current release:** v1.0.0 — stable open-source functional foundation.
+
+
 AI Desk Meter currently provides:
 
 - A Python host daemon with mock/manual provider support
@@ -17,6 +20,7 @@ AI Desk Meter currently provides:
 - A timeout-safe Arc-RAR CLI provider with status, receipt, archive, and session contract fixtures
 - A local HTTP API bridge for live dashboard refresh
 - A diagnostics ZIP exporter that avoids secrets and private prompt/session content
+- A local `doctor` command for functional health checks
 - A JSON payload protocol suitable for dashboards and small hardware displays
 - Wi-Fi/stdout transport scaffolds
 - Raspberry Pi / Linux SBC install, smoke-test, systemd, and kiosk deployment docs
@@ -60,6 +64,14 @@ Cheap prototype target:
 
 Raspberry Pi-class systems can run the Python host and dashboard stack directly. Arduino-class systems should be treated as endpoints or companion nodes, not as the full backend authority.
 
+## Release and license path
+
+- `v1.0.0` is the stable open-source functional release.
+- `v1.x-v2.x` remain the open-source foundation/expansion corridor unless a future notice says otherwise.
+- `MuseMeter 3.0` is the planned commercial full package: second-brain / Neural Synth / AI buddy.
+
+See `docs/release-v1.0.0.md`, `docs/open-source-boundary.md`, and `docs/version-license-matrix.md`.
+
 ## Architecture
 
 ```text
@@ -83,8 +95,10 @@ cd host
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -e .
-ai-meter test-payload
+ai-meter version
 ai-meter providers
+ai-meter doctor --provider mock
+ai-meter test-payload
 ai-meter start --provider mock --transport stdout --once
 ```
 
@@ -347,3 +361,24 @@ Linux/SBC install script, smoke-test script, systemd unit, kiosk docs, and netwo
 ## License
 
 MIT for the current open-source corridor. See `LICENSE` and `docs/licensing-roadmap.md`. The planned MuseMeter 3.0 package is intended to move to a commercial license after the open foundation is stable.
+
+
+## v0.9 Omnibinary adapter boundary
+
+The repo now includes a planned, fails-closed `omnibinary` provider and adapter documentation. This does not claim Omnibinary is fully wired yet. It locks the safe connection boundary for future binary event-spine, replay ledger, and second-brain substrate work.
+
+```bash
+ai-meter status --provider omnibinary
+AI_METER_OMNIBINARY_STATE=examples/omnibinary_event_state.example.json ai-meter status --provider omnibinary
+```
+
+Current authority order remains:
+
+```text
+ARC-Core = canonical authority
+Arc-RAR = portable archive / receipt bundle backend
+Omnibinary = future binary event spine / replay mirror
+AI Desk Meter = dashboard, companion payloads, diagnostics
+Neural Synth = later visualization toggle driven by real provider state
+MuseMeter 3.0 = later commercial second-brain / Neural Synth / AI buddy package
+```

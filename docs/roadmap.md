@@ -92,3 +92,18 @@
 MuseMeter 3.0 is the planned commercial-licensed full package after the open-source foundation is stable. Direction: second-brain / Neural Synth / AI buddy package using the open dashboard, provider, hardware, and backend lessons from v0.x-v2.x.
 
 The baseline pixel buddy and `✶ Musing...` state remain intentional. For now, Musing means prompt response or action-loading. Later versions can differentiate states such as verifying, archiving, warning, responding, and idle.
+
+
+## v0.9 — Omnibinary adapter boundary
+
+Status: complete for the open-source foundation.
+
+- Added a fails-closed `omnibinary` provider.
+- Added Omnibinary fixture examples.
+- Added the ARC-Core hardwire map.
+- Added adapter boundary documentation.
+- Kept Neural Synth as a later visualization layer driven by real provider state.
+
+## v1.0 — Stable open-source functional release
+
+Next release target. Focus on final public polish, install validation, release notes, and packaging hygiene.

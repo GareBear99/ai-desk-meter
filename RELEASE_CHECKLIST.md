@@ -5,7 +5,7 @@ Before tagging a release:
 - [ ] README describes only implemented behavior and clearly marks roadmap items.
 - [ ] `cd host && python -m pytest` passes.
 - [ ] `ai-meter test-payload` prints valid JSON.
-- [ ] `ai-meter providers` lists `arcrar`, `arcrar-cli`, `manual`, and `mock`.
+- [ ] `ai-meter providers` lists `arcrar`, `arcrar-cli`, `manual`, `mock`, and `omnibinary`.
 - [ ] `AI_METER_ARCRAR_STATE=../examples/arcrar_meter_state.example.json ai-meter start --provider arcrar --transport stdout --once` returns an active payload.
 - [ ] Missing Arc-RAR state returns an offline payload.
 - [ ] Corrupt Arc-RAR state returns an error payload.
@@ -14,7 +14,7 @@ Before tagging a release:
 - [ ] Arc-RAR CLI timeout returns an error payload.
 - [ ] Docs mention Raspberry Pi/SBC support accurately.
 - [ ] Docs describe Arduino-class boards as endpoints/companions, not full backend hosts.
-- [ ] No trademark-risk branding remains in public copy.
+- [ ] Public copy uses intentional AI Desk Meter / MuseMeter roadmap wording and avoids accidental legacy branding drift.
 - [ ] GitHub Pages renders without broken CSS or old names.
 
 ## v0.4 functional checks
@@ -69,3 +69,23 @@ Before tagging a release:
 - [ ] Launch scripts default to `127.0.0.1`.
 - [ ] Desktop shell docs state that the GUI is not backend authority.
 - [ ] Tests pass with `pytest`.
+
+
+## v0.9 Omnibinary boundary checks
+
+- [ ] `ai-meter status --provider omnibinary` fails closed without state.
+- [ ] `AI_METER_OMNIBINARY_STATE=examples/omnibinary_event_state.example.json ai-meter status --provider omnibinary` maps fixture state.
+- [ ] Docs clearly state Omnibinary is planned/future integration, not a fully wired backend yet.
+- [ ] Neural Synth remains a later visualization layer.
+- [ ] MuseMeter 3.0 remains documented as the later commercial full package.
+
+
+## v1.0 stable release checks
+
+- [ ] `ai-meter version` prints `1.0.0`.
+- [ ] `ai-meter doctor --provider mock` returns `ok: true`.
+- [ ] `scripts/release_smoke_test.sh` passes on a clean checkout.
+- [ ] GitHub Actions workflow is present under `.github/workflows/ci.yml`.
+- [ ] `docs/release-v1.0.0.md` clearly separates implemented behavior from future roadmap items.
+- [ ] `docs/version-license-matrix.md` preserves the open-source corridor and MuseMeter 3.0 commercial path.
+- [ ] `docs/open-source-boundary.md` preserves the intentional pixel buddy and `✶ Musing...` state.

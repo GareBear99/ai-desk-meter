@@ -3,516 +3,110 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>MuseMeter — DIY ESP32-S3 AI Usage Dashboard</title>
-  <meta name="description" content="MuseMeter is a local-first physical usage dashboard for Claude Code and AI coding tools, powered by an ESP32-S3 AMOLED display and a desktop host daemon." />
-  <meta name="keywords" content="MuseMeter, Claude Code usage meter, ESP32-S3 AMOLED, Waveshare ESP32, AI coding dashboard, local-first AI monitor, DIY ESP32 project, Bluetooth usage display, Claude Code hardware" />
+  <title>AI Desk Meter — Local AI Workflow and Arc-RAR Dashboard</title>
+  <meta name="description" content="AI Desk Meter is a local-first AI workflow dashboard for desktop, Raspberry Pi, ESP32 displays, and future Arc-RAR/Omnibinary-backed ARC system visibility." />
+  <meta name="keywords" content="AI Desk Meter, Arc-RAR dashboard, Raspberry Pi AI dashboard, ESP32 AI display, Arduino telemetry display, local-first AI monitor, Claude Code usage dashboard, ARC-Core, Omnibinary, Neural Synth" />
   <meta name="author" content="Gary Doman / GareBear99" />
-  <meta property="og:title" content="MuseMeter — DIY ESP32-S3 AI Usage Dashboard" />
-  <meta property="og:description" content="A local-first physical AI usage dashboard for Claude Code and coding tools." />
+  <meta property="og:title" content="AI Desk Meter — Local AI Workflow and Arc-RAR Dashboard" />
+  <meta property="og:description" content="A local-first dashboard and device bridge for AI workflow state, Arc-RAR backend health, Raspberry Pi kiosks, ESP32 displays, and future ARC ecosystem telemetry." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://garebear99.github.io/ai-desk-meter/" />
   <style>
-    :root {
-      --bg:#07090f;
-      --panel:#111827;
-      --panel2:#0b1020;
-      --text:#f8fafc;
-      --muted:#a8b3c7;
-                              .13);
-      --accent:#ff7a2f;
-      --cyan:#72f7d4;
-      --purple:#a78bfa;
-      --danger:#ff4d5e;
-      --good:#4ade80;
-      --shadow:0 24px 80px rgba(0,0,0,.45);
-    }
+    :root { --bg:#07090f; --panel:#111827; --panel2:#0b1020; --text:#f8fafc; --muted:#a8b3c7; --line:rgba(255,255,255,.13); --accent:#ff7a2f; --cyan:#72f7d4; --purple:#a78bfa; --danger:#ff4d5e; --good:#4ade80; }
     * { box-sizing:border-box; }
-    html { scroll-behavior:smooth; }
-    body {
-      margin:0;
-      font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      color:var(--text);
-      background:
-        radial-gradient(circle at 15% 10%, rgba(255,122,47,.18), transparent 28%),
-        radial-gradient(circle at 80% 18%, rgba(114,247,212,.13), transparent 25%),
-        radial-gradient(circle at 50% 85%, rgba(167,139,250,.16), transparent 35%),
-        linear-gradient(180deg,#07090f,#0c1020 48%,#07090f);
-      line-height:1.6;
-    }
-    a { color:var(--cyan); text-decoration:none; }
-    a:hover { text-decoration:underline; }
-    .wrap { width:min(1160px, calc(100% - 32px)); margin:auto; }
-    header {
-      padding:68px 0 44px;
-      border-bottom:1px solid var(--line);
-    }
-    .hero {
-      display:grid;
-      grid-template-columns:1.12fr .88fr;
-      gap:30px;
-      align-items:center;
-    }
-    .eyebrow {
-      display:inline-flex;
-      padding:8px 12px;
-      border:1px solid rgba(114,247,212,.28);
-      background:rgba(114,247,212,.08);
-      color:#cffff4;
-      border-radius:999px;
-      font-size:13px;
-      text-transform:uppercase;
-      letter-spacing:.08em;
-      font-weight:900;
-    }
-    h1 {
-      font-size:clamp(42px,7vw,88px);
-      line-height:.92;
-      margin:22px 0 18px;
-      letter-spacing:-.06em;
-    }
-    .subtitle {
-      color:var(--muted);
-      font-size:clamp(17px,2vw,23px);
-      max-width:760px;
-      margin:0 0 24px;
-    }
+    body { margin:0; font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; color:var(--text); background:radial-gradient(circle at 15% 10%,rgba(255,122,47,.18),transparent 28%),radial-gradient(circle at 80% 18%,rgba(114,247,212,.13),transparent 25%),linear-gradient(180deg,#07090f,#0c1020 48%,#07090f); line-height:1.6; }
+    a { color:var(--cyan); text-decoration:none; } a:hover { text-decoration:underline; }
+    .wrap { width:min(1120px,calc(100% - 32px)); margin:auto; }
+    header { padding:70px 0 46px; border-bottom:1px solid var(--line); }
+    .hero { display:grid; grid-template-columns:1.15fr .85fr; gap:28px; align-items:center; }
+    .eyebrow { display:inline-flex; padding:8px 12px; border:1px solid rgba(114,247,212,.28); background:rgba(114,247,212,.08); color:#cffff4; border-radius:999px; font-size:13px; text-transform:uppercase; letter-spacing:.08em; font-weight:900; }
+    h1 { font-size:clamp(42px,7vw,82px); line-height:.94; margin:22px 0 18px; letter-spacing:-.055em; }
+    .subtitle { color:var(--muted); font-size:clamp(17px,2vw,22px); max-width:760px; margin:0 0 24px; }
     .actions { display:flex; flex-wrap:wrap; gap:12px; margin-top:24px; }
-    .btn {
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      min-height:46px;
-      padding:12px 16px;
-      border-radius:14px;
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.06);
-      color:var(--text);
-      font-weight:900;
-      box-shadow:0 12px 34px rgba(0,0,0,.24);
-    }
-    .btn.primary {
-      background:linear-gradient(135deg,rgba(255,122,47,.95),rgba(167,139,250,.84));
-    }
-    .mock {
-      border:1px solid var(--line);
-      background:linear-gradient(145deg,rgba(255,255,255,.09),rgba(255,255,255,.025));
-      border-radius:34px;
-      padding:22px;
-      box-shadow:var(--shadow);
-    }
-    .device {
-      width:min(360px,100%);
-      aspect-ratio:1;
-      margin:auto;
-      border-radius:44px;
-      padding:20px;
-      background:linear-gradient(145deg,#e8ebe6,#8e9895);
-      box-shadow:inset 0 2px 4px rgba(255,255,255,.72),0 24px 80px rgba(0,0,0,.55);
-    }
-    .screen {
-      height:100%;
-      border-radius:26px;
-      padding:18px;
-      background:radial-gradient(circle at 22% 4%,rgba(114,247,212,.18),transparent 30%),#05070b;
-      border:4px solid #1a1e28;
-      overflow:hidden;
-      position:relative;
-    }
-    .screen:after {
-      content:"";
-      position:absolute;
-      inset:-45%;
-      background:linear-gradient(60deg,transparent 45%,rgba(255,255,255,.12),transparent 55%);
-      transform:translateX(-35%) rotate(12deg);
-      pointer-events:none;
-    }
-    .screen-inner { position:relative; z-index:1; }
+    .btn { display:inline-flex; align-items:center; justify-content:center; min-height:46px; padding:12px 16px; border-radius:14px; border:1px solid var(--line); background:rgba(255,255,255,.06); color:var(--text); font-weight:900; }
+    .btn.primary { background:linear-gradient(135deg,rgba(255,122,47,.95),rgba(167,139,250,.84)); }
+    .device { border:1px solid var(--line); background:linear-gradient(145deg,rgba(255,255,255,.09),rgba(255,255,255,.025)); border-radius:34px; padding:24px; box-shadow:0 24px 80px rgba(0,0,0,.45); }
+    .screen { border:4px solid #1a1e28; border-radius:28px; padding:22px; min-height:330px; background:radial-gradient(circle at 22% 4%,rgba(114,247,212,.18),transparent 30%),#05070b; }
     .screen-top { display:flex; justify-content:space-between; font-weight:950; font-size:20px; }
-    .meter { margin:17px 0; }
-    .meter-label { display:flex; justify-content:space-between; font-weight:900; font-size:14px; }
+    .meter { margin:20px 0; } .meter-label { display:flex; justify-content:space-between; font-weight:900; font-size:14px; }
     .bar { height:16px; border-radius:999px; background:#252b3b; border:1px solid rgba(255,255,255,.1); overflow:hidden; }
     .fill { height:100%; background:linear-gradient(90deg,var(--cyan),var(--accent),var(--danger)); border-radius:999px; }
-    .reset { color:#c5ccda; font-size:12px; margin-top:5px; }
-    .sprite {
-      margin:14px auto 3px;
-    }
-    .pixel-crab {
-      width:72px;
-      height:48px;
-      display:grid;
-      grid-template-columns:repeat(8, 1fr);
-      gap:3px;
-      image-rendering:pixelated;
-    }
-    .pixel-crab .px {
-      width:100%;
-      aspect-ratio:1;
-      border-radius:2px;
-      background:#ff6945;
-      box-shadow:0 0 8px rgba(255,105,69,.35);
-    }
-    .pixel-crab .px.red { background:#ff6945; }
-    .pixel-crab .px.blue { background:#69c8ff; box-shadow:0 0 8px rgba(105,200,255,.35); }
-    .pixel-crab .px.dark { background:#101827; box-shadow:none; }
-    .pixel-crab .px.off { background:transparent; box-shadow:none; }
-    .status { text-align:center; color:#ffd6aa; font-weight:900; }
-    nav {
-      position:sticky;
-      top:0;
-      z-index:5;
-      background:rgba(7,9,15,.88);
-      backdrop-filter:blur(16px);
-      border-bottom:1px solid var(--line);
-      overflow-x:auto;
-      white-space:nowrap;
-    }
-    nav .wrap { display:flex; gap:8px; padding:10px 0; }
-    nav a {
-      color:var(--muted);
-      font-weight:900;
-      font-size:13px;
-      padding:8px 10px;
-      border-radius:10px;
-    }
-    nav a:hover { background:rgba(255,255,255,.07); color:var(--text); text-decoration:none; }
-    main { padding:36px 0 80px; }
-    section {
-      margin:22px 0;
-      padding:28px;
-      border:1px solid var(--line);
-      background:linear-gradient(180deg,rgba(17,24,39,.84),rgba(11,16,32,.88));
-      border-radius:24px;
-      box-shadow:0 14px 46px rgba(0,0,0,.24);
-    }
-    h2 { margin:0 0 14px; font-size:clamp(28px,3vw,42px); line-height:1.05; letter-spacing:-.035em; }
-    h3 { margin:26px 0 10px; font-size:22px; }
-    p, li, td { color:var(--muted); }
-    .grid { display:grid; gap:16px; }
-    .two { grid-template-col  ns:repeat(2,minmax(0,1fr)); }
-    .three { grid-template-columns:repeat(3,minmax(0,1fr)); }
-    .card {
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.045);
-      border-radius:18px;
-      padding:18px;
-    }
-    .card strong { color:#fff; }
-    .pill {
-      display:inline-flex;
-      margin:3px 3px 3px 0;
-      padding:5px 9px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.14);
-      background:rgba(255,255,255,.06);
-      color:#dbeafe;
-      font-size:12px;
-      font-weight:900;
-    }
-    table {
-      width:100%;
-      border-collapse:collapse;
-      border:1px solid var(--line);
-      border-radius:16px;
-      overflow:hidden;
-      margin:14px 0;
-    }
-    th,td { padding:12px 13px; text-align:left; border-bottom:1px solid var(--line); vertical-align:top; }
-    th {
-      background:rgba(255,255,255,.08);
-      color:white;
-      text-transform:uppercase;
-      letter-spacing:.06em;
-      font-size:13px;
-    }
-    tr:last-child td { border-bottom:0; }
-    pre {
-      overflow-x:auto;
-      padding:16px;
-      border-radius:18px;
-      background:#0c111c;
-      border:1px solid rgba(114,247,212,.15);
-      color:#dcffe9;
-    }
-    code {
-      font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace;
-      font-size:13px;
-    }
-    .callout {
-      margin:16px 0;
-      padding:15px 16px;
-      border-left:4px solid var(--accent);
-      border-radius:14px;
-      background:rgba(255,122,47,.09);
-    }
-    .callout.blue { border-left-color:var(--cyan); background:rgba(114,247,212,.08); }
-    footer { border-top:1px solid var(--line); padding:30px 0 52px; color:var(--muted); }
-    @media (max-width:860px) {
-      .hero,.two,.three { grid-template-columns:1fr; }
-      section { padding:20px; }
-    }
+    .status { margin-top:24px; text-align:center; color:#ffd6aa; font-weight:900; }
+    nav { position:sticky; top:0; z-index:5; background:rgba(7,9,15,.88); backdrop-filter:blur(16px); border-bottom:1px solid var(--line); overflow-x:auto; white-space:nowrap; }
+    nav .wrap { display:flex; gap:8px; padding:10px 0; } nav a { color:var(--muted); font-weight:900; font-size:13px; padding:8px 10px; border-radius:10px; }
+    main { padding:36px 0 80px; } section { margin:22px 0; padding:28px; border:1px solid var(--line); background:linear-gradient(180deg,rgba(17,24,39,.84),rgba(11,16,32,.88)); border-radius:24px; box-shadow:0 14px 46px rgba(0,0,0,.24); }
+    h2 { margin:0 0 14px; font-size:clamp(28px,3vw,42px); line-height:1.05; letter-spacing:-.035em; } h3 { margin:24px 0 10px; font-size:22px; }
+    p, li, td { color:var(--muted); } .grid { display:grid; gap:16px; } .two { grid-template-columns:repeat(2,minmax(0,1fr)); } .three { grid-template-columns:repeat(3,minmax(0,1fr)); }
+    .card { border:1px solid var(--line); background:rgba(255,255,255,.045); border-radius:18px; padding:18px; } .card strong { color:#fff; }
+    code, pre { background:#05070b; border:1px solid var(--line); border-radius:14px; color:#dffdf5; } code { padding:2px 6px; } pre { padding:16px; overflow:auto; }
+    table { width:100%; border-collapse:collapse; overflow:hidden; border-radius:14px; } th,td { border-bottom:1px solid var(--line); padding:12px; text-align:left; } th { color:#fff; background:rgba(255,255,255,.055); }
+    footer { padding:28px 0 50px; color:var(--muted); border-top:1px solid var(--line); }
+    @media (max-width:850px){ .hero,.two,.three{grid-template-columns:1fr;} header{padding-top:44px;} }
   </style>
 </head>
 <body>
-<header>
-  <div class="wrap hero">
-    <div>
-      <span class="eyebrow">DIY Hardware • ESP32-S3 • Local-First AI Meter</span>
-      <h1>MuseMeter</h1>
-      <p class="subtitle">
-        A physical AI usage dashboard for Claude Code and coding tools. Built around an ESP32-S3 AMOLED screen,
-        a local host daemon, simple JSON payloads, and a clean firmware/UI stack.
-      </p>
-      <div class="actions">
-        <a class="btn primary" href="https://github.com/GareBear99/ai-desk-meter">View GitHub Repo</a>
-        <a class="btn" href="#mvp">Build the MVP</a>
-        <a class="btn" href="#protocol">Protocol</a>
-        <a class="btn" href="#repo">Repo Structure</a>
+  <header>
+    <div class="wrap hero">
+      <div>
+        <span class="eyebrow">Local-first AI workflow dashboard</span>
+        <h1>AI Desk Meter</h1>
+        <p class="subtitle">A portable dashboard and device bridge for AI workflow state, Arc-RAR backend health, Raspberry Pi kiosks, ESP32 displays, and future ARC ecosystem telemetry.</p>
+        <div class="actions">
+          <a class="btn primary" href="https://github.com/GareBear99/ai-desk-meter">View on GitHub</a>
+          <a class="btn" href="#architecture">Architecture</a>
+          <a class="btn" href="#roadmap">Roadmap</a>
+        </div>
       </div>
-    </div>
-    <div class="mock">
-      <div class="device">
+      <div class="device" aria-label="AI Desk Meter mock display">
         <div class="screen">
-          <div class="screen-inner">
-            <div class="screen-top"><span>▮ Usage</span><span>▣</span></div>
-            <div class="meter">
-              <div class="meter-label"><span>50%</span><span>Current</span></div>
-              <div class="bar"><div class="fill" style="width:50%"></div></div>
-              <div class="reset">Resets in 1h 22m</div>
-            </div>
-            <div class="meter">
-              <div class="meter-label"><span>11%</span><span>Weekly</span></div>
-              <div class="bar"><div class="fill" style="width:11%"></div></div>
-              <div class="reset">Resets in 6d 8h</div>
-            </div>
-            <div class="sprite pixel-crab" aria-label="MuseMeter pixel mascot">
-  <span class="px off"></span><span class="px red"></span><span class="px red"></span><span class="px red"></span><span class="px red"></span><span class="px red"></span><span class="px red"></span><span class="px off"></span>
-  <span class="px red"></span><span class="px red"></span><span class="px dark"></span><span class="px red"></span><span class="px red"></span><span class="px dark"></span><span class="px red"></span><span class="px red"></span>
-  <span class="px off"></span><span class="px red"></span><span class="px red"></span><span class="px red"></span><span class="px red"></span><span class="px red"></span><span class="px red"></span><span class="px off"></span>
-  <span class="px blue"></span><span class="px blue"></span><span class="px off"></span><span class="px off"></span><span class="px off"></span><span class="px off"></span><span class="px blue"></span><span class="px blue"></span>
-</div>
-            <div class="status">✶ Musing...</div>
-          </div>
+          <div class="screen-top"><span>AI Desk</span><span>72%</span></div>
+          <div class="meter"><div class="meter-label"><span>Session</span><span>72%</span></div><div class="bar"><div class="fill" style="width:72%"></div></div></div>
+          <div class="meter"><div class="meter-label"><span>Weekly</span><span>31%</span></div><div class="bar"><div class="fill" style="width:31%"></div></div></div>
+          <p class="status">Arc-RAR linked</p>
+          <p>Receipt: available<br/>Archive: verified<br/>Hardwire: portable</p>
         </div>
       </div>
     </div>
-  </div>
-</header>
-
-<nav>
-  <div class="wrap">
-    <a href="#overview">Overview</a>
-    <a href="#hardware">Hardware</a>
-    <a href="#architecture">Architecture</a>
-    <a href="#protocol">Protocol</a>
-    <a href="#firmware">Firmware</a>
-    <a href="#host">Host</a>
-    <a href="#mvp">MVP</a>
-    <a href="#testing">Testing</a>
-    <a href="#repo">Repo</a>
-    <a href="#roadmap">Roadmap</a>
-  </div>
-</nav>
-
-<main class="wrap">
-  <section id="overview">
-    <h2>Project Overview</h2>
-    <p>
-      MuseMeter is a small desk device that shows usage percentage, reset countdowns, weekly usage,
-      burn-rate warnings, and connection status for AI coding tools. The first target is Claude Code,
-      but the architecture is intentionally service-agnostic.
-    </p>
-    <div class="grid three">
-      <div class="card"><strong>Local-first</strong><p>The computer reads usage data and sends a small payload to the device. The device does not need a cloud backend.</p></div>
-      <div class="card"><strong>Hardware-simple</strong><p>One ESP32-S3 AMOLED board, USB-C power, optional enclosure, optional BLE polish later.</p></div>
-      <div class="card"><strong>Extensible</strong><p>Provider model supports mock data, manual estimates, official APIs, logs, Codex, Gemini CLI, and local LLM tools.</p></div>
-    </div>
-    <div class="callout">
-      <strong>Rule:</strong> this project displays usage information. It should not bypass limits, automate account rotation, scrape private dashboards, or violate service rules.
-    </div>
-  </section>
-
-  <section id="hardware">
-    <h2>Hardware Target</h2>
-    <p>
-      Recommended board: Waveshare ESP32-S3-Touch-AMOLED-2.16 or similar 480×480 ESP32-S3 AMOLED display board.
-      Use the exact vendor example for your board revision before wiring custom graphics.
-    </p>
-    <table>
-      <thead><tr><th>Part</th><th>Purpose</th><th>Expected Cost</th></tr></thead>
-      <tbody>
-        <tr><td>ESP32-S3 AMOLED display board</td><td>Main CPU, screen, Wi-Fi/BLE, USB-C</td><td>$45–$80 CAD typical</td></tr>
-        <tr><td>USB-C cable and 5V power</td><td>Desk power</td><td>$0–$15</td></tr>
-        <tr><td>3D printed or acrylic enclosure</td><td>Finished product look</td><td>$5–$35</td></tr>
-        <tr><td>Rubber feet / screws / stand</td><td>Desk stability</td><td>$3–$15</td></tr>
-        <tr><td>Optional LiPo battery</td><td>Portable mode after MVP</td><td>$8–$25</td></tr>
-      </tbody>
-    </table>
-  </section>
-
-  <section id="architecture">
-    <h2>Architecture</h2>
-    <pre><code>Claude Code / AI tool usage source
-        ↓
-Desktop host daemon
-        ↓
-Normalize into JSON
-        ↓
-BLE or local Wi-Fi
-        ↓
-ESP32-S3 AMOLED firmware
-        ↓
-Usage bars + reset countdown + status animation</code></pre>
-    <div class="grid two">
-      <div class="card"><strong>Desktop host</strong><p>Reads usage, estimates reset windows, validates state, sends payloads, writes logs.</p></div>
-      <div class="card"><strong>ESP32 firmware</strong><p>Receives payloads, draws UI, shows stale/offline/error states, stays lightweight.</p></div>
-    </div>
-  </section>
-
-  <section id="protocol">
-    <h2>JSON Protocol</h2>
-    <p>Send one compact JSON payload every 10–60 seconds. The display only needs the latest state.</p>
-    <pre><code>{
-  "schema": "ai-desk-meter.v1",
-  "service": "claude-code",
-  "current_percent": 50,
-  "weekly_percent": 11,
-  "current_reset_seconds": 4920,
-  "weekly_reset_seconds": 547200,
-  "burn_rate": "normal",
-  "status": "Musing...",
-  "mode": "active",
-  "updated_at": 1760000000,
-  "source": "local-provider",
-  "confidence": "estimated"
-}</code></pre>
-    <table>
-      <thead><tr><th>Field</th><th>Meaning</th></tr></thead>
-      <tbody>
-        <tr><td>current_percent</td><td>Current usage window percentage, clamped 0–100.</td></tr>
-        <tr><td>weekly_percent</td><td>Weekly or longer-period usage estimate.</td></tr>
-        <tr><td>burn_rate</td><td>idle, low, normal, high, critical.</td></tr>
-        <tr><td>confidence</td><td>exact, estimated, mock, or unknown.</td></tr>
-      </tbody>
-    </table>
-  </section>
-
-  <section id="firmware">
-    <h2>Firmware Spec</h2>
-    <p>Recommended stack: PlatformIO, Arduino ESP32 core, ArduinoJson, vendor display examples, and optional LVGL/LovyanGFX later.</p>
-    <pre><code>firmware/src/
-├─ main.cpp
-├─ config.h
-├─ display/
-│  ├─ DisplayDriver.cpp
-│  ├─ UiRenderer.cpp
-│  └─ Theme.cpp
-├─ protocol/
-│  ├─ UsageState.h
-│  └─ JsonParser.cpp
-├─ transport/
-│  ├─ WifiServer.cpp
-│  └─ BleReceiver.cpp
-└─ diagnostics/
-   └─ Watchdog.cpp</code></pre>
-    <table>
-      <thead><tr><th>State</th><th>Display behavior</th></tr></thead>
-      <tbody>
-        <tr><td>BOOT</td><td>Logo and self-test.</td></tr>
-        <tr><td>PAIRING</td><td>Show IP/BLE name and setup hint.</td></tr>
-        <tr><td>ONLINE</td><td>Show usage bars and timers.</td></tr>
-        <tr><td>STALE</td><td>Show last known data with stale warning.</td></tr>
-        <tr><td>OFFLINE</td><td>Waiting for host.</td></tr>
-        <tr><td>ERROR</td><td>Short error code, no crash.</td></tr>
-      </tbody>
-    </table>
-  </section>
-
-  <section id="host">
-    <h2>Host App Spec</h2>
-    <p>
-      First implementation should be Python: fast to build, easy to debug, and easy to replace later with a Tauri menu-bar app.
-    </p>
-    <pre><code>ai-meter start
-ai-meter status
-ai-meter pair
-ai-meter test-payload
-ai-meter provider list
-ai-meter provider test mock
-ai-meter config open
-ai-meter logs tail</code></pre>
-    <div class="grid two">
-      <div class="card"><strong>Mock provider</strong><p>Required for hardware testing and demo mode.</p></div>
-      <div class="card"><strong>Manual provider</strong><p>Fallback where exact usage data is unavailable.</p></div>
-      <div class="card"><strong>Official/API provider</strong><p>Only when a legitimate usage source is available.</p></div>
-      <div class="card"><strong>Local log provider</strong><p>Reads local user-accessible logs where possible and marks confidence honestly.</p></div>
-    </div>
-  </section>
-
-  <section id="mvp">
-    <h2>MVP Build Plan</h2>
-    <ol>
-      <li>Flash the vendor ESP32-S3 AMOLED display demo.</li>
-      <li>Draw a static fake usage screen.</li>
-      <li>Add Wi-Fi endpoint or WebSocket receiver.</li>
-      <li>Send mock JSON from a Python host daemon.</li>
-      <li>Add stale/offline/error handling.</li>
-      <li>Add manual or real usage provider later.</li>
-      <li>Build a simple enclosure only after the electronics work.</li>
-    </ol>
-  </section>
-
-  <section id="testing">
-    <h2>Testing Checklist</h2>
-    <ul>
-      <li>Bad JSON does not crash firmware.</li>
-      <li>Huge payload is rejected safely.</li>
-      <li>Host disconnect moves screen to stale/offline state.</li>
-      <li>Device can run for 8+ hours on USB power.</li>
-      <li>Percentages are clamped to 0–100.</li>
-      <li>Confidence label is visible when usage is estimated.</li>
-      <li>Mock payload updates are visible on real hardware.</li>
-    </ul>
-  </section>
-
-  <section id="repo">
-    <h2>Repo Structure</h2>
-    <pre><code>ai-desk-meter/
-├─ README.md
-├─ docs/
-│  ├─ index.html
-│  ├─ hardware.md
-│  ├─ protocol.md
-│  ├─ firmware.md
-│  └─ troubleshooting.md
-├─ firmware/
-│  ├─ platformio.ini
-│  └─ src/
-├─ host/
-│  ├─ pyproject.toml
-│  └─ ai_meter/
-├─ enclosure/
-├─ examples/
-└─ media/</code></pre>
-  </section>
-
-  <section id="roadmap">
-    <h2>Roadmap</h2>
-    <div class="grid three">
-      <div class="card"><strong>v0.1</strong><p>Static firmware UI and mock payload.</p></div>
-      <div class="card"><strong>v0.2</strong><p>Python host daemon and Wi-Fi transport.</p></div>
-      <div class="card"><strong>v0.3</strong><p>Manual/estimated usage provider.</p></div>
-      <div class="card"><strong>v0.4</strong><p>BLE transport and setup wizard.</p></div>
-      <div class="card"><strong>v1.0</strong><p>Multi-service AI desk meter.</p></div>
-      <div class="card"><strong>v2.0</strong><p>Physical creator kit with enclosure files.</p></div>
-    </div>
-  </section>
-</main>
-
-<footer>
-  <div class="wrap">
-    <strong>MuseMeter</strong>
-    <p>Created by Gary Doman / GareBear99. Public repo: <a href="https://github.com/GareBear99/ai-desk-meter">github.com/GareBear99/ai-desk-meter</a></p>
-  </div>
-</footer>
+  </header>
+  <nav><div class="wrap"><a href="#scope">Scope</a><a href="#architecture">Architecture</a><a href="#hardware">Hardware</a><a href="#arcrar">Arc-RAR</a><a href="#roadmap">Roadmap</a></div></nav>
+  <main class="wrap">
+    <section id="scope">
+      <h2>What it is</h2>
+      <p>AI Desk Meter is a visibility layer for local AI work. It reports provider state, confidence, backend warnings, and display-safe usage indicators without scraping private dashboards or pretending estimates are exact.</p>
+      <div class="grid three">
+        <div class="card"><strong>Host daemon</strong><p>Python provider layer for mock, manual, and Arc-RAR state-file payloads.</p></div>
+        <div class="card"><strong>Device bridge</strong><p>Wi-Fi/stdout transport today, with BLE and serial companion bridges planned.</p></div>
+        <div class="card"><strong>ARC-ready path</strong><p>Arc-RAR first, then Omnibinary event spine and Neural Synth visualization once backend contracts are stable.</p></div>
+      </div>
+    </section>
+    <section id="architecture">
+      <h2>Backend-first architecture</h2>
+      <pre>Provider source → validated payload → transport → dashboard/device endpoint</pre>
+      <p>The dashboard is not the authority. It renders state from providers and fails closed when data is missing or invalid.</p>
+    </section>
+    <section id="hardware">
+      <h2>Hardware targets</h2>
+      <table><thead><tr><th>Device</th><th>Role</th></tr></thead><tbody><tr><td>Desktop/laptop</td><td>Full host daemon and dashboard</td></tr><tr><td>Raspberry Pi / Linux SBC</td><td>Full host daemon, kiosk, local bridge</td></tr><tr><td>ESP32-S3</td><td>Wi-Fi/BLE display endpoint</td></tr><tr><td>Arduino-class MCU</td><td>Companion telemetry or simplified display node</td></tr></tbody></table>
+    </section>
+    <section id="arcrar">
+      <h2>Arc-RAR integration path</h2>
+      <p>The first bridge reads a local Arc-RAR state JSON file. The next bridge should consume stable Arc-RAR CLI/API JSON output such as <code>arc-rar status --json</code> and <code>arc-rar archive verify --json</code>.</p>
+    </section>
+    <section id="roadmap">
+      <h2>Roadmap</h2>
+      <ol>
+        <li>Clean dashboard and mock/manual providers.</li>
+        <li>Arc-RAR state-file provider.</li>
+        <li>Arc-RAR CLI/API provider.</li>
+        <li>Provider contract tests and diagnostics export.</li>
+        <li>Raspberry Pi / Linux SBC kiosk validation.</li>
+        <li>ESP32-S3 display endpoint hardening.</li>
+        <li>Arduino-class companion telemetry bridge.</li>
+        <li>Native dashboard shell.</li>
+        <li>Omnibinary adapter, ARC-Core hardwire integration, and Neural Synth toggle page.</li>
+      </ol>
+    </section>
+  </main>
+  <footer><div class="wrap">AI Desk Meter — local-first visibility for AI workflow systems.</div></footer>
 </body>
 </html>

@@ -2,7 +2,9 @@
 
 ## Target
 
-ESP32-S3 with a 480×480 AMOLED display.
+Primary endpoint target: ESP32-S3 with a 480×480 AMOLED display.
+
+Secondary endpoint target: Arduino-class boards with simplified serial/display payloads.
 
 ## Stack
 
@@ -24,3 +26,5 @@ ESP32-S3 with a 480×480 AMOLED display.
 ## Integration note
 
 Display drivers are board-specific. This repo includes placeholders and a console-safe scaffold. Use your board's vendor display example as the base, then connect `UsageState` and `UiRenderer`.
+
+For Arduino-class companion devices, keep the payload smaller and treat the board as a display/telemetry endpoint only.

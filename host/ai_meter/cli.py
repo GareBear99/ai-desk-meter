@@ -6,7 +6,7 @@ import sys
 import time
 
 from ai_meter.config import load_config
-from ai_meter.providers import make_provider
+from ai_meter.providers import make_provider, provider_names
 from ai_meter.transports import make_transport
 
 
@@ -16,7 +16,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     start = sub.add_parser("start", help="start host loop")
     start.add_argument("--config", default=None)
-    start.add_argument("--provider", default=None, choices=["mock", "manual"])
+    start.add_argument("--provider", default=None, choices=provider_names())
     start.add_argument("--transport", default=None, choices=["stdout", "wifi"])
     start.add_argument("--url", default=None)
     start.add_argument("--poll", type=int, default=None)
@@ -57,7 +57,7 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps(payload.to_wire(), indent=2))
         return 0
     if args.cmd == "providers":
-        print("mock\nmanual")
+        print("\n".join(provider_names()))
         return 0
     if args.cmd == "start":
         return cmd_start(args)

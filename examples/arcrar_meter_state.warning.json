@@ -1,0 +1,22 @@
+{
+  "service": "arc-rar",
+  "current_percent": 74,
+  "weekly_percent": 39,
+  "current_reset_seconds": 1200,
+  "weekly_reset_seconds": 370000,
+  "burn_rate": "high",
+  "status": "Archive warning",
+  "mode": "active",
+  "confidence": "estimated",
+  "backend": {
+    "name": "Arc-RAR",
+    "receipt_state": "available",
+    "archive_state": "warning",
+    "hardwire_state": "portable",
+    "checkpoint_id": "local-checkpoint-002"
+  },
+  "warnings": [
+    "Archive verification returned a warning; review diagnostics."
+  ],
+  "errors": []
+}

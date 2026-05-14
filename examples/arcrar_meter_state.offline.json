@@ -1,0 +1,21 @@
+{
+  "service": "arc-rar",
+  "current_percent": 0,
+  "weekly_percent": 0,
+  "current_reset_seconds": 0,
+  "weekly_reset_seconds": 0,
+  "burn_rate": "idle",
+  "status": "Arc-RAR offline",
+  "mode": "offline",
+  "confidence": "unknown",
+  "backend": {
+    "name": "Arc-RAR",
+    "receipt_state": "unknown",
+    "archive_state": "unknown",
+    "hardwire_state": "unknown"
+  },
+  "warnings": [
+    "Backend not reachable."
+  ],
+  "errors": []
+}

@@ -4,7 +4,7 @@ from enum import Enum
 from time import time
 from typing import Any
 
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
 class BurnRate(str, Enum):
@@ -32,19 +32,32 @@ class Confidence(str, Enum):
     unknown = "unknown"
 
 
+class BackendState(BaseModel):
+    name: str = "none"
+    receipt_state: str = "unknown"
+    archive_state: str = "unknown"
+    hardwire_state: str = "unknown"
+    checkpoint_id: str | None = None
+
+
 class UsagePayload(BaseModel):
-    schema: str = "ai-desk-meter.v1"
+    model_config = ConfigDict(populate_by_name=True)
+
+    schema_name: str = Field(default="ai-desk-meter.v1", alias="schema")
     service: str = "mock"
-    current_percent: float = Field(ge=0, le=100)
-    weekly_percent: float = Field(ge=0, le=100)
-    current_reset_seconds: int = Field(ge=0)
-    weekly_reset_seconds: int = Field(ge=0)
+    current_percent: float = Field(default=0, ge=0, le=100)
+    weekly_percent: float = Field(default=0, ge=0, le=100)
+    current_reset_seconds: int = Field(default=0, ge=0)
+    weekly_reset_seconds: int = Field(default=0, ge=0)
     burn_rate: BurnRate = BurnRate.normal
-    status: str = Field(default="Musing...", max_length=48)
+    status: str = Field(default="Ready", max_length=64)
     mode: MeterMode = MeterMode.active
     updated_at: int = Field(default_factory=lambda: int(time()))
     source: str = "mock"
     confidence: Confidence = Confidence.mock
+    backend: BackendState | None = None
+    warnings: list[str] = Field(default_factory=list)
+    errors: list[str] = Field(default_factory=list)
 
     @field_validator("status")
     @classmethod
@@ -52,5 +65,15 @@ class UsagePayload(BaseModel):
         value = value.strip()
         return value or "Ready"
 
+    @field_validator("warnings", "errors")
+    @classmethod
+    def clean_messages(cls, values: list[str]) -> list[str]:
+        cleaned: list[str] = []
+        for item in values:
+            text = str(item).strip()
+            if text:
+                cleaned.append(text[:160])
+        return cleaned[:10]
+
     def to_wire(self) -> dict[str, Any]:
-        return self.model_dump(mode="json")
+        return self.model_dump(mode="json", by_alias=True, exclude_none=True)

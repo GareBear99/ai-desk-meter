@@ -1,5 +1,4 @@
 {
-  "schema": "ai-desk-meter.v1",
   "service": "arc-rar",
   "current_percent": 12,
   "weekly_percent": 4,
@@ -8,8 +7,6 @@
   "burn_rate": "low",
   "status": "Arc-RAR linked",
   "mode": "active",
-  "updated_at": 1760000000,
-  "source": "arcrar",
   "confidence": "estimated",
   "backend": {
     "name": "Arc-RAR",

@@ -11,7 +11,7 @@
     "critical_percent": 95
   },
   "ui": {
-    "theme": "dark-crab",
+    "theme": "dark-meter",
     "show_confidence": true,
     "show_source": true
   }

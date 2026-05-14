@@ -32,9 +32,15 @@ Minimum fields:
 
 ## Phase 2: CLI/API bridge
 
-The next implementation should add an `arcrar-cli` provider that shells out to stable Arc-RAR commands with timeouts and JSON validation.
+The `arcrar-cli` provider is now implemented as the next live-backend bridge. It shells out to stable Arc-RAR commands with timeouts and JSON validation.
 
-Candidate commands:
+Implemented command:
+
+```text
+arc-rar status --json
+```
+
+Candidate future commands:
 
 ```text
 arc-rar status --json
@@ -74,3 +80,20 @@ The dashboard should export a diagnostic bundle containing:
 - Test matrix result snapshot
 
 No secrets, tokens, private prompts, or proprietary local paths should be included by default.
+
+
+## Current CLI provider usage
+
+```bash
+cd host
+ai-meter status --provider arcrar-cli
+ai-meter start --provider arcrar-cli --transport stdout --once
+```
+
+The provider can be configured without changing source code:
+
+```bash
+AI_METER_ARCRAR_BIN=/path/to/arc-rar AI_METER_ARCRAR_TIMEOUT=3 ai-meter status --provider arcrar-cli
+```
+
+The provider accepts either a full AI Desk Meter payload-style JSON object or a compact Arc-RAR status object with `arc` and `usage` sections. In both cases the final display payload is validated through `UsagePayload`.

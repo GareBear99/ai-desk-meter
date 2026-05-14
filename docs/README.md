@@ -17,3 +17,8 @@ Recommended reading order:
 7. `test-matrix.md`
 8. `roadmap.md`
 9. `neural-synth-roadmap.md`
+
+
+## Current implementation note
+
+The host package now includes both `arcrar` for state-file bridge testing and `arcrar-cli` for timeout-safe `arc-rar status --json` integration. Use `ai-meter status --provider arcrar-cli` to inspect the live CLI provider boundary.

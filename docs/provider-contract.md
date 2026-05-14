@@ -20,6 +20,7 @@ A provider must:
 | `mock` | Moving demo values | mock |
 | `manual` | Fixed/manual local state | estimated |
 | `arcrar` | Reads a local Arc-RAR state JSON file | estimated/unknown depending on state |
+| `arcrar-cli` | Calls `arc-rar status --json` through a timeout-safe subprocess boundary | estimated/unknown depending on result |
 
 ## Arc-RAR provider input
 
@@ -71,9 +72,15 @@ If the Arc-RAR state file is missing, the provider must return an offline/error 
 }
 ```
 
-## Future provider boundary
+## Arc-RAR CLI provider boundary
 
-The preferred future Arc-RAR boundary is a stable CLI/API output format:
+The implemented `arcrar-cli` provider is the preferred live-backend boundary. It starts with: 
+
+```text
+arc-rar status --json
+```
+
+Future Arc-RAR commands may add richer health and receipt data:
 
 ```text
 arc-rar status --json
@@ -83,3 +90,19 @@ arc-rar session inspect --json
 ```
 
 AI Desk Meter should consume those stable outputs rather than importing private internals.
+
+
+## CLI provider fail-closed rules
+
+`arcrar-cli` must never crash the dashboard or fabricate backend state. It returns:
+
+- `mode="offline"` when the executable is missing or cannot be launched.
+- `mode="error"` when Arc-RAR times out, exits non-zero, emits invalid JSON, or emits a payload that fails validation.
+- `confidence="unknown"` for all offline/error states.
+
+Supported environment variables:
+
+```text
+AI_METER_ARCRAR_BIN=/path/to/arc-rar
+AI_METER_ARCRAR_TIMEOUT=3
+```

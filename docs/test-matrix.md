@@ -9,6 +9,11 @@
 | Arc-RAR state file valid | Valid active payload with backend metadata |
 | Arc-RAR state file missing | Offline payload, unknown confidence, warning present |
 | Arc-RAR state file corrupt | Error payload, unknown confidence, warning/error present |
+| Arc-RAR CLI executable missing | Offline payload, unknown confidence, warning present |
+| Arc-RAR CLI valid JSON | Active payload with backend metadata |
+| Arc-RAR CLI invalid JSON | Error payload, unknown confidence, error present |
+| Arc-RAR CLI non-zero exit | Error payload, unknown confidence, error present |
+| Arc-RAR CLI timeout | Error payload, unknown confidence, timeout error present |
 | Invalid percentage values | Validation rejects or clamps through model rules |
 
 ## Transport tests
@@ -39,4 +44,5 @@ A release should not be tagged until:
 - `ai-meter test-payload` prints valid JSON
 - `ai-meter start --provider mock --transport stdout --once` works
 - `ai-meter start --provider arcrar --transport stdout --once` handles both valid and missing state files
+- `ai-meter status --provider arcrar-cli` fails closed when Arc-RAR is not installed
 - README and docs match the actual implemented state

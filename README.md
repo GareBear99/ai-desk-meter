@@ -12,6 +12,7 @@ AI Desk Meter currently provides:
 
 - A Python host daemon with mock/manual provider support
 - A conservative Arc-RAR state-file provider for backend integration testing
+- A timeout-safe Arc-RAR CLI provider for the next backend boundary
 - A JSON payload protocol suitable for dashboards and small hardware displays
 - Wi-Fi/stdout transport scaffolds
 - ESP32-S3 firmware scaffold for a physical desk meter
@@ -106,6 +107,31 @@ arc-rar session inspect --json
 
 AI Desk Meter should consume stable command/API output rather than private Arc-RAR internals.
 
+
+## Arc-RAR CLI provider
+
+The next backend integration path is now included as `arcrar-cli`. It calls a stable Arc-RAR executable boundary, validates JSON, and fails closed when the executable is missing, times out, exits non-zero, or returns invalid output.
+
+```bash
+cd host
+ai-meter status --provider arcrar-cli
+ai-meter start --provider arcrar-cli --transport stdout --once
+```
+
+By default it looks for `arc-rar` on `PATH`. Override the executable and timeout when testing:
+
+```bash
+AI_METER_ARCRAR_BIN=/path/to/arc-rar AI_METER_ARCRAR_TIMEOUT=3 ai-meter status --provider arcrar-cli
+```
+
+The expected backend command is:
+
+```text
+arc-rar status --json
+```
+
+The state-file provider remains useful for development and hardware demos; the CLI provider is the preferred path toward live backend authority.
+
 ## Firmware quick start
 
 ```bash
@@ -168,8 +194,8 @@ ai-desk-meter/
 
 - **v0.1** Clean dashboard + mock/manual providers
 - **v0.2** Arc-RAR state-file provider
-- **v0.3** Arc-RAR CLI/API provider
-- **v0.4** Provider contract tests and diagnostics export
+- **v0.3** Arc-RAR CLI/API provider ✅
+- **v0.4** Live dashboard provider refresh and diagnostics export
 - **v0.5** Raspberry Pi / Linux SBC kiosk validation
 - **v0.6** ESP32 display endpoint hardening
 - **v0.7** Arduino-class companion telemetry bridge design
@@ -177,6 +203,17 @@ ai-desk-meter/
 - **v1.0** Stable Arc-RAR-backed AI Desk Meter
 - **v1.1+** Omnibinary adapter, ARC-Core hardwire integration, archive timeline view, Neural Synth toggle page
 - **Future provider targets** Multi-AI desk meter support where official/local signals exist: Claude Code/manual logs, Codex-style CLI workflows, Gemini CLI-style workflows, Ollama/local LLMs, and other local-first provider adapters
+
+## Validation
+
+Current package validation:
+
+```text
+pytest: 12 passed
+mock provider works
+state-file Arc-RAR provider works
+Arc-RAR CLI provider fails closed for missing executable, invalid JSON, non-zero exit, and timeout
+```
 
 ## License
 

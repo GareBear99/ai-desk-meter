@@ -22,6 +22,9 @@ def build_parser() -> argparse.ArgumentParser:
     start.add_argument("--poll", type=int, default=None)
     start.add_argument("--once", action="store_true")
 
+    status = sub.add_parser("status", help="print one provider payload as formatted JSON")
+    status.add_argument("--provider", default="mock", choices=provider_names())
+
     sub.add_parser("test-payload", help="print one mock payload")
     sub.add_parser("providers", help="list available providers")
     return p
@@ -52,6 +55,10 @@ def cmd_start(args: argparse.Namespace) -> int:
 
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
+    if args.cmd == "status":
+        payload = make_provider(args.provider).read()
+        print(json.dumps(payload.to_wire(), indent=2))
+        return 0
     if args.cmd == "test-payload":
         payload = make_provider("mock").read()
         print(json.dumps(payload.to_wire(), indent=2))

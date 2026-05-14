@@ -1,10 +1,12 @@
 from .arcrar import ArcRarProvider
+from .arcrar_cli import ArcRarCliProvider
 from .manual import ManualProvider
 from .mock import MockProvider
 
 
 PROVIDERS = {
     "arcrar": ArcRarProvider,
+    "arcrar-cli": ArcRarCliProvider,
     "manual": ManualProvider,
     "mock": MockProvider,
 }

@@ -1,0 +1,20 @@
+{
+  "service": "arc-rar",
+  "status": "Arc-RAR CLI linked",
+  "mode": "active",
+  "current_percent": 8,
+  "weekly_percent": 3,
+  "current_reset_seconds": 1800,
+  "weekly_reset_seconds": 604800,
+  "burn_rate": "low",
+  "confidence": "estimated",
+  "backend": {
+    "name": "Arc-RAR",
+    "receipt_state": "available",
+    "archive_state": "verified",
+    "hardwire_state": "portable",
+    "checkpoint_id": "example-checkpoint-001"
+  },
+  "warnings": [],
+  "errors": []
+}

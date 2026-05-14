@@ -17,12 +17,23 @@
 
 ## v0.3 — Arc-RAR CLI/API provider
 
-- Consume stable Arc-RAR JSON commands
+- Consume `arc-rar status --json` through `arcrar-cli`
 - Add timeout/error handling
-- Add diagnostics export
+- Add missing-executable handling
+- Add invalid JSON/non-zero exit tests
+- Keep state-file provider as the development bridge
+
+Status: implemented in host provider layer.
+
+## v0.4 — Live dashboard refresh and diagnostics export
+
+- Add a small local endpoint or generated payload file for the dashboard
+- Refresh provider output without reloading the page
+- Show stale/offline/error states visibly
+- Add a diagnostic bundle export command
 - Add backend health panel
 
-## v0.4 — Provider contract testing
+## v0.4b — Provider contract testing
 
 - Mock/manual/arcrar provider tests
 - Protocol validation tests

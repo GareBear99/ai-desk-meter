@@ -34,28 +34,26 @@ Minimum fields:
 
 The `arcrar-cli` provider is now implemented as the next live-backend bridge. It shells out to stable Arc-RAR commands with timeouts and JSON validation.
 
-Implemented command:
+Implemented command contract:
 
 ```text
 arc-rar status --json
-```
-
-Candidate future commands:
-
-```text
-arc-rar status --json
-arc-rar archive verify --json
 arc-rar receipts latest --json
-arc-rar diagnostics --json
+arc-rar archive verify --json
+arc-rar session inspect --json
 ```
+
+`status --json` is required. Receipt, archive, and session commands are enrichment commands. If an enrichment command fails, AI Desk Meter keeps the status payload and adds a warning.
 
 Required safety behavior:
 
 - Apply a short timeout
 - Validate JSON before display
 - Preserve command stderr in diagnostics, not on the device payload
-- Return `mode="error"` for corrupt JSON
+- Return `mode="error"` for corrupt required status JSON
 - Return `mode="offline"` for missing executable/backend
+- Return warnings for optional enrichment failures
+- Never invent receipt, archive, or hardwire state that Arc-RAR did not provide
 
 ## Phase 3: Cross-system hardwire reports
 
@@ -97,3 +95,6 @@ AI_METER_ARCRAR_BIN=/path/to/arc-rar AI_METER_ARCRAR_TIMEOUT=3 ai-meter status -
 ```
 
 The provider accepts either a full AI Desk Meter payload-style JSON object or a compact Arc-RAR status object with `arc` and `usage` sections. In both cases the final display payload is validated through `UsagePayload`.
+
+
+See `docs/arcrar-cli-contract.md` and `docs/arcrar-fixtures.md` for the current compatibility contract and fixture set.

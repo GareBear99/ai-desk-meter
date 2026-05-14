@@ -8,12 +8,9 @@ from ai_meter.providers.arcrar_cli import ArcRarCliProvider
 def _fake_arc_rar(tmp_path: Path, body: str, exit_code: int = 0) -> Path:
     script = tmp_path / "arc-rar"
     script.write_text(
-        "#!/usr/bin/env python3\n"
-        "import sys\n"
-        "if '--sleep' in sys.argv:\n"
-        "    import time; time.sleep(5)\n"
-        f"sys.stdout.write({body!r})\n"
-        f"sys.exit({exit_code})\n",
+        "#!/bin/sh\n"
+        f"printf '%s' {json.dumps(body)}\n"
+        f"exit {exit_code}\n",
         encoding="utf-8",
     )
     script.chmod(script.stat().st_mode | stat.S_IEXEC)
@@ -42,7 +39,7 @@ def test_arcrar_cli_provider_reads_valid_output(tmp_path: Path):
             "checkpoint_id": "chk_001"
         }
     }))
-    payload = ArcRarCliProvider(executable=str(exe)).read().to_wire()
+    payload = ArcRarCliProvider(executable=str(exe), enrich=False).read().to_wire()
     assert payload["source"] == "arcrar-cli"
     assert payload["mode"] == "active"
     assert payload["backend"]["checkpoint_id"] == "chk_001"
@@ -62,7 +59,7 @@ def test_arcrar_cli_provider_accepts_compact_backend_shape(tmp_path: Path):
             "burn_rate": "low"
         }
     }))
-    payload = ArcRarCliProvider(executable=str(exe)).read().to_wire()
+    payload = ArcRarCliProvider(executable=str(exe), enrich=False).read().to_wire()
     assert payload["mode"] == "active"
     assert payload["current_percent"] == 5
     assert payload["backend"]["hardwire_state"] == "portable"
@@ -70,14 +67,14 @@ def test_arcrar_cli_provider_accepts_compact_backend_shape(tmp_path: Path):
 
 def test_arcrar_cli_provider_invalid_json_fails_closed(tmp_path: Path):
     exe = _fake_arc_rar(tmp_path, "not json")
-    payload = ArcRarCliProvider(executable=str(exe)).read().to_wire()
+    payload = ArcRarCliProvider(executable=str(exe), enrich=False).read().to_wire()
     assert payload["mode"] == "error"
     assert payload["errors"]
 
 
 def test_arcrar_cli_provider_nonzero_exit_fails_closed(tmp_path: Path):
     exe = _fake_arc_rar(tmp_path, "{}", exit_code=3)
-    payload = ArcRarCliProvider(executable=str(exe)).read().to_wire()
+    payload = ArcRarCliProvider(executable=str(exe), enrich=False).read().to_wire()
     assert payload["mode"] == "error"
     assert payload["errors"]
 
@@ -85,13 +82,12 @@ def test_arcrar_cli_provider_nonzero_exit_fails_closed(tmp_path: Path):
 def test_arcrar_cli_provider_timeout_fails_closed(tmp_path: Path):
     script = tmp_path / "arc-rar"
     script.write_text(
-        "#!/usr/bin/env python3\n"
-        "import time\n"
-        "time.sleep(2)\n"
-        "print('{}')\n",
+        "#!/bin/sh\n"
+        "sleep 2\n"
+        "printf '{}'\n",
         encoding="utf-8",
     )
     script.chmod(script.stat().st_mode | stat.S_IEXEC)
-    payload = ArcRarCliProvider(executable=str(script), timeout_seconds=0.25).read().to_wire()
+    payload = ArcRarCliProvider(executable=str(script), timeout_seconds=0.25, enrich=False).read().to_wire()
     assert payload["mode"] == "error"
     assert "timed out" in payload["errors"][0]

@@ -20,7 +20,7 @@ A provider must:
 | `mock` | Moving demo values | mock |
 | `manual` | Fixed/manual local state | estimated |
 | `arcrar` | Reads a local Arc-RAR state JSON file | estimated/unknown depending on state |
-| `arcrar-cli` | Calls `arc-rar status --json` through a timeout-safe subprocess boundary | estimated/unknown depending on result |
+| `arcrar-cli` | Calls the Arc-RAR CLI contract through a timeout-safe subprocess boundary | estimated/unknown depending on result |
 
 ## Arc-RAR provider input
 
@@ -74,22 +74,16 @@ If the Arc-RAR state file is missing, the provider must return an offline/error 
 
 ## Arc-RAR CLI provider boundary
 
-The implemented `arcrar-cli` provider is the preferred live-backend boundary. It starts with: 
+The implemented `arcrar-cli` provider is the preferred live-backend boundary. Current command contract:
 
 ```text
-arc-rar status --json
+arc-rar status --json                  # required
+arc-rar receipts latest --json         # optional enrichment
+arc-rar archive verify --json          # optional enrichment
+arc-rar session inspect --json         # optional enrichment
 ```
 
-Future Arc-RAR commands may add richer health and receipt data:
-
-```text
-arc-rar status --json
-arc-rar receipts latest --json
-arc-rar archive verify --json
-arc-rar session inspect --json
-```
-
-AI Desk Meter should consume those stable outputs rather than importing private internals.
+AI Desk Meter consumes these stable outputs rather than importing private internals. Required status failures become offline/error states. Optional enrichment failures become warnings.
 
 
 ## CLI provider fail-closed rules
@@ -97,7 +91,8 @@ AI Desk Meter should consume those stable outputs rather than importing private 
 `arcrar-cli` must never crash the dashboard or fabricate backend state. It returns:
 
 - `mode="offline"` when the executable is missing or cannot be launched.
-- `mode="error"` when Arc-RAR times out, exits non-zero, emits invalid JSON, or emits a payload that fails validation.
+- `mode="error"` when required status times out, exits non-zero, emits invalid JSON, or emits a payload that fails validation.
+- warning messages when optional enrichment commands fail.
 - `confidence="unknown"` for all offline/error states.
 
 Supported environment variables:

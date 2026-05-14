@@ -46,12 +46,14 @@
 - Companion protocol docs and payload examples
 - Tests for compact payload conversion and endpoint behavior
 
-## v0.7 — Arc-RAR command compatibility pass
+## v0.7 — Arc-RAR command compatibility pass ✅
 
-- Validate against the real Arc-RAR CLI package
-- Confirm `arc-rar status --json` output contract
-- Add fixture tests from real backend output
-- Document supported Arc-RAR command versions
+- Document required `arc-rar status --json` output contract
+- Document optional enrichment commands: `receipts latest`, `archive verify`, and `session inspect`
+- Add fixture examples for valid, warning, error, receipt, archive, and session output
+- Merge status, receipt, archive, and session outputs into one dashboard-safe payload
+- Treat required status failures as offline/error states
+- Treat optional enrichment failures as warnings
 
 ## v0.8 — Native dashboard shell prototype
 

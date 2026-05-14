@@ -71,3 +71,13 @@ A release should not be tagged until:
 - Missing/offline providers remain display-safe and do not crash the API.
 - ESP32 and Arduino example firmware artifacts are present.
 - Companion payload excludes private prompts, tokens, and private session content.
+
+## v0.7 Arc-RAR CLI contract checks
+
+| Case | Expected result |
+|---|---|
+| `status --json` valid + all enrichment commands valid | Active linked payload with receipt, archive, hardwire, and checkpoint state |
+| `status --json` invalid JSON | Error payload with invalid-output message |
+| Optional `archive verify --json` non-zero exit | Active payload with warning, no crash |
+| `archive verify --json` returns `verified=false` | Payload preserves archive failure in backend state and errors list |
+| `session inspect --json` returns `portable=false` | Payload reports `hardwire_state=not_portable` |

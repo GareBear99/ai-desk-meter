@@ -51,3 +51,13 @@ Before tagging a release:
 - [ ] ESP32 companion example has Wi-Fi/URL placeholders only.
 - [ ] Arduino serial example reads one JSON payload per line.
 - [ ] Public docs clearly say microcontrollers are companion nodes, not backend authority.
+
+## v0.7 Arc-RAR CLI contract
+
+- [ ] `arc-rar status --json` valid fixture maps into a dashboard-safe payload.
+- [ ] `arc-rar receipts latest --json` can enrich receipt/checkpoint state.
+- [ ] `arc-rar archive verify --json` can enrich archive verification state.
+- [ ] `arc-rar session inspect --json` can enrich hardwire/portability state.
+- [ ] Optional enrichment failures become warnings, not crashes.
+- [ ] Required status failures become offline/error states.
+- [ ] `docs/arcrar-cli-contract.md` matches provider behavior.

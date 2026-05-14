@@ -107,7 +107,7 @@
     </section>
     <section id="arcrar">
       <h2>Arc-RAR integration path</h2>
-      <p>The first bridge reads a local Arc-RAR state JSON file. The next bridge should consume stable Arc-RAR CLI/API JSON output such as <code>arc-rar status --json</code> and <code>arc-rar archive verify --json</code>.</p>
+      <p>The first bridge reads a local Arc-RAR state JSON file. The live bridge consumes stable Arc-RAR CLI JSON output: <code>status</code>, <code>receipts latest</code>, <code>archive verify</code>, and <code>session inspect</code>.</p>
     </section>
 
     <section id="live">
@@ -148,7 +148,7 @@ ai-meter companion-status --provider mock</pre>
       <ol>
         <li>Clean dashboard and mock/manual providers.</li>
         <li>Arc-RAR state-file provider.</li>
-        <li>Arc-RAR CLI/API provider.</li>
+        <li>Arc-RAR CLI contract provider.</li>
         <li>Provider contract tests and diagnostics export.</li>
         <li>Raspberry Pi / Linux SBC kiosk validation. ✅</li>
         <li>ESP32-S3 display endpoint hardening. ✅</li>

@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.7.0 - Arc-RAR CLI command compatibility pass
+
+- Expanded the Arc-RAR CLI provider from a single status command to a contract bundle.
+- Required command: `arc-rar status --json`.
+- Optional enrichment commands: `arc-rar receipts latest --json`, `arc-rar archive verify --json`, and `arc-rar session inspect --json`.
+- Added command contract docs and Arc-RAR fixture docs.
+- Added valid/warning/error status fixtures plus receipt, archive verify, and session inspect fixtures.
+- Added contract tests for merged backend state, optional command warnings, required command invalid JSON, and failed archive verification.
+
 ## 0.6.0 - Companion hardware bridge
 
 - Added compact companion payload conversion and `/companion/status` endpoint.

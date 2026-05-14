@@ -15,16 +15,16 @@ class MockProvider:
         weekly = 20 + 15 * math.sin(now / 300)
         if current >= 95:
             burn = BurnRate.critical
-            status = "Near limit"
         elif current >= 80:
             burn = BurnRate.high
-            status = "Careful..."
         elif current <= 10:
             burn = BurnRate.low
-            status = "Rested"
         else:
             burn = BurnRate.normal
-            status = "✶ Musing..."
+        # Baseline product identity: for the open foundation, the character
+        # uses one shared Musing state for prompt response and action loading.
+        # Later MuseMeter versions can split responding/loading/action states.
+        status = "✶ Musing..."
         return UsagePayload(
             service="mock-ai",
             current_percent=round(max(0, min(100, current)), 1),

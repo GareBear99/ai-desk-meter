@@ -1,7 +1,7 @@
 Metadata-Version: 2.4
 Name: ai-desk-meter
-Version: 0.8.0
-Summary: Local-first host daemon for AI workflow, Arc-RAR, Raspberry Pi, ESP32, Arduino-class companion displays, and compact hardware dashboards.
+Version: 1.0.1
+Summary: Local-first AI workflow meter, Arc-RAR dashboard bridge, offline-first file/stdout/serial payload flow, optional diagnostics API, Raspberry Pi/SBC host path, and ESP32/Arduino companion display protocol.
 Requires-Python: >=3.10
 Description-Content-Type: text/markdown
 Requires-Dist: pydantic>=2.0

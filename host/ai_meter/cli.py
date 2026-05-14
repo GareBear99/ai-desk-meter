@@ -13,6 +13,7 @@ from ai_meter.config import load_config
 from ai_meter.diagnostics import write_diagnostics_zip
 from ai_meter.providers import make_provider, provider_names
 from ai_meter.transports import make_transport
+from ai_meter.writer import watch_writer, write_companion, write_status
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -30,12 +31,33 @@ def build_parser() -> argparse.ArgumentParser:
     status = sub.add_parser("status", help="print one provider payload as formatted JSON")
     status.add_argument("--provider", default="mock", choices=provider_names())
 
-    serve = sub.add_parser("serve", help="start local dashboard API")
+    serve = sub.add_parser("serve", help="start optional local dashboard API for development/debug previews")
     serve.add_argument("--host", default="127.0.0.1")
     serve.add_argument("--port", type=int, default=8787)
 
     companion = sub.add_parser("companion-status", help="print compact companion-display payload as JSON")
     companion.add_argument("--provider", default="mock", choices=provider_names())
+
+
+    write_status_p = sub.add_parser("write-status", help="write one full provider payload to a JSON file; no local server required")
+    write_status_p.add_argument("--provider", default="mock", choices=provider_names())
+    write_status_p.add_argument("--out", default="runtime/status.json")
+
+    write_companion_p = sub.add_parser("write-companion", help="write one compact companion payload to a JSON file; no local server required")
+    write_companion_p.add_argument("--provider", default="mock", choices=provider_names())
+    write_companion_p.add_argument("--out", default="runtime/companion.json")
+
+    watch = sub.add_parser("watch", help="continuously write full provider payload JSON; no local server required")
+    watch.add_argument("--provider", default="mock", choices=provider_names())
+    watch.add_argument("--out", default="runtime/status.json")
+    watch.add_argument("--interval", type=float, default=2.0)
+    watch.add_argument("--count", type=int, default=None, help=argparse.SUPPRESS)
+
+    watch_companion = sub.add_parser("watch-companion", help="continuously write compact companion JSON; no local server required")
+    watch_companion.add_argument("--provider", default="mock", choices=provider_names())
+    watch_companion.add_argument("--out", default="runtime/companion.json")
+    watch_companion.add_argument("--interval", type=float, default=2.0)
+    watch_companion.add_argument("--count", type=int, default=None, help=argparse.SUPPRESS)
 
     diagnostics = sub.add_parser("diagnostics", help="write a safe diagnostics ZIP bundle")
     diagnostics.add_argument("--provider", default="mock", choices=provider_names())
@@ -96,6 +118,41 @@ def main(argv: list[str] | None = None) -> int:
     if args.cmd == "doctor":
         print(json.dumps(run_doctor(args.provider), indent=2))
         return 0
+
+    if args.cmd == "write-status":
+        out = write_status(Path(args.out), args.provider)
+        print(str(out))
+        return 0
+    if args.cmd == "write-companion":
+        out = write_companion(Path(args.out), args.provider)
+        print(str(out))
+        return 0
+    if args.cmd == "watch":
+        try:
+            watch_writer(
+                path=Path(args.out),
+                provider_name=args.provider,
+                interval_seconds=args.interval,
+                companion=False,
+                count=args.count,
+                on_write=lambda p: print(str(p), flush=True),
+            )
+            return 0
+        except KeyboardInterrupt:
+            return 0
+    if args.cmd == "watch-companion":
+        try:
+            watch_writer(
+                path=Path(args.out),
+                provider_name=args.provider,
+                interval_seconds=args.interval,
+                companion=True,
+                count=args.count,
+                on_write=lambda p: print(str(p), flush=True),
+            )
+            return 0
+        except KeyboardInterrupt:
+            return 0
     if args.cmd == "diagnostics":
         out = write_diagnostics_zip(Path(args.out), args.provider)
         print(str(out))

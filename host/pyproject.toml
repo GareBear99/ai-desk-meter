@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ai-desk-meter"
-version = "1.0.0"
-description = "Local-first AI workflow meter, Arc-RAR dashboard bridge, diagnostics API, Raspberry Pi/SBC host path, and ESP32/Arduino companion display protocol."
+version = "1.0.1"
+description = "Local-first AI workflow meter, Arc-RAR dashboard bridge, offline-first file/stdout/serial payload flow, optional diagnostics API, Raspberry Pi/SBC host path, and ESP32/Arduino companion display protocol."
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [

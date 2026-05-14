@@ -1,5 +1,7 @@
 # AI Desk Meter
 
+[![Sponsor](https://img.shields.io/badge/Sponsor-GitHub%20Sponsors-ff69b4)](https://github.com/sponsors/GareBear99) [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-support-yellow)](https://www.buymeacoffee.com/tizwildin)
+
 🌐 **Live Project Page:** https://garebear99.github.io/ai-desk-meter/
 
 **AI Desk Meter** is a local-first usage, session, and backend-health dashboard for AI coding workflows. The project starts with a lightweight Python host daemon and ESP32/desktop display payloads, then grows into an ARC-compatible control surface where Arc-RAR can provide portable receipts, archive state, diagnostics, and system-hardwire evidence.
@@ -7,6 +9,19 @@
 The project is designed to remain honest and portable: the dashboard visualizes state reported by providers; it does not invent usage numbers, bypass limits, rotate accounts, scrape private dashboards, or claim exact usage where only estimates are available.
 
 The open-source track keeps the hardware, provider, dashboard, and local API groundwork public. The planned **MuseMeter 3.0** track is the later commercial full package: a second-brain / Neural Synth / AI buddy product built on the stable open foundation. The current `Musing...` state is intentional and means the agent is responding to prompt input or an action is loading.
+
+
+## Support the Project
+
+AI Desk Meter is part of the open-source foundation leading toward MuseMeter: a local-first runtime dashboard, native app shell, and future second-brain / Neural Synth / AI buddy system.
+
+If this project helps you, you can support development here:
+
+- GitHub Sponsors: https://github.com/sponsors/GareBear99
+- Buy Me a Coffee: https://www.buymeacoffee.com/tizwildin
+
+Support helps fund continued work on the native app shell, Raspberry Pi / ESP32 companion hardware, Omnibinary integration, Arc-RAR runtime boundaries, and the open-source path toward MuseMeter.
+
 
 ## Native app holster
 

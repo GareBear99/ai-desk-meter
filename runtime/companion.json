@@ -1,18 +1,18 @@
 {
   "schema": "ai_desk_meter_companion_v1",
   "status": "linked",
-  "current_pct": 8,
-  "weekly_pct": 34,
-  "current_reset": "1h 19m",
-  "weekly_reset": "6d 17h",
+  "current_pct": 81,
+  "weekly_pct": 35,
+  "current_reset": "49m",
+  "weekly_reset": "6d 16h",
   "activity": "musing",
-  "message": "Rested",
-  "burn_rate": "low",
+  "message": "\u2736 Musing...",
+  "burn_rate": "high",
   "backend": "mock",
   "receipt_state": "unknown",
   "archive_state": "unknown",
   "hardwire_state": "unknown",
   "warnings": 0,
   "errors": 0,
-  "updated_at": 1778740802
+  "updated_at": 1778742620
 }

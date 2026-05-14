@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# Local diagnostics/build artifacts
+*.zip
+*.log
+/tmp/
+ai-desk-meter-diagnostics.zip
+arcrar-diagnostics.zip
+
+# OS/editor
+.DS_Store
+.vscode/
+.idea/

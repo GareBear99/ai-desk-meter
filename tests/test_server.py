@@ -78,3 +78,17 @@ def test_diagnostics_endpoint_excludes_private_content():
     finally:
         server.shutdown()
         server.server_close()
+
+
+def test_companion_status_endpoint_returns_compact_payload():
+    server, port = _start_server()
+    try:
+        status, data = _get(port, "/companion/status?provider=mock")
+        assert status == 200
+        assert data["schema"] == "ai_desk_meter_companion_v1"
+        assert "current_pct" in data
+        assert "weekly_pct" in data
+        assert data["activity"] in {"musing", "warning", "offline", "error", "stale"}
+    finally:
+        server.shutdown()
+        server.server_close()

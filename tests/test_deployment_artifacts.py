@@ -30,3 +30,10 @@ def test_public_dashboard_preserves_pixel_buddy_and_musing_state():
     assert "pixel-buddy" in html
     assert "✶ Musing..." in html
     assert "MuseMeter 3.0" in html
+
+
+def test_companion_firmware_artifacts_exist():
+    root = Path(__file__).resolve().parents[1]
+    assert (root / "firmware" / "esp32_companion_display" / "ai_desk_meter_companion.ino").exists()
+    assert (root / "firmware" / "arduino_serial_companion" / "ai_desk_meter_serial.ino").exists()
+    assert (root / "docs" / "hardware-companion-protocol.md").exists()

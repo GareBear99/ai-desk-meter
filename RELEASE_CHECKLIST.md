@@ -41,3 +41,13 @@ Before tagging a release:
 - [ ] companion bridge docs clarify Arduino-class devices are endpoints, not backend authority
 - [ ] pixel buddy and `✶ Musing...` state preserved in public dashboard/spec
 - [ ] licensing roadmap documents open-source corridor and planned MuseMeter 3.0 commercial package
+
+
+## v0.6 companion bridge
+
+- [ ] `pytest` passes.
+- [ ] `ai-meter companion-status --provider mock` returns compact JSON.
+- [ ] `/companion/status?provider=mock` works from the local API.
+- [ ] ESP32 companion example has Wi-Fi/URL placeholders only.
+- [ ] Arduino serial example reads one JSON payload per line.
+- [ ] Public docs clearly say microcontrollers are companion nodes, not backend authority.

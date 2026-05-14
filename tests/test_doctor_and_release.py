@@ -9,7 +9,7 @@ from ai_meter.doctor import run_doctor
 
 
 def test_version_is_v1():
-    assert __version__ == "1.0.1"
+    assert __version__ == "1.2.1"
 
 
 def test_doctor_mock_is_ok():
@@ -22,7 +22,7 @@ def test_doctor_mock_is_ok():
 def test_cli_version_outputs_version(capsys):
     assert main(["version"]) == 0
     out = capsys.readouterr().out.strip()
-    assert out == "1.0.1"
+    assert out == "1.2.1"
 
 
 def test_cli_doctor_outputs_json(capsys):
@@ -35,6 +35,12 @@ def test_v1_release_docs_exist():
     required = [
         "docs/install.md",
         "docs/release-v1.0.1.md",
+        "docs/release-v1.0.7.md",
+        "docs/release-v1.0.8.md",
+        "docs/release-v1.1.0.md",
+        "docs/release-v1.1.6.md",
+        "docs/release-v1.2.1.md",
+        "docs/parts-and-sourcing.md",
         "docs/version-license-matrix.md",
         "docs/open-source-boundary.md",
         "docs/functional-release.md",

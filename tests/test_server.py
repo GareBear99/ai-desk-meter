@@ -88,7 +88,7 @@ def test_companion_status_endpoint_returns_compact_payload():
         assert data["schema"] == "ai_desk_meter_companion_v1"
         assert "current_pct" in data
         assert "weekly_pct" in data
-        assert data["activity"] in {"musing", "warning", "offline", "error", "stale"}
+        assert data["activity"] in {"runtime", "musing", "warning", "offline", "error", "stale"}
     finally:
         server.shutdown()
         server.server_close()

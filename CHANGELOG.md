@@ -1,3 +1,135 @@
+## v1.2.1 - Runtime dashboard IP server fix
+
+- Fixed Dashboard button opening a refused `127.0.0.1:1420` page when Vite was not running.
+- Added built-in Electron holster HTTP server for the runtime dashboard IP site.
+- Added `/runtime/status.json` and `/health` routes served directly from the source-of-truth runtime payload.
+- Kept Electron app window and external browser dashboard in sync from the same payload.
+
+## v1.2.0 — Stable Runtime App Shell
+
+- Fixed runtime dashboard button/tab flicker by isolating static controls from payload refresh.
+- Runtime polling now updates text/value nodes only instead of repainting navigation controls.
+- Replaced status-title rebuilds with stable spans for star/status/dots.
+- Added fixed control-bar layout so Dashboard / Docs / DIY buttons do not jump during streaming.
+- Preserved runtime-vs-Muse truth model and smooth runtime/status.json source-of-truth flow.
+
+## v1.1.9 — Smooth Runtime Stream
+
+- Fixed flashing/two-truth behavior by holding the last good runtime payload across transient file-read misses.
+- Prevented overlapping dashboard refresh calls.
+- Stopped SVG blink timers from resetting every refresh.
+- Smoothed bar/card visual updates for the runtime dashboard.
+- Preserved runtime-connected vs Muse-connected separation.
+
+## v1.1.6 — Runtime Connection vs Muse State
+
+## 1.1.8 — Parts & Sourcing Completion
+
+- Added `docs/parts-and-sourcing.md` with required/optional parts, cost tiers, source categories, and search terms.
+- Expanded runtime dashboard DIY / Cost Specs panel with buying guidance and sourcing table.
+- Added Parts & Sourcing links to docs and app/runtime panels.
+- Clarified that ESP32/Arduino-class boards are companion endpoints while the host/Pi remains the runtime source of truth.
+
+
+- Split runtime connectivity from Muse/model connectivity.
+- Top-right dot now means CLI/runtime + runtime dashboard IP page are reachable.
+- No active Muse only changes when a real Muse/model/agent payload is connected.
+- Updated SVG-eye blink rules: 3–11s idle blink, usage-aware active Muse blink.
+
+## v1.1.5 — Runtime Dashboard Button
+
+- Added Dashboard button that opens the live runtime dashboard IP page (`http://127.0.0.1:1420/#muse`).
+- Electron holster now starts/opens the browser runtime dashboard from the Dashboard button.
+- Docs button now opens the docs page/site instead of reusing the same runtime panel.
+- Runtime dashboard keeps polling `runtime/status.json` and mirrors the source-of-truth payload with the red/green connection dot.
+
+## v1.1.4 — Runtime Docs Button Fix
+
+- Fixed `Docs / Runtime Info` so it opens the integrated docs/runtime panel from both the Electron holster and external browser/Vite page.
+- Fixed the removed `devBrowserButton` reference that could stop runtime page controls from binding.
+- Added `Back to Muse` behavior that reliably returns to the Muse dashboard panel.
+- Added optional full-docs opener wiring for shells that support it.
+
+
+## v1.1.3 — Connection Dot + Unified Runtime Docs Panel
+
+- Added red/green connection indicator to the runtime page.
+- Integrated docs/runtime/connection info into the same page with a Back to Muse button.
+- Browser/Vite preview and the app holster now use the same runtime page UX.
+- Runtime page auto-refreshes from `runtime/status.json` as the source of truth.
+
+## v1.1.2 — Unified runtime/dev page
+
+- Merged runtime connection, Dev JSON, internal commands, provider/Omnibinary boundary, and logs into the same runtime page.
+- The Electron native holster and the external browser/Vite preview now use the same page and same panels.
+- The former separate `runtime/dev-connection.html` report is no longer the main UX path.
+- The Electron button now opens the same runtime page externally with `#dev` instead of generating a separate dev page.
+- Keeps no-server runtime JSON as the default and the local API as optional dev/debug tooling only.
+
+# Changelog
+
+## v1.1.1 — Native holster dev browser view
+
+- Added Electron holster button to open a browser dev view.
+- Generated `runtime/dev-connection.html` with connection state, current payload JSON, app info, internal commands, optional local API routes, and provider boundary details.
+- Added resilient launcher fallback: `ai-meter app` opens a browser/static fallback if npm/Electron install or launch fails.
+
+## v1.1.0 - Native app holster and Omnibinary runtime boundary
+
+- Added `ai-meter app` for one-command native GUI launch.
+- Added `native/launcher`, an Electron-based cross-system desktop holster.
+- Kept `ai-meter runtime` as the no-GUI/headless path.
+- Made `ai-meter gui` fall back to the app holster when Tkinter is unavailable.
+- Bundled the uploaded Omnibinary Runtime handoff under `integrations/omnibinary-runtime`.
+- Extended the Omnibinary provider to detect `PRODUCT_STATUS.json` while still showing No active Muse until a real model/Muse connection exists.
+
+## v1.0.8 - One-command GUI/runtime launcher
+
+- Added `ai-meter gui` to launch the no-server GUI and background runtime writer in one command.
+- Added `ai-meter runtime` for no-GUI/headless operation.
+- Added packaged Tk native GUI module under `ai_meter.gui` so Catalina users do not need Tauri/WebKit.
+- Preserved `No active Muse` / `No Muse.` disconnected state.
+
+## v1.0.7 — SVG No Muse Label Fix
+
+- Updated the actual SVG buddy label to say `No Muse.` when no active Muse/model payload is connected.
+- Removed the periodless `No Muse` disconnected label from the native inline SVG and packaged SVG asset.
+- Preserved the main disconnected header as `No active Muse` and active status as `✶ Musing...`.
+
+## v1.0.6 — Correct Muse Connection and Eye Blink Behavior
+
+- Browser/Vite preview now defaults to `No active Muse` instead of loading a fake active browser sample.
+- Removed the fake black blink overlay.
+- Blinking now only hides the two yellow eye pixels.
+- Blink timing now runs at randomized 3–11 second intervals only when not musing.
+- Catalina fallback follows the same connection and blink rules.
+
+# Changelog
+
+## v1.0.4 — No Active Muse Disconnected State
+
+- Added explicit `No active Muse` UI state for missing, invalid, offline, planned, or disconnected payloads.
+- Updated native Tauri frontend fallback behavior so disconnected state does not display `Musing...`.
+- Updated Catalina fallback app to show `No active Muse` when not connected.
+- Preserved animated `✶ Musing...` only for active/connected payloads.
+
+## v1.0.3 — Animated Musing State and Runtime Action Layer
+
+- Added animated Musing dots and blinking buddy eye overlay in the native frontend.
+- Added last action, action in progress, CLI checker, and run log fields to status payloads.
+- Added `ai-meter check-cli` for CLI checker probes.
+- Added browser-safe fallback and JSON import path so Vite preview does not crash outside Tauri.
+- Added Tauri icon asset required for native launch/build.
+- Kept no-local-server default: file/stdout/serial payload flow remains primary.
+
+
+## 1.0.2
+
+- Added a real Tauri/Rust native desktop app under `native/tauri`.
+- Native app reads `runtime/status.json` directly through a Rust command; no local server is required.
+- Added native frontend files, Rust backend command, Tauri config, package manifest, and release notes.
+- Preserved the exact orange/blue pixel buddy SVG and `✶ Musing...` baseline state in the native shell.
+- Kept the localhost API as optional development/debug tooling only.
 
 ## 1.0.1
 
@@ -8,6 +140,13 @@
 - Added `docs/no-local-server-default.md` and release notes for v1.0.1.
 
 # Changelog
+
+## v1.0.4 — No Active Muse Disconnected State
+
+- Added explicit `No active Muse` UI state for missing, invalid, offline, planned, or disconnected payloads.
+- Updated native Tauri frontend fallback behavior so disconnected state does not display `Musing...`.
+- Updated Catalina fallback app to show `No active Muse` when not connected.
+- Preserved animated `✶ Musing...` only for active/connected payloads.
 
 ## v1.0.0 — Stable open-source functional release
 
@@ -86,3 +225,13 @@
 - Added ESP32-S3 firmware scaffold.
 - Added JSON protocol examples and docs.
 - Added enclosure and testing documentation.
+
+
+## v1.1.7 — Specs Visibility + Muse State Polish
+
+- Added DIY / Cost Specs panel to the runtime dashboard page.
+- Added direct links from the runtime docs panel to the DIY hardware spec and BOM/cost section.
+- Added docs-page section for DIY/cost specs and a back-to-runtime-dashboard link.
+- Clarified red/green connection dot semantics: runtime connected only, not Muse active.
+- Preserved No active Muse for mock/runtime-only states.
+- Tightened SVG eye-only blink behavior and made first idle blink occur within 3 seconds for visible verification.

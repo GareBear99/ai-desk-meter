@@ -1,0 +1,15 @@
+[package]
+name = "ai-desk-meter-native"
+version = "1.1.8"
+description = "Native no-server AI Desk Meter desktop shell"
+authors = ["Gary Doman"]
+edition = "2021"
+license = "MIT"
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"

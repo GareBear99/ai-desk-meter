@@ -23,6 +23,8 @@ def test_companion_payload_from_usage_payload():
         source="arcrar-cli",
         confidence=Confidence.estimated,
         backend=BackendState(name="Arc-RAR", receipt_state="available", archive_state="verified", hardwire_state="portable"),
+        muse_connected=True,
+        muse_state="musing",
     )
     compact = to_companion_payload(payload)
     assert compact["schema"] == "ai_desk_meter_companion_v1"

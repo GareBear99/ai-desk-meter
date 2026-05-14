@@ -1,3 +1,10 @@
+# Current Next Milestone: v1.2.1 Stable Runtime App Shell
+
+- Static UI controls are separated from runtime refresh.
+- Buttons/tabs/layout containers render once.
+- Runtime values stream from runtime/status.json without visual reflow.
+- Runtime connected remains distinct from Muse/model connected.
+
 # Roadmap
 
 ## v0.1 — Clean dashboard and mock/manual providers ✅
@@ -109,6 +116,34 @@ Status: complete for the open-source foundation.
 Next release target. Focus on final public polish, install validation, release notes, and packaging hygiene.
 
 
-## v1.0.1 No-server default
+## v1.0.2 No-server default
 
 AI Desk Meter does not require a local server for normal use. Prefer `write-status`, `write-companion`, `watch`, and `watch-companion` for desktop, Raspberry Pi, native/Tauri, and companion-device flows. The HTTP API remains optional development/debug preview tooling.
+
+## v1.0.2
+
+- Tauri/Rust native desktop shell implemented under `native/tauri`.
+- Reads local JSON payloads directly; no local server required.
+
+
+
+## v1.1.0 — Native app holster and Omnibinary boundary
+
+- `ai-meter app` launches the packaged GUI holster and runtime writer.
+- `ai-meter runtime` remains the headless/no-GUI mode.
+- `native/launcher` becomes the practical cross-system shell.
+- Omnibinary is bundled as a runtime foundation and exposed through a truthful no-active-Muse provider boundary.
+
+
+## v1.1.2 — Unified runtime/dev page
+
+- Same page inside native holster and external browser.
+- Dev JSON, commands, provider boundaries, Omnibinary notes, and logs are integrated into the runtime page.
+
+
+## v1.1.3 — Connection Dot + Unified Runtime Docs Panel
+
+- Added red/green connection indicator to the runtime page.
+- Integrated docs/runtime/connection info into the same page with a Back to Muse button.
+- Browser/Vite preview and the app holster now use the same runtime page UX.
+- Runtime page auto-refreshes from `runtime/status.json` as the source of truth.

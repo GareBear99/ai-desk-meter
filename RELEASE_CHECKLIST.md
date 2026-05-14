@@ -65,7 +65,6 @@ Before tagging a release:
 ## v0.8 native shell checks
 
 - [ ] `docs/native-gui-plan.md` is present.
-- [ ] `native/tauri/tauri.conf.example.json` remains an example, not a signed release claim.
 - [ ] Launch scripts default to `127.0.0.1`.
 - [ ] Desktop shell docs state that the GUI is not backend authority.
 - [ ] Tests pass with `pytest`.
@@ -89,3 +88,11 @@ Before tagging a release:
 - [ ] `docs/release-v1.0.0.md` clearly separates implemented behavior from future roadmap items.
 - [ ] `docs/version-license-matrix.md` preserves the open-source corridor and MuseMeter 3.0 commercial path.
 - [ ] `docs/open-source-boundary.md` preserves the intentional pixel buddy and `✶ Musing...` state.
+
+## v1.0.2 native desktop shell
+
+- [ ] `pytest -q` passes.
+- [ ] `ai-meter watch --provider mock --out runtime/status.json --interval 0.5` writes payloads.
+- [ ] `cd native/tauri && npm install && npm run tauri:dev` opens the native app.
+- [ ] Native app displays pixel buddy, `✶ Musing...`, usage meters, provider, warnings, and errors from `runtime/status.json`.
+- [ ] `npm run tauri:build` produces a desktop bundle on a machine with Node, Rust, and Tauri prerequisites installed.

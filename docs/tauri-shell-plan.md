@@ -1,35 +1,28 @@
-# Tauri Shell Plan
+# Tauri Shell
 
-Tauri is the preferred native shell direction because it aligns with the local-first, Rust-adjacent Arc-RAR architecture while remaining lighter than Electron.
+The Tauri shell is implemented under `native/tauri`.
 
-## First prototype behavior
-
-1. Start or verify the local `ai-meter serve` process.
-2. Load the dashboard from local static assets or `http://127.0.0.1:8787`.
-3. Poll `/health`, `/providers`, `/status`, `/companion/status`, and `/diagnostics`.
-4. Show offline/error states if the host is unavailable.
-5. Never write provider truth from the frontend without a backend command path.
-
-## Suggested app layout
+## Files
 
 ```text
-native/tauri/
-├── README.md
-├── tauri.conf.example.json
-├── frontend-bridge.md
-└── src-tauri-notes.md
+native/tauri/package.json
+native/tauri/index.html
+native/tauri/src/main.js
+native/tauri/src/styles.css
+native/tauri/public/pixel-buddy-musing.svg
+native/tauri/src-tauri/Cargo.toml
+native/tauri/src-tauri/tauri.conf.json
+native/tauri/src-tauri/build.rs
+native/tauri/src-tauri/src/main.rs
 ```
 
-## Development command flow
+## Commands
 
 ```bash
-cd host
-pip install -e .
-ai-meter serve --host 127.0.0.1 --port 8787
+cd native/tauri
+npm install
+npm run tauri:dev
+npm run tauri:build
 ```
 
-A later implementation can copy `docs/index.html` into a Tauri frontend directory or load it as a local webview.
-
-## Production rule
-
-The desktop shell should bundle or supervise the host service, but it should not silently bind to the LAN. Loopback is the default. LAN access should be explicit.
+The native shell reads `runtime/status.json` by default and supports `AI_METER_STATUS_PATH` for an absolute override.

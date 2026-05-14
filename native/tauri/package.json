@@ -1,0 +1,21 @@
+{
+  "name": "ai-desk-meter-native",
+  "version": "1.2.1",
+  "private": true,
+  "description": "Native no-server AI Desk Meter desktop shell powered by Tauri and local JSON payloads.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1 --port 1420",
+    "build": "vite build",
+    "tauri": "tauri",
+    "tauri:dev": "tauri dev",
+    "tauri:build": "tauri build"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "^2.0.0"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2.0.0",
+    "vite": "^5.0.0"
+  }
+}

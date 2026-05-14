@@ -18,3 +18,9 @@ arcrar-diagnostics.zip
 .DS_Store
 .vscode/
 .idea/
+
+# Node/Tauri
+node_modules/
+native/tauri/node_modules/
+native/tauri/dist/
+native/tauri/src-tauri/target/

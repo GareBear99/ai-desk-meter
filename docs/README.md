@@ -62,3 +62,53 @@ The host package now includes both `arcrar` for state-file bridge testing and `a
 ## v1.0.1 No-server default
 
 AI Desk Meter does not require a local server for normal use. Prefer `write-status`, `write-companion`, `watch`, and `watch-companion` for desktop, Raspberry Pi, native/Tauri, and companion-device flows. The HTTP API remains optional development/debug preview tooling.
+
+- [v1.0.2 release notes](release-v1.0.2.md) — native Tauri/Rust desktop app release notes.
+- [v1.0.3 release notes](release-v1.0.3.md) — animated Musing state and runtime action layer.
+- [v1.0.6 release notes](release-v1.0.6.md) — corrected No active Muse preview behavior and eye-only blinking.
+- [v1.0.4 release notes](release-v1.0.4.md) — explicit No active Muse disconnected-state behavior.
+
+- [v1.0.7 release notes](release-v1.0.7.md) — exact `No Muse.` label inside the actual SVG disconnected state.
+- [v1.0.6 release notes](release-v1.0.6.md) — native SVG eye blink fix and faster no-server runtime refresh.
+
+- [v1.1.2 native holster dev browser view](release-v1.1.2.md)
+
+- [v1.1.2 unified runtime/dev page](release-v1.1.2.md)
+
+
+## v1.1.6
+
+- [v1.1.6 runtime dashboard button](release-v1.1.6.md)
+
+## v1.1.4 — Runtime Docs Button Fix
+
+- [v1.1.4 runtime docs button fix](release-v1.1.4.md)
+
+## v1.1.3 — Connection Dot + Unified Runtime Docs Panel
+
+- Added red/green connection indicator to the runtime page.
+- Integrated docs/runtime/connection info into the same page with a Back to Muse button.
+- Browser/Vite preview and the app holster now use the same runtime page UX.
+- Runtime page auto-refreshes from `runtime/status.json` as the source of truth.
+
+
+### v1.1.6 Runtime/Muse state model
+
+The top-right connection dot indicates the CLI/runtime writer and runtime dashboard IP page are reachable. It does not mean a Muse/model/agent is active. `No active Muse` remains until a payload reports `muse_connected: true`, `agent_connected: true`, `active_muse: true`, or an active `muse_state`.
+
+- [Parts & Sourcing](parts-and-sourcing.md) — build-ready buying guide, costs, search terms, and source categories.
+
+## v1.1.8
+
+- [v1.1.8 parts and sourcing completion](release-v1.1.8.md)
+- [Parts & Sourcing](parts-and-sourcing.md)
+
+
+## v1.1.9
+
+Smooth runtime stream patch: no flicker between disconnected/connected during transient reads; blink timers survive dashboard refreshes.
+
+
+## v1.2.1 — Stable Runtime App Shell
+
+The runtime dashboard now separates static controls from live payload streaming. Buttons, tabs, docs/specs navigation, and layout containers render once; the 0.5s refresh loop updates only values, logs, JSON, and status text. This prevents the two-truth flicker and button reflow seen in the v1.1 line.

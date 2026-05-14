@@ -8,9 +8,39 @@ The project is designed to remain honest and portable: the dashboard visualizes 
 
 The open-source track keeps the hardware, provider, dashboard, and local API groundwork public. The planned **MuseMeter 3.0** track is the later commercial full package: a second-brain / Neural Synth / AI buddy product built on the stable open foundation. The current `Musing...` state is intentional and means the agent is responding to prompt input or an action is loading.
 
+## Native app holster
+
+Use the packaged GUI holster with one command:
+
+```bash
+ai-meter app
+```
+
+The native holster and browser preview now share one unified runtime page. The same page includes Muse status, runtime connection state, Dev JSON, internal CLI commands, provider/Omnibinary boundaries, logs, and an integrated Docs / Runtime Info panel. The runtime page includes Muse status, runtime connection state, Dev JSON, internal CLI commands, provider/Omnibinary boundaries, logs, and docs/runtime information. The Dashboard button opens the live runtime dashboard IP page, while Docs opens the docs page/site.
+
+This starts the no-server runtime writer and opens the desktop GUI shell. For headless/no-GUI operation:
+
+```bash
+ai-meter runtime --provider mock --out runtime/status.json --interval 0.5
+```
+
+`native/launcher` is the practical cross-system native shell path. `native/tauri` remains available for modern Tauri development, and `ai-meter gui` remains a compatibility alias.
+
+## One-command launch
+
+```bash
+ai-meter gui
+```
+
+This opens the no-server GUI and automatically starts the local runtime writer. For headless/no-GUI use:
+
+```bash
+ai-meter runtime --provider mock --out runtime/status.json --interval 0.5
+```
+
 ## Current scope
 
-**Current release:** v1.0.1 — stable open-source functional foundation with no local server required by default.
+**Current release:** v1.0.7 — stable open-source functional foundation with native SVG eye blink control, exact `No Muse.` SVG disconnected label, `No active Muse` connection state, and faster no-server runtime refresh.
 
 
 AI Desk Meter currently provides:
@@ -28,7 +58,7 @@ AI Desk Meter currently provides:
 - ESP32-S3 firmware scaffold for a physical desk meter
 - Compact companion JSON payloads for ESP32 and Arduino-class companion displays
 - Optional `/companion/status` endpoint for development/debug previews
-- Tauri-native shell plan/prototype docs and local dashboard launch scripts
+- Real Tauri/Rust native desktop shell under `native/tauri` that reads `runtime/status.json` with no local server required
 - Public docs for hardware, firmware, host app, provider contracts, roadmap, testing, companion devices, licensing direction, and the pixel buddy character
 - Example payloads for normal, warning, offline, corrupt, and Arc-RAR-linked states
 
@@ -68,12 +98,39 @@ Raspberry Pi-class systems can run the Python host and dashboard stack directly.
 
 ## Release and license path
 
+- `v1.0.3` adds the real Tauri/Rust native desktop shell while preserving no-server defaults.
+- `v1.0.7` makes the actual SVG buddy label say `No Muse.` when no active Muse/model payload is connected, while preserving the main `No active Muse` header and active `✶ Musing...` state.
+- `v1.0.6` removes overlay blink elements, hooks blink behavior directly into the two SVG eye pixels, preserves `No active Muse`, and reduces no-server refresh increments.
+- `v1.0.4` adds explicit `No active Muse` behavior when no valid runtime payload is connected.
 - `v1.0.1` is the stable open-source functional release with no local server required by default.
 - `v1.0.0` remains the first stable functional release baseline.
 - `v1.x-v2.x` remain the open-source foundation/expansion corridor unless a future notice says otherwise.
 - `MuseMeter 3.0` is the planned commercial full package: second-brain / Neural Synth / AI buddy.
 
 See `docs/release-v1.0.0.md`, `docs/open-source-boundary.md`, and `docs/version-license-matrix.md`.
+
+
+## Native desktop app
+
+AI Desk Meter includes a real Tauri/Rust native app under `native/tauri`. It reads `runtime/status.json` directly and does **not** require the optional localhost API.
+
+```bash
+# terminal 1
+source host/.venv/bin/activate
+ai-meter watch --provider mock --out runtime/status.json --interval 0.5
+
+# terminal 2
+cd native/tauri
+npm install
+npm run tauri:dev
+```
+
+Build a desktop bundle with:
+
+```bash
+cd native/tauri
+npm run tauri:build
+```
 
 ## Architecture
 
@@ -189,8 +246,8 @@ ai-meter write-companion --provider mock --out ../runtime/companion.json
 Continuously refresh file payloads:
 
 ```bash
-ai-meter watch --provider mock --out ../runtime/status.json --interval 2
-ai-meter watch-companion --provider mock --out ../runtime/companion.json --interval 2
+ai-meter watch --provider mock --out ../runtime/status.json --interval 0.5
+ai-meter watch-companion --provider mock --out ../runtime/companion.json --interval 0.5
 ```
 
 Open `docs/index.html` directly and use the file-import control to load `runtime/status.json`. Native/Tauri shells and Raspberry Pi kiosk setups should prefer file/stdout/serial flows over a required server.
@@ -406,3 +463,42 @@ AI Desk Meter = dashboard, companion payloads, diagnostics
 Neural Synth = later visualization toggle driven by real provider state
 MuseMeter 3.0 = later commercial second-brain / Neural Synth / AI buddy package
 ```
+
+
+## v1.1.6 — Runtime Dashboard Button
+
+- Adds a Dashboard button for the live runtime dashboard IP page.
+- Docs opens the docs page/site.
+- The runtime page continues to auto-refresh from `runtime/status.json` and mirror source-of-truth state.
+
+## v1.1.4 — Connection Dot + Unified Runtime Docs Panel
+
+- Added red/green connection indicator to the runtime page.
+- Integrated docs/runtime/connection info into the same page with a Back to Muse button.
+- Browser/Vite preview and the app holster now use the same runtime page UX.
+- Runtime page auto-refreshes from `runtime/status.json` as the source of truth.
+
+
+### v1.1.6 Runtime/Muse state model
+
+The top-right connection dot indicates the CLI/runtime writer and runtime dashboard IP page are reachable. It does not mean a Muse/model/agent is active. `No active Muse` remains until a payload reports `muse_connected: true`, `agent_connected: true`, `active_muse: true`, or an active `muse_state`.
+
+
+## v1.1.7 runtime dashboard clarification
+
+The runtime connection dot means the CLI/runtime writer and runtime dashboard path are reachable. It does not mean a Muse/model/agent is active. Mock/runtime-only payloads keep the UI on **No active Muse** while still showing a green runtime connection. DIY hardware specs and cost/BOM details are now visible directly from the runtime dashboard and docs page.
+
+
+## v1.1.8 parts and sourcing completion
+
+The DIY hardware path now includes a build-ready sourcing page at `docs/parts-and-sourcing.md`. It documents the recommended Waveshare ESP32-S3-Touch-AMOLED-2.16 board, required USB-C/runtime-host parts, optional enclosure/battery/fastener parts, cost tiers, search terms, and source categories. The runtime dashboard DIY / Cost Specs panel exposes the same buying guidance so users do not have to guess what to purchase.
+
+
+## v1.1.9
+
+Smooth runtime stream patch: no flicker between disconnected/connected during transient reads; blink timers survive dashboard refreshes.
+
+
+## v1.2.1 — Stable Runtime App Shell
+
+The runtime dashboard now separates static controls from live payload streaming. Buttons, tabs, docs/specs navigation, and layout containers render once; the 0.5s refresh loop updates only values, logs, JSON, and status text. This prevents the two-truth flicker and button reflow seen in the v1.1 line.

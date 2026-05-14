@@ -13,7 +13,7 @@ from ai_meter.config import load_config
 from ai_meter.diagnostics import write_diagnostics_zip
 from ai_meter.providers import make_provider, provider_names
 from ai_meter.transports import make_transport
-from ai_meter.writer import watch_writer, write_companion, write_status
+from ai_meter.writer import read_provider_payload, watch_writer, write_companion, write_status
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -35,6 +35,24 @@ def build_parser() -> argparse.ArgumentParser:
     serve.add_argument("--host", default="127.0.0.1")
     serve.add_argument("--port", type=int, default=8787)
 
+    gui = sub.add_parser("gui", help="open the no-server GUI and automatically start the runtime writer")
+    gui.add_argument("--provider", default="mock", choices=provider_names())
+    gui.add_argument("--out", default="runtime/status.json", help="status JSON path used by the GUI")
+    gui.add_argument("--interval", type=float, default=0.5)
+    gui.add_argument("--no-runtime", action="store_true", help="open GUI without starting the background writer")
+
+    app = sub.add_parser("app", help="open the packaged native app holster and automatically start runtime")
+    app.add_argument("--provider", default="mock", choices=provider_names())
+    app.add_argument("--out", default="runtime/status.json", help="status JSON path used by the native app")
+    app.add_argument("--interval", type=float, default=0.5)
+    app.add_argument("--no-runtime", action="store_true", help="open native app without starting the background writer")
+    app.add_argument("--no-install", action="store_true", help="do not run npm install automatically for the native launcher")
+
+    runtime = sub.add_parser("runtime", help="run the no-GUI runtime writer until stopped")
+    runtime.add_argument("--provider", default="mock", choices=provider_names())
+    runtime.add_argument("--out", default="runtime/status.json")
+    runtime.add_argument("--interval", type=float, default=0.5)
+
     companion = sub.add_parser("companion-status", help="print compact companion-display payload as JSON")
     companion.add_argument("--provider", default="mock", choices=provider_names())
 
@@ -50,13 +68,13 @@ def build_parser() -> argparse.ArgumentParser:
     watch = sub.add_parser("watch", help="continuously write full provider payload JSON; no local server required")
     watch.add_argument("--provider", default="mock", choices=provider_names())
     watch.add_argument("--out", default="runtime/status.json")
-    watch.add_argument("--interval", type=float, default=2.0)
+    watch.add_argument("--interval", type=float, default=0.5)
     watch.add_argument("--count", type=int, default=None, help=argparse.SUPPRESS)
 
     watch_companion = sub.add_parser("watch-companion", help="continuously write compact companion JSON; no local server required")
     watch_companion.add_argument("--provider", default="mock", choices=provider_names())
     watch_companion.add_argument("--out", default="runtime/companion.json")
-    watch_companion.add_argument("--interval", type=float, default=2.0)
+    watch_companion.add_argument("--interval", type=float, default=0.5)
     watch_companion.add_argument("--count", type=int, default=None, help=argparse.SUPPRESS)
 
     diagnostics = sub.add_parser("diagnostics", help="write a safe diagnostics ZIP bundle")
@@ -68,6 +86,9 @@ def build_parser() -> argparse.ArgumentParser:
 
     sub.add_parser("test-payload", help="print one mock payload")
     sub.add_parser("providers", help="list available providers")
+    check_cli = sub.add_parser("check-cli", help="print CLI checker state as JSON")
+    check_cli.add_argument("--provider", default="mock", choices=provider_names())
+
     sub.add_parser("version", help="print the installed ai-desk-meter version")
     return p
 
@@ -115,9 +136,43 @@ def main(argv: list[str] | None = None) -> int:
     if args.cmd == "version":
         print(__version__)
         return 0
+    if args.cmd == "check-cli":
+        payload = read_provider_payload(args.provider, action="CLI checker probe complete")
+        print(json.dumps({
+            "schema": "ai-desk-meter.cli-checker.v1",
+            "ok": not bool(payload.errors),
+            "provider": args.provider,
+            "last_action": payload.last_action,
+            "action_in_progress": payload.action_in_progress,
+            "cli_checker": payload.cli_checker,
+            "warnings": payload.warnings,
+            "errors": payload.errors,
+        }, indent=2))
+        return 0
     if args.cmd == "doctor":
         print(json.dumps(run_doctor(args.provider), indent=2))
         return 0
+    if args.cmd == "gui":
+        from ai_meter.gui import run_gui
+
+        return run_gui(provider=args.provider, status_path=args.out, interval=args.interval, start_runtime=not args.no_runtime)
+    if args.cmd == "app":
+        from ai_meter.app_launcher import run_app
+
+        return run_app(provider=args.provider, status_path=args.out, interval=args.interval, start_runtime=not args.no_runtime, install_deps=not args.no_install)
+    if args.cmd == "runtime":
+        try:
+            watch_writer(
+                path=Path(args.out),
+                provider_name=args.provider,
+                interval_seconds=args.interval,
+                companion=False,
+                count=None,
+                on_write=lambda p: print(str(p), flush=True),
+            )
+            return 0
+        except KeyboardInterrupt:
+            return 0
 
     if args.cmd == "write-status":
         out = write_status(Path(args.out), args.provider)

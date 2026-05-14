@@ -32,23 +32,25 @@ def infer_activity(payload: UsagePayload) -> str:
         return "stale"
     if payload.warnings:
         return "warning"
-    # The baseline character/state intentionally uses Musing while an agent is
-    # responding to prompt input or an action is loading. Later product versions
-    # can split this into responding/loading/action states without breaking v1.
-    return "musing"
+    if not getattr(payload, "muse_connected", False):
+        return "runtime" if getattr(payload, "runtime_connected", False) else "idle"
+    return "musing" if "musing" in str(payload.status).lower() or str(payload.muse_state).lower() == "musing" else "active"
 
 
 def to_companion_payload(payload: UsagePayload) -> dict[str, Any]:
     backend = payload.backend
     return {
         "schema": COMPANION_SCHEMA,
-        "status": "linked" if payload.mode == MeterMode.active and not payload.errors else str(payload.mode.value),
+        "status": "linked" if getattr(payload, "runtime_connected", False) and payload.mode == MeterMode.active and not payload.errors else str(payload.mode.value),
         "current_pct": clamp_int_percent(payload.current_percent),
         "weekly_pct": clamp_int_percent(payload.weekly_percent),
         "current_reset": format_duration(payload.current_reset_seconds),
         "weekly_reset": format_duration(payload.weekly_reset_seconds),
         "activity": infer_activity(payload),
-        "message": payload.status[:48],
+        "message": (payload.status if getattr(payload, "muse_connected", False) else "No active Muse")[:48],
+        "runtime_connected": bool(getattr(payload, "runtime_connected", False)),
+        "muse_connected": bool(getattr(payload, "muse_connected", False)),
+        "muse_state": str(getattr(payload, "muse_state", "none")),
         "burn_rate": str(payload.burn_rate.value),
         "backend": payload.source,
         "receipt_state": backend.receipt_state if backend else "unknown",

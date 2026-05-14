@@ -1,27 +1,40 @@
-# Native Tauri Shell Prototype
+# AI Desk Meter Native App
 
-This folder documents the v0.8 native dashboard shell path. It is intentionally a prototype scaffold, not a shipped binary.
+This directory contains the real Tauri/Rust desktop shell for AI Desk Meter.
 
-## Purpose
+The native app is intentionally **no-server by default**. It reads `runtime/status.json` through a Rust command exposed by Tauri and refreshes the window every two seconds. The optional localhost API remains available only for development/debug previews and is not required by the native app.
 
-Wrap the existing AI Desk Meter dashboard and local API in a desktop-friendly shell while keeping provider/backend truth in the Python host and Arc-RAR provider boundary.
+## Run locally
 
-## Expected local service
+From the repo root:
 
 ```bash
-cd host
-pip install -e .
-ai-meter serve --host 127.0.0.1 --port 8787
+source host/.venv/bin/activate
+ai-meter watch --provider mock --out runtime/status.json --interval 0.5
 ```
 
-The shell should read:
+In a second terminal:
 
-- `http://127.0.0.1:8787/health`
-- `http://127.0.0.1:8787/providers`
-- `http://127.0.0.1:8787/status?provider=mock`
-- `http://127.0.0.1:8787/companion/status?provider=mock`
-- `http://127.0.0.1:8787/diagnostics?provider=mock`
+```bash
+cd native/tauri
+npm install
+npm run tauri:dev
+```
 
-## Character identity
+## Build desktop bundle
 
-The orange/blue pixel buddy and `✶ Musing...` state are intentional. For now, Musing means prompt response or action loading. Later states can distinguish verifying, archiving, idle, warning, and responding.
+```bash
+cd native/tauri
+npm install
+npm run tauri:build
+```
+
+The compiled bundle will be emitted under `native/tauri/src-tauri/target/release/bundle/`.
+
+## Runtime contract
+
+- `runtime/status.json` is the default payload.
+- `AI_METER_STATUS_PATH=/absolute/path/status.json` may override the payload path.
+- The native app never invents provider state.
+- `✶ Musing...` remains the baseline loading/responding/action state.
+- The orange/blue pixel buddy is loaded from `public/pixel-buddy-musing.svg`, copied from the canonical repo asset.

@@ -1,35 +1,23 @@
 # Native GUI Plan
 
-AI Desk Meter v0.8 adds a desktop-shell path without moving authority into the interface. The native shell is a wrapper around the already-tested local host service and dashboard assets.
+AI Desk Meter now includes a real Tauri/Rust native desktop shell under `native/tauri`.
 
-## Core rule
+The native app wraps the same product identity as the HTML dashboard but does not require a local HTTP server. It reads the offline-first JSON payload written by the host CLI.
 
-The GUI is a viewer and control surface. Provider truth remains in the host process and backend integrations such as Arc-RAR.
+## Default native flow
 
 ```text
-Arc-RAR / mock / manual provider
+ai-meter watch --provider mock --out runtime/status.json --interval 0.5
         ↓
-ai-meter optional local API
+native/tauri Rust command reads runtime/status.json
         ↓
-HTML dashboard / Tauri shell / kiosk view
+Tauri window refreshes usage, weekly usage, reset timers, burn rate, provider, warnings, errors, and ✶ Musing... state
 ```
 
-## Open-source track
+## Native app rules
 
-The v0.x-v2.x track stays open-source and focuses on optional local API stability, provider contract stability, Raspberry Pi / Linux SBC operation, ESP32/Arduino-class companion displays, dashboard shelling, and diagnostics.
-
-## MuseMeter 3.0 track
-
-MuseMeter 3.0 is the planned commercial-licensed full package after the open foundation is stable. Its direction is a second-brain / Neural Synth / AI buddy product. The current pixel buddy and `✶ Musing...` state remain intentional; for now, Musing means prompt response or action loading.
-
-## v0.8 desktop shell scope
-
-Included in this repo stage:
-
-- Tauri shell plan and config example
-- launch scripts for macOS/Linux and Windows
-- desktop security notes
-- frontend bridge notes for polling the optional local API
-- artifact tests to prevent losing the native shell path
-
-Not included yet: compiled desktop binaries, signed installers, Omnibinary adapter, Neural Synth toggle implementation, or commercial MuseMeter-only features.
+- The GUI is not the backend authority.
+- The GUI reads provider payloads; it does not invent usage state.
+- No local API/server is required for normal operation.
+- The optional `serve` command remains development/debug tooling only.
+- MuseMeter 3.0 remains the later commercial second-brain / Neural Synth / AI buddy package.

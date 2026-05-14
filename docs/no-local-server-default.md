@@ -27,8 +27,8 @@ ai-meter write-companion --provider mock --out runtime/companion.json
 Continuously refresh files:
 
 ```bash
-ai-meter watch --provider mock --out runtime/status.json --interval 2
-ai-meter watch-companion --provider mock --out runtime/companion.json --interval 2
+ai-meter watch --provider mock --out runtime/status.json --interval 0.5
+ai-meter watch-companion --provider mock --out runtime/companion.json --interval 0.5
 ```
 
 ## Device-friendly outputs

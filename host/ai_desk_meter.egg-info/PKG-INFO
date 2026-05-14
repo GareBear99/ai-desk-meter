@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: ai-desk-meter
-Version: 1.0.1
+Version: 1.2.1
 Summary: Local-first AI workflow meter, Arc-RAR dashboard bridge, offline-first file/stdout/serial payload flow, optional diagnostics API, Raspberry Pi/SBC host path, and ESP32/Arduino companion display protocol.
 Requires-Python: >=3.10
 Description-Content-Type: text/markdown

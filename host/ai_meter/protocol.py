@@ -56,6 +56,19 @@ class UsagePayload(BaseModel):
     source: str = "mock"
     confidence: Confidence = Confidence.mock
     backend: BackendState | None = None
+    # Runtime connection means the CLI/writer/dashboard source of truth is reachable.
+    # It does not imply a Muse/model/agent is connected.
+    runtime_connected: bool = True
+    muse_connected: bool = False
+    muse_state: str = Field(default="none", max_length=48)
+    last_action: str = Field(default="provider payload refreshed", max_length=96)
+    action_in_progress: str = Field(default="musing", max_length=96)
+    cli_checker: dict[str, Any] = Field(default_factory=lambda: {
+        "state": "active",
+        "last_check": int(time()),
+        "message": "payload generated",
+    })
+    run_log: list[str] = Field(default_factory=list)
     warnings: list[str] = Field(default_factory=list)
     errors: list[str] = Field(default_factory=list)
 
@@ -64,6 +77,12 @@ class UsagePayload(BaseModel):
     def clean_status(cls, value: str) -> str:
         value = value.strip()
         return value or "Ready"
+
+    @field_validator("last_action", "action_in_progress", "muse_state")
+    @classmethod
+    def clean_action_text(cls, value: str) -> str:
+        value = str(value).strip()
+        return value or "musing"
 
     @field_validator("warnings", "errors")
     @classmethod
@@ -74,6 +93,16 @@ class UsagePayload(BaseModel):
             if text:
                 cleaned.append(text[:160])
         return cleaned[:10]
+
+    @field_validator("run_log")
+    @classmethod
+    def clean_run_log(cls, values: list[str]) -> list[str]:
+        cleaned: list[str] = []
+        for item in values:
+            text = str(item).strip()
+            if text:
+                cleaned.append(text[:240])
+        return cleaned[:12]
 
     def to_wire(self) -> dict[str, Any]:
         return self.model_dump(mode="json", by_alias=True, exclude_none=True)

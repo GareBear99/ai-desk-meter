@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from time import time
+from datetime import datetime
 import math
 
 from ai_meter.protocol import BurnRate, Confidence, MeterMode, UsagePayload
@@ -21,10 +22,11 @@ class MockProvider:
             burn = BurnRate.low
         else:
             burn = BurnRate.normal
-        # Baseline product identity: for the open foundation, the character
-        # uses one shared Musing state for prompt response and action loading.
-        # Later MuseMeter versions can split responding/loading/action states.
-        status = "✶ Musing..."
+        # Mock means the runtime/CLI writer is alive. It is not a real Muse/model
+        # connection, so the UI must keep showing No active Muse while the
+        # top-right runtime connection dot can still be green.
+        status = "No active Muse"
+        stamp = datetime.fromtimestamp(now).strftime("%H:%M:%S")
         return UsagePayload(
             service="mock-ai",
             current_percent=round(max(0, min(100, current)), 1),
@@ -36,4 +38,19 @@ class MockProvider:
             mode=MeterMode.active,
             source=self.name,
             confidence=Confidence.mock,
+            runtime_connected=True,
+            muse_connected=False,
+            muse_state="none",
+            last_action="mock runtime payload refreshed",
+            action_in_progress="none",
+            cli_checker={
+                "state": "active",
+                "last_check": int(now),
+                "message": "mock provider sampled successfully",
+            },
+            run_log=[
+                f"[{stamp}] status payload loaded",
+                f"[{stamp}] provider mock updated",
+                f"[{stamp}] runtime connected; no active Muse",
+            ],
         )

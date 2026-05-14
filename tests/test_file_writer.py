@@ -13,7 +13,13 @@ def test_write_status_creates_full_payload(tmp_path):
     data = json.loads(out.read_text(encoding="utf-8"))
     assert data["schema"] == "ai-desk-meter.v1"
     assert data["source"] == "mock"
-    assert data["status"] == "✶ Musing..."
+    assert data["status"] == "No active Muse"
+    assert data["runtime_connected"] is True
+    assert data["muse_connected"] is False
+    assert data["last_action"] == "write-status complete"
+    assert data["action_in_progress"] == "none"
+    assert data["cli_checker"]["state"] == "active"
+    assert any("CLI checker" in row for row in data["run_log"])
 
 
 def test_write_companion_creates_compact_payload(tmp_path):
@@ -21,8 +27,8 @@ def test_write_companion_creates_compact_payload(tmp_path):
     write_companion(out, "mock")
     data = json.loads(out.read_text(encoding="utf-8"))
     assert data["schema"] == "ai_desk_meter_companion_v1"
-    assert data["activity"] == "musing"
-    assert data["message"] == "✶ Musing..."
+    assert data["activity"] == "runtime"
+    assert data["message"] == "No active Muse"
 
 
 def test_watch_writer_count_stops_for_tests(tmp_path):
@@ -42,3 +48,13 @@ def test_cli_write_status_and_companion(tmp_path, capsys):
     captured = capsys.readouterr()
     assert "status.json" in captured.out
     assert "companion.json" in captured.out
+
+
+def test_cli_check_cli_outputs_action_state(capsys):
+    assert main(["check-cli", "--provider", "mock"]) == 0
+    data = json.loads(capsys.readouterr().out)
+    assert data["schema"] == "ai-desk-meter.cli-checker.v1"
+    assert data["ok"] is True
+    assert data["last_action"] == "CLI checker probe complete"
+    assert data["action_in_progress"] == "none"
+    assert data["cli_checker"]["state"] == "active"

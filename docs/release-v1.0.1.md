@@ -6,8 +6,8 @@ v1.0.1 keeps the stable v1.0 open-source foundation and corrects the default run
 
 - `ai-meter write-status --provider mock --out runtime/status.json`
 - `ai-meter write-companion --provider mock --out runtime/companion.json`
-- `ai-meter watch --provider mock --out runtime/status.json --interval 2`
-- `ai-meter watch-companion --provider mock --out runtime/companion.json --interval 2`
+- `ai-meter watch --provider mock --out runtime/status.json --interval 0.5`
+- `ai-meter watch-companion --provider mock --out runtime/companion.json --interval 0.5`
 - Atomic JSON file writes for dashboard and companion payloads.
 - Offline-first documentation in `docs/no-local-server-default.md`.
 - Dashboard file-import workflow so `docs/index.html` can be used without a running API server.

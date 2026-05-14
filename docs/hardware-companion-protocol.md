@@ -44,4 +44,4 @@ The full host, provider validation, Arc-RAR access, diagnostics, and archive aut
 - Render errors and offline states clearly.
 - Do not store secrets, prompts, tokens, or private AI content.
 - Do not treat the companion device as the source of truth.
-- Prefer short polling intervals of 2-10 seconds.
+- Prefer short polling intervals of 0.5-10 seconds.

@@ -1,0 +1,27 @@
+{
+  "schema": "ai-desk-meter.v1",
+  "service": "browser-preview",
+  "current_percent": 0,
+  "weekly_percent": 0,
+  "current_reset_seconds": 0,
+  "weekly_reset_seconds": 0,
+  "burn_rate": "inactive",
+  "status": "No active Muse",
+  "mode": "not connected",
+  "updated_at": 0,
+  "source": "browser-preview",
+  "confidence": "fallback",
+  "last_action": "no active model payload connected",
+  "action_in_progress": "none",
+  "cli_checker": {
+    "state": "inactive",
+    "last_check": 0,
+    "message": "import runtime/status.json or run ai-meter watch"
+  },
+  "run_log": [
+    "[preview] No active Muse connected",
+    "[preview] Import runtime/status.json for live payload testing"
+  ],
+  "warnings": [],
+  "errors": []
+}

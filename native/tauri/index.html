@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Desk Meter Native</title>
+      <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main id="app" class="shell no-active">
+      <div id="connectionPill" class="connection-pill disconnected" role="status" aria-live="polite">
+        <span id="connectionDot" class="connection-dot"></span>
+        <span id="connectionText">Disconnected</span>
+      </div>
+      <section class="hero">
+        <div id="buddyShell" class="buddy-shell" aria-label="AI Desk Meter pixel buddy">
+          <svg id="buddySvg" class="buddy" xmlns="http://www.w3.org/2000/svg" width="160" height="110" viewBox="0 0 160 110" role="img" aria-labelledby="title desc">
+            <title id="title">AI Desk Meter pixel buddy</title>
+            <desc id="desc">Orange pixel buddy with blue feet and Musing status baseline.</desc>
+            <rect width="160" height="110" rx="18" fill="#05070b"/>
+            <g transform="translate(42 16)" shape-rendering="crispEdges">
+              <style>.o{fill:#ff7048}.d{fill:#ff9a5f}.b{fill:#67b7ff}.e{fill:#ffd6aa}</style>
+              <!-- 10 x 5 pixel buddy, hardware-friendly baseline -->
+              <rect class="o" x="16" y="0" width="8" height="8" rx="2"/><rect class="o" x="26" y="0" width="8" height="8" rx="2"/><rect class="o" x="36" y="0" width="8" height="8" rx="2"/><rect class="o" x="46" y="0" width="8" height="8" rx="2"/><rect class="o" x="56" y="0" width="8" height="8" rx="2"/><rect class="o" x="66" y="0" width="8" height="8" rx="2"/>
+              <rect class="o" x="6" y="10" width="8" height="8" rx="2"/><rect class="o" x="16" y="10" width="8" height="8" rx="2"/><rect id="museEyeLeft" class="e muse-eye" x="26" y="10" width="8" height="8" rx="2"/><rect class="o" x="36" y="10" width="8" height="8" rx="2"/><rect class="o" x="46" y="10" width="8" height="8" rx="2"/><rect id="museEyeRight" class="e muse-eye" x="56" y="10" width="8" height="8" rx="2"/><rect class="o" x="66" y="10" width="8" height="8" rx="2"/><rect class="o" x="76" y="10" width="8" height="8" rx="2"/>
+              <rect class="o" x="0" y="20" width="8" height="8" rx="2"/><rect class="o" x="10" y="20" width="8" height="8" rx="2"/><rect class="o" x="20" y="20" width="8" height="8" rx="2"/><rect class="o" x="30" y="20" width="8" height="8" rx="2"/><rect class="o" x="40" y="20" width="8" height="8" rx="2"/><rect class="o" x="50" y="20" width="8" height="8" rx="2"/><rect class="o" x="60" y="20" width="8" height="8" rx="2"/><rect class="o" x="70" y="20" width="8" height="8" rx="2"/><rect class="o" x="80" y="20" width="8" height="8" rx="2"/><rect class="o" x="90" y="20" width="8" height="8" rx="2"/>
+              <rect class="o" x="20" y="30" width="8" height="8" rx="2"/><rect class="o" x="30" y="30" width="8" height="8" rx="2"/><rect class="o" x="40" y="30" width="8" height="8" rx="2"/><rect class="o" x="50" y="30" width="8" height="8" rx="2"/><rect class="o" x="60" y="30" width="8" height="8" rx="2"/><rect class="o" x="70" y="30" width="8" height="8" rx="2"/>
+              <rect class="b" x="6" y="42" width="8" height="8" rx="2"/><rect class="b" x="16" y="42" width="8" height="8" rx="2"/><rect class="b" x="76" y="42" width="8" height="8" rx="2"/><rect class="b" x="86" y="42" width="8" height="8" rx="2"/>
+            </g>
+            <text id="buddyStatusLabel" x="80" y="92" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="16" font-weight="800" fill="#ffd6aa">No Muse.</text>
+          </svg>
+        </div>
+        <div class="hero-copy">
+          <p class="eyebrow">AI Desk Meter Native</p>
+          <h1 id="statusText"><span id="statusStar" class="star hidden">✶</span><span id="statusWord">No active Muse</span><span id="statusDots" class="dots hidden" aria-hidden="true"><i>.</i><i>.</i><i>.</i></span></h1>
+          <p class="sub">No-server desktop shell reading local JSON payloads.</p>
+        </div>
+      </section>
+
+      <section class="grid">
+        <article class="card meter-card">
+          <span>Current usage</span>
+          <strong id="currentPercent">--%</strong>
+          <div class="bar"><i id="currentBar"></i></div>
+          <small id="currentReset">reset: unknown</small>
+        </article>
+        <article class="card meter-card">
+          <span>Weekly usage</span>
+          <strong id="weeklyPercent">--%</strong>
+          <div class="bar"><i id="weeklyBar"></i></div>
+          <small id="weeklyReset">reset: unknown</small>
+        </article>
+        <article class="card">
+          <span>Burn rate</span>
+          <strong id="burnRate">inactive</strong>
+          <small id="modeText">mode: not connected</small>
+        </article>
+        <article class="card">
+          <span>Provider</span>
+          <strong id="providerText">not connected</strong>
+          <small id="updatedText">updated: never</small>
+        </article>
+      </section>
+
+      <section class="grid action-grid">
+        <article class="card">
+          <span>Last action</span>
+          <strong id="lastAction">no active session</strong>
+          <small id="lastActionTime">updated: never</small>
+        </article>
+        <article class="card">
+          <span>Action in progress</span>
+          <strong id="actionProgress">none</strong>
+          <small id="actionHint">No model payload connected</small>
+        </article>
+        <article class="card">
+          <span>CLI checker</span>
+          <strong id="cliChecker">inactive</strong>
+          <small id="cliCheckerDetail">no check yet</small>
+        </article>
+        <article class="card">
+          <span>Runtime source</span>
+          <strong id="runtimeSource">local JSON</strong>
+          <small id="runtimeMode">no active Muse</small>
+        </article>
+      </section>
+
+      <section class="card status-card" id="staticControlBar">
+        <div>
+          <span>Payload path</span>
+          <code id="pathText">../../runtime/status.json</code>
+        </div>
+        <div class="button-row">
+          <label class="file-button" for="payloadFile">Import JSON</label>
+          <input id="payloadFile" type="file" accept="application/json,.json" />
+          <button id="refreshButton" type="button">Refresh now</button>
+          <button id="dashboardButton" type="button">Dashboard</button>
+          <button id="docsButton" type="button">Docs</button>
+          <button id="specsButton" type="button">DIY / Cost Specs</button>
+        </div>
+      </section>
+
+      <section class="tabs" aria-label="Runtime panels">
+        <button class="tab-button active" data-tab="muse" type="button">Muse</button>
+        <button class="tab-button" data-tab="runtime" type="button">Runtime / Connection</button>
+        <button class="tab-button" data-tab="dev" type="button">Dev JSON</button>
+        <button class="tab-button" data-tab="commands" type="button">Commands</button>
+        <button class="tab-button" data-tab="providers" type="button">Providers / Omnibinary</button>
+        <button class="tab-button" data-tab="logs" type="button">Logs</button>
+        <button class="tab-button" data-tab="docs" type="button">Docs / Runtime Info</button>
+        <button class="tab-button" data-tab="specs" type="button">DIY / Cost Specs</button>
+      </section>
+
+      <section id="runtimePanel" class="card tab-panel" data-panel="runtime">
+        <span>Runtime / connection</span>
+        <div class="dev-grid">
+          <div><small>Runtime</small><strong id="connectionState">Runtime disconnected</strong></div>
+          <div><small>Shell</small><strong id="shellState">browser/runtime page</strong></div>
+          <div><small>Project root</small><code id="projectRootText">unknown</code></div>
+          <div><small>Status path</small><code id="statusPathText">runtime/status.json</code></div>
+          <div><small>Provider</small><strong id="devProviderText">not connected</strong></div>
+          <div><small>Refresh</small><strong id="refreshRateText">0.5s</strong></div>
+        </div>
+        <p class="panel-note">This is the same runtime page in the packaged app and in the external browser preview. No separate dev-connection page is required.</p>
+      </section>
+
+      <section id="devPanel" class="card tab-panel" data-panel="dev">
+        <span>Dev JSON</span>
+        <pre id="payloadJsonOutput">No active Muse payload connected.</pre>
+      </section>
+
+      <section id="commandsPanel" class="card tab-panel" data-panel="commands">
+        <span>Internal CLI commands</span>
+        <div id="commandList" class="dev-command-grid"></div>
+        <span>Optional local API routes</span>
+        <p class="panel-note">The runtime page does not require a local server. These commands are dev/debug/SaaS-style inspection helpers only.</p>
+        <div id="apiRouteList" class="dev-command-grid"></div>
+      </section>
+
+      <section id="providersPanel" class="card tab-panel" data-panel="providers">
+        <span>Providers / Omnibinary boundary</span>
+        <pre id="providerBoundaryOutput">Providers: mock, manual, arcrar, arcrar-cli, omnibinary</pre>
+      </section>
+
+
+
+      <section id="specsPanel" class="card tab-panel" data-panel="specs">
+        <div class="panel-header-row">
+          <span>DIY / Cost Specs</span>
+          <button id="specsBackButton" class="secondary-button" type="button">Back to Muse</button>
+          <button id="partsSourcingButton" class="secondary-button" type="button">Parts & Sourcing</button>
+        </div>
+        <p class="panel-note">Build-ready hardware sourcing for the AI Desk Meter. These are guidance estimates and source categories, not required purchases from one vendor.</p>
+        <div class="dev-grid sourcing-grid">
+          <div><small>Recommended core board</small><strong>Waveshare ESP32-S3-Touch-AMOLED-2.16</strong><p>2.16-inch 480×480 capacitive AMOLED ESP32-S3 board. Search exactly: <code>ESP32-S3-Touch-AMOLED-2.16</code>.</p></div>
+          <div><small>Best first source</small><strong>Waveshare official store</strong><p>Use the official product page to verify SKU, battery option, and current board pricing before checking marketplaces.</p></div>
+          <div><small>Docs / firmware source</small><strong>Waveshare Docs + GitHub + Espressif BSP</strong><p>Use vendor docs/sample code and Espressif registry entries for pinout, display, touch, IMU, audio, and flashing references.</p></div>
+          <div><small>Convenience source</small><strong>Amazon / regional marketplace</strong><p>Search: <code>Waveshare ESP32-S3 2.16 AMOLED Touch</code>. Confirm it is the 2.16-inch model, not 2.06 or 2.41.</p></div>
+          <div><small>Required extras</small><strong>USB-C data cable + runtime host</strong><p>Use a data-capable USB-C cable. Runtime host can be Mac, Windows, Linux, or Raspberry Pi writing <code>runtime/status.json</code>.</p></div>
+          <div><small>Optional build polish</small><strong>3D case, stand, screws, battery option</strong><p>Search for an ESP32-S3 AMOLED 2.16 case or print/custom-fit one. Battery is optional; USB-powered is simplest.</p></div>
+          <div><small>Cheap prototype</small><strong>$25–$60</strong><p>Board or cheaper ESP32 display, USB cable, no polished case. Good for protocol and UI proof.</p></div>
+          <div><small>Best-match desk build</small><strong>$50–$120 all-in</strong><p>Recommended Waveshare 2.16 AMOLED board, cable, simple enclosure/stand, basic finish.</p></div>
+          <div><small>Product-style one-off</small><strong>$90–$160</strong><p>Board, polished enclosure, fasteners, rubber feet, cable management, optional battery/power polish.</p></div>
+        </div>
+        <p class="panel-note"><strong>Rule:</strong> ESP32/Arduino-class boards are companion displays. The desktop/Pi host remains the backend/source-of-truth runtime.</p>
+      </section>
+
+      <section id="docsPanel" class="card tab-panel" data-panel="docs">
+        <div class="panel-header-row">
+          <span>Docs / Runtime Info</span>
+          <button id="docsBackButton" class="secondary-button" type="button">Back to Muse</button>
+          <button id="fullDocsButton" class="secondary-button" type="button">Open Full Docs</button>
+          <button id="docsDiySpecLink" class="secondary-button" type="button">DIY / Cost Spec</button>
+          <button id="partsSourcingDocsButton" class="secondary-button" type="button">Parts & Sourcing</button>
+        </div>
+        <div class="dev-grid">
+          <div><small>Connection dot</small><strong id="docsConnectionState">Disconnected</strong></div>
+          <div><small>DIY / cost spec</small><code>DIY_Claude_Code_Desk_Usage_Meter_Spec_Guide.html#bom</code></div>
+          <div><small>Parts & sourcing</small><code>docs/parts-and-sourcing.md</code></div>
+          <div><small>Source of truth</small><code>runtime/status.json</code></div>
+          <div><small>Default GUI command</small><code>ai-meter app</code></div>
+          <div><small>No-GUI runtime</small><code>ai-meter runtime --provider mock --out runtime/status.json --interval 0.5</code></div>
+          <div><small>Omnibinary provider</small><code>AI_METER_OMNIBINARY_REPO=integrations/omnibinary-runtime ai-meter status --provider omnibinary</code></div>
+          <div><small>Optional API</small><code>ai-meter serve --host 127.0.0.1 --port 8787</code></div>
+        </div>
+        <p class="panel-note">The runtime page listens to the local JSON payload as the lightweight source of truth. It does not create fake Muse/model state: red means disconnected/no active Muse, green means the CLI/runtime and runtime dashboard IP page are reachable. No active Muse only changes when a real Muse/model/agent connection is present.</p>
+      </section>
+
+      <section class="card log-card">
+        <span>Run log</span>
+        <pre id="runLogOutput">No active Muse connected. Waiting for runtime/status.json...</pre>
+      </section>
+
+      <section class="card log-card compact-log">
+        <span>Warnings / errors</span>
+        <pre id="logOutput">No warnings or errors yet.</pre>
+      </section>
+    </main>
+    <script src="renderer.js"></script>
+  </body>
+</html>

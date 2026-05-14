@@ -20,23 +20,87 @@ class OmnibinaryProvider:
 
     name = "omnibinary"
 
-    def __init__(self, state_path: str | None = None) -> None:
+    def __init__(self, state_path: str | None = None, repo_path: str | None = None) -> None:
         self.state_path = state_path or os.getenv("AI_METER_OMNIBINARY_STATE")
+        self.repo_path = repo_path or os.getenv("AI_METER_OMNIBINARY_REPO")
 
     def read(self) -> UsagePayload:
-        if not self.state_path:
-            return self._planned_payload("Omnibinary adapter planned")
+        if self.state_path:
+            path = Path(self.state_path)
+            if not path.exists():
+                return self._planned_payload(f"Omnibinary state file not found: {path}")
+            try:
+                raw = json.loads(path.read_text(encoding="utf-8"))
+            except Exception as exc:
+                return self._error_payload(f"invalid Omnibinary state JSON: {exc}")
+            return self._from_state(raw)
 
-        path = Path(self.state_path)
-        if not path.exists():
-            return self._planned_payload(f"Omnibinary state file not found: {path}")
+        if self.repo_path:
+            return self._from_repo(Path(self.repo_path))
 
+        return self._planned_payload("Omnibinary adapter planned")
+
+    def _from_repo(self, repo: Path) -> UsagePayload:
+        status_file = repo / "PRODUCT_STATUS.json"
+        manifest_file = repo / "RELEASE_MANIFEST.json"
+        if not status_file.exists():
+            return self._planned_payload(f"Omnibinary repo detected without PRODUCT_STATUS.json: {repo}")
         try:
-            raw = json.loads(path.read_text(encoding="utf-8"))
+            status = json.loads(status_file.read_text(encoding="utf-8"))
         except Exception as exc:
-            return self._error_payload(f"invalid Omnibinary state JSON: {exc}")
+            return self._error_payload(f"invalid Omnibinary PRODUCT_STATUS.json: {exc}")
+        manifest: dict[str, Any] = {}
+        if manifest_file.exists():
+            try:
+                manifest = json.loads(manifest_file.read_text(encoding="utf-8"))
+            except Exception:
+                manifest = {}
 
-        return self._from_state(raw)
+        blockers = _clean_list(status.get("remaining_blockers", []))
+        handoff = str(status.get("package_handoff", status.get("repo_handoff_state", "unknown")))
+        runtime_state = str(status.get("universal_runtime_state", status.get("core_runtime_status", "unknown")))
+        version = str(status.get("version", manifest.get("version", "unknown")))
+        package_state = str(manifest.get("package_state", status.get("repo_handoff_state", "unknown")))
+        warnings = [
+            f"Omnibinary runtime package {version}: {package_state}",
+            "No active Muse model is connected through Omnibinary yet.",
+        ] + blockers[:4]
+
+        return UsagePayload(
+            service="omnibinary",
+            current_percent=0,
+            weekly_percent=0,
+            current_reset_seconds=0,
+            weekly_reset_seconds=0,
+            burn_rate=BurnRate.idle,
+            status="No active Muse",
+            mode=MeterMode.offline,
+            updated_at=int(time()),
+            source=self.name,
+            confidence=Confidence.unknown,
+            backend=BackendState(
+                name="Omnibinary",
+                receipt_state=handoff,
+                archive_state=runtime_state,
+                hardwire_state="repo-package-detected",
+                checkpoint_id=version,
+            ),
+            last_action="Omnibinary runtime package detected",
+            action_in_progress="none",
+            cli_checker={
+                "state": "inactive",
+                "last_check": int(time()),
+                "message": "Omnibinary package detected; no active Muse model connected",
+            },
+            run_log=[
+                f"Omnibinary runtime package detected at {repo}",
+                f"Version: {version}",
+                f"Runtime state: {runtime_state}",
+                "No active Muse model connection established yet.",
+            ],
+            warnings=warnings,
+            errors=[],
+        )
 
     def _from_state(self, raw: dict[str, Any]) -> UsagePayload:
         event = raw.get("event", {}) if isinstance(raw.get("event"), dict) else {}

@@ -61,9 +61,11 @@
         <h1>AI Desk Meter</h1>
         <p class="subtitle">A portable dashboard and device bridge for AI workflow state, Arc-RAR backend health, Raspberry Pi kiosks, ESP32 displays, and the planned MuseMeter 3.0 second-brain / Neural Synth AI buddy package.</p>
         <div class="actions">
+          <a class="btn" href="http://127.0.0.1:1420/#muse">Back to Runtime Dashboard</a>
           <a class="btn primary" href="https://github.com/GareBear99/ai-desk-meter">View on GitHub</a>
           <a class="btn" href="#architecture">Architecture</a>
           <a class="btn" href="#roadmap">Roadmap</a>
+          <a class="btn" href="#diy-cost">DIY / Cost Specs</a> <a class="btn" href="parts-and-sourcing.md">Parts & Sourcing</a>
         </div>
       </div>
       <div class="device" aria-label="AI Desk Meter mock display">
@@ -84,7 +86,7 @@
       </div>
     </div>
   </header>
-  <nav><div class="wrap"><a href="#scope">Scope</a><a href="#architecture">Architecture</a><a href="#hardware">Hardware</a><a href="#arcrar">Arc-RAR</a><a href="#offline">No-server mode</a><a href="#live">Optional API</a><a href="#pi">Pi/SBC</a><a href="#companion">Companion</a><a href="#roadmap">Roadmap</a><a href="#license">License Path</a></div></nav>
+  <nav><div class="wrap"><a href="#scope">Scope</a><a href="#architecture">Architecture</a><a href="#hardware">Hardware</a><a href="#diy-cost">DIY / Cost Specs</a><a href="parts-and-sourcing.md">Parts & Sourcing</a><a href="#arcrar">Arc-RAR</a><a href="#offline">No-server mode</a><a href="#live">Optional API</a><a href="#pi">Pi/SBC</a><a href="#companion">Companion</a><a href="#roadmap">Roadmap</a><a href="#license">License Path</a></div></nav>
   <main class="wrap">
     <section id="scope">
       <h2>What it is</h2>
@@ -101,6 +103,24 @@
       <pre>Provider source → validated payload → transport → dashboard/device endpoint</pre>
       <p>The dashboard is not the authority. It renders state from providers and fails closed when data is missing or invalid.</p>
     </section>
+
+    <section id="diy-cost">
+      <h2>DIY / Cost Specs</h2>
+      <p>The full printable hardware spec is bundled at <a href="../DIY_Claude_Code_Desk_Usage_Meter_Spec_Guide.html#bom">DIY_Claude_Code_Desk_Usage_Meter_Spec_Guide.html</a>. The build-ready buying sheet is <a href="parts-and-sourcing.md">Parts & Sourcing</a>. The runtime dashboard also includes a DIY / Cost Specs panel so the bill of materials is visible inside the app shell.</p>
+      <ul>
+        <li><strong>Recommended board:</strong> Waveshare ESP32-S3-Touch-AMOLED-2.16.</li>
+        <li><strong>Search term:</strong> <code>ESP32-S3-Touch-AMOLED-2.16</code>.</li>
+        <li><strong>Where to start:</strong> Waveshare official store/docs, Waveshare GitHub sample, Espressif Component Registry, or Amazon/regional marketplace for convenience.</li>
+        <li><strong>Required extras:</strong> data-capable USB-C cable and a desktop/Pi runtime host.</li>
+      </ul>
+      <table><thead><tr><th>Tier</th><th>Estimated budget</th><th>Notes</th></tr></thead><tbody>
+        <tr><td>Cheap Prototype</td><td>$25–$60</td><td>ESP32-S3 board plus small LCD/OLED for protocol/UI validation.</td></tr>
+        <tr><td>Best Match</td><td>$50–$120 all-in</td><td>Waveshare ESP32-S3-Touch-AMOLED-2.16, USB-C power, case, and stand.</td></tr>
+        <tr><td>Product-style build</td><td>$90–$160 one-off</td><td>AMOLED board, enclosure, OTA/pairing polish, and sellable desk-meter finish.</td></tr>
+      </tbody></table>
+      <p><a class="btn" href="../DIY_Claude_Code_Desk_Usage_Meter_Spec_Guide.html#bom">Open full DIY/BOM guide</a> <a class="btn" href="http://127.0.0.1:1420/#muse">Back to runtime dashboard</a></p>
+    </section>
+
     <section id="hardware">
       <h2>Hardware targets</h2>
       <table><thead><tr><th>Device</th><th>Role</th></tr></thead><tbody><tr><td>Desktop/laptop</td><td>Full host daemon and dashboard</td></tr><tr><td>Raspberry Pi / Linux SBC</td><td>Full host daemon, kiosk, local bridge</td></tr><tr><td>ESP32-S3</td><td>Wi-Fi/BLE display endpoint</td></tr><tr><td>Arduino-class MCU</td><td>Companion telemetry or simplified display node</td></tr></tbody></table>
@@ -112,7 +132,7 @@
 
     <section id="offline">
       <h2>No-server default mode</h2>
-      <p>AI Desk Meter does not require a local server. Generate a payload file with <code>ai-meter write-status --provider mock --out runtime/status.json</code> or keep it updated with <code>ai-meter watch --provider mock --out runtime/status.json --interval 2</code>, then import it below.</p>
+      <p>AI Desk Meter does not require a local server. Generate a payload file with <code>ai-meter write-status --provider mock --out runtime/status.json</code> or keep it updated with <code>ai-meter watch --provider mock --out runtime/status.json --interval 0.5</code>, then import it below.</p>
       <div class="live-row">
         <label for="payloadFile">Import status JSON</label>
         <input id="payloadFile" type="file" accept="application/json,.json" />
@@ -140,7 +160,7 @@
       <pre>bash scripts/install_linux_sbc.sh
 bash scripts/run_smoke_test.sh
 ai-meter write-status --provider mock --out runtime/status.json
-ai-meter watch --provider mock --out runtime/status.json --interval 2
+ai-meter watch --provider mock --out runtime/status.json --interval 0.5
 # optional preview only:
 ai-meter serve --host 127.0.0.1 --port 8787</pre>
     </section>
@@ -150,7 +170,7 @@ ai-meter serve --host 127.0.0.1 --port 8787</pre>
       <p>v0.6 adds a compact companion endpoint for small displays and serial telemetry nodes. The host remains the source of truth; companion devices render state only.</p>
       <pre>ai-meter companion-status --provider mock
 ai-meter write-companion --provider mock --out runtime/companion.json
-ai-meter watch-companion --provider mock --out runtime/companion.json --interval 2
+ai-meter watch-companion --provider mock --out runtime/companion.json --interval 0.5
 # optional preview only:
 GET /companion/status?provider=mock</pre>
       <p>The pixel buddy and <code>✶ Musing...</code> state are preserved as the baseline display identity. For now, Musing means the agent is responding to prompt input or an action is loading.</p>
@@ -180,6 +200,7 @@ GET /companion/status?provider=mock</pre>
           <p>v0.8 adds a Tauri-oriented desktop shell plan for wrapping the local API and dashboard while keeping provider truth in the backend.</p>
           <p><strong>Open track:</strong> AI Desk Meter v0.x-v2.x. <strong>Future track:</strong> MuseMeter 3.0 commercial second-brain / Neural Synth / AI buddy.</p>
         </section>
+<section><h2>v1.2.0 Stable Runtime App Shell</h2><p>Buttons, tabs, docs/specs navigation, and layout containers are now stable while runtime/status.json streams. The refresh loop updates values only, preserving the runtime-vs-Muse truth model and reducing flicker.</p></section>
 </main>
   <footer><div class="wrap">AI Desk Meter — local-first visibility for AI workflow systems. Current milestone: no-server file/stdout runtime, optional local API, diagnostics, Raspberry Pi/Linux SBC deployment, and ESP32/Arduino companion bridge are included.</div></footer>
   <script>
@@ -255,5 +276,6 @@ GET /companion/status?provider=mock</pre>
   <p>v0.9 adds a planned, fails-closed Omnibinary provider boundary for future binary event spine, replay ledger, and second-brain substrate work. Arc-RAR remains the portable archive and receipt backend; AI Desk Meter remains the dashboard and companion display surface.</p>
   <p><a href="omnibinary-adapter-spec.md">Read the Omnibinary adapter spec</a></p>
 </section>
+<section><h2>v1.1.9 Smooth Runtime Stream</h2><p>Prevents flicker/two-truth updates by holding the last good runtime payload during transient reads and keeping SVG blink timers stable while streaming.</p></section>
 </body>
 </html>

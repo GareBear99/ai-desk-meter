@@ -1,0 +1,21 @@
+{
+  "service": "arc-rar",
+  "status": "Arc-RAR CLI linked with warnings",
+  "mode": "active",
+  "confidence": "estimated",
+  "usage": {
+    "current": 72,
+    "weekly": 40,
+    "current_reset": 1800,
+    "weekly_reset": 172800,
+    "burn_rate": "high"
+  },
+  "arc": {
+    "name": "Arc-RAR",
+    "receipt_state": "available",
+    "archive_state": "warning",
+    "hardwire_state": "portable"
+  },
+  "warnings": ["Archive verify reported stale secondary index; primary receipt chain remains readable."],
+  "errors": []
+}

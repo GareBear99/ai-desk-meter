@@ -14,7 +14,7 @@ AI Desk Meter currently provides:
 
 - A Python host daemon with mock/manual provider support
 - A conservative Arc-RAR state-file provider for backend integration testing
-- A timeout-safe Arc-RAR CLI provider for the next backend boundary
+- A timeout-safe Arc-RAR CLI provider with status, receipt, archive, and session contract fixtures
 - A local HTTP API bridge for live dashboard refresh
 - A diagnostics ZIP exporter that avoids secrets and private prompt/session content
 - A JSON payload protocol suitable for dashboards and small hardware displays
@@ -282,6 +282,8 @@ ai-desk-meter/
 │  ├─ architecture.md
 │  ├─ provider-contract.md
 │  ├─ arcrar-integration-spec.md
+│  ├─ arcrar-cli-contract.md
+│  ├─ arcrar-fixtures.md
 │  ├─ raspberry-pi-setup.md
 │  ├─ linux-sbc-validation.md
 │  ├─ network-security.md
@@ -306,8 +308,8 @@ ai-desk-meter/
 - **v0.3** Arc-RAR CLI/API provider ✅
 - **v0.4** Live dashboard provider refresh and diagnostics export ✅
 - **v0.5** Raspberry Pi / Linux SBC kiosk validation ✅
-- **v0.6** ESP32 display endpoint hardening
-- **v0.7** Arduino-class companion telemetry bridge design
+- **v0.6** ESP32 / Arduino companion bridge ✅
+- **v0.7** Arc-RAR CLI command compatibility pass ✅
 - **v0.8** Native dashboard shell prototype
 - **v1.0** Stable Arc-RAR-backed AI Desk Meter
 - **v1.1+** Omnibinary adapter, ARC-Core hardwire integration, archive timeline view, Neural Synth toggle page
@@ -319,11 +321,12 @@ ai-desk-meter/
 Current package validation:
 
 ```text
-pytest: 18 passed
+pytest passes locally for the included protocol, provider, API, diagnostics, deployment, companion, and Arc-RAR CLI contract tests
 mock provider works
 state-file Arc-RAR provider works
 Arc-RAR CLI provider fails closed for missing executable, invalid JSON, non-zero exit, and timeout
-local API bridge works for `/health`, `/providers`, `/status`, and `/diagnostics`
+Arc-RAR CLI provider now merges status, latest receipt, archive verify, and session inspect fixture outputs
+local API bridge works for `/health`, `/providers`, `/status`, `/companion/status`, and `/diagnostics`
 diagnostics ZIP export works without including secrets or private prompt/session content
 Linux/SBC install script, smoke-test script, systemd unit, kiosk docs, and network-safety docs are included
 ```

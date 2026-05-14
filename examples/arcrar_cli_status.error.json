@@ -1,0 +1,21 @@
+{
+  "service": "arc-rar",
+  "status": "Arc-RAR CLI reported backend error",
+  "mode": "error",
+  "confidence": "unknown",
+  "usage": {
+    "current": 0,
+    "weekly": 0,
+    "current_reset": 0,
+    "weekly_reset": 0,
+    "burn_rate": "idle"
+  },
+  "arc": {
+    "name": "Arc-RAR",
+    "receipt_state": "unknown",
+    "archive_state": "failed",
+    "hardwire_state": "unknown"
+  },
+  "warnings": [],
+  "errors": ["Arc-RAR status failed validation upstream."]
+}

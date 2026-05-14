@@ -1,0 +1,21 @@
+{
+  "service": "arc-rar",
+  "status": "Arc-RAR CLI linked",
+  "mode": "active",
+  "confidence": "estimated",
+  "usage": {
+    "current": 50,
+    "weekly": 11,
+    "current_reset": 4920,
+    "weekly_reset": 547200,
+    "burn_rate": "normal"
+  },
+  "arc": {
+    "name": "Arc-RAR",
+    "receipt_state": "available",
+    "archive_state": "verified",
+    "hardwire_state": "portable"
+  },
+  "warnings": [],
+  "errors": []
+}

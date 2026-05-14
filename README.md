@@ -16,7 +16,18 @@ AI Desk Meter currently provides:
 - Wi-Fi/stdout transport scaffolds
 - ESP32-S3 firmware scaffold for a physical desk meter
 - Public docs for hardware, firmware, host app, provider contracts, roadmap, and testing
-- Example payloads for normal, warning, offline, and Arc-RAR-linked states
+- Example payloads for normal, warning, offline, corrupt, and Arc-RAR-linked states
+
+The original desk-meter feature set is still preserved as the baseline display target:
+
+- Current usage percentage
+- Weekly usage percentage
+- Reset countdowns
+- Burn-rate state: idle, low, normal, high, critical
+- Data confidence: exact, estimated, mock, or unknown
+- Offline, stale, warning, and error states
+- Optional pixel mascot or status animation
+- Local visibility and diagnostics for AI coding tools without bypassing usage limits
 
 ## Hardware direction
 
@@ -28,6 +39,16 @@ AI Desk Meter is designed to scale across several device classes:
 | Raspberry Pi / Linux SBC | Full host daemon, local dashboard, bridge node, kiosk display | Supported target path |
 | ESP32-S3 | Wi-Fi/BLE display endpoint for simple meter payloads | Firmware scaffold included |
 | Arduino-class microcontrollers | Companion telemetry/display nodes using simplified serial or compact payload bridges | Roadmap target |
+
+Best first physical target:
+
+- Waveshare **ESP32-S3-Touch-AMOLED-2.16** or similar ESP32-S3 AMOLED board
+- USB-C power
+- Optional 3D printed enclosure
+
+Cheap prototype target:
+
+- Any ESP32-S3 board with a small display supported by Arduino, LovyanGFX, or TFT_eSPI
 
 Raspberry Pi-class systems can run the Python host and dashboard stack directly. Arduino-class systems should be treated as endpoints or companion nodes, not as the full backend authority.
 
@@ -155,6 +176,7 @@ ai-desk-meter/
 - **v0.8** Native dashboard shell prototype
 - **v1.0** Stable Arc-RAR-backed AI Desk Meter
 - **v1.1+** Omnibinary adapter, ARC-Core hardwire integration, archive timeline view, Neural Synth toggle page
+- **Future provider targets** Multi-AI desk meter support where official/local signals exist: Claude Code/manual logs, Codex-style CLI workflows, Gemini CLI-style workflows, Ollama/local LLMs, and other local-first provider adapters
 
 ## License
 
